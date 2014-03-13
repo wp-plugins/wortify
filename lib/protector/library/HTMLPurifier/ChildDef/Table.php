@@ -12,7 +12,7 @@
  *
  * But actually, the HTML4 spec then has this to say:
  *
- *      The TBODY start tag is always required except when the table
+ *      The TBODY start tag is always included except when the table
  *      contains only one table body and no table head or foot sections.
  *      The TBODY end tag may always be safely omitted.
  *

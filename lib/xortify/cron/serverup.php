@@ -96,15 +96,15 @@
 		define('WORTIFY_USER_AGENT', 'Mozilla/5.0 ('.WORTIFY_VERSION.'; PHP '.PHP_VERSION.') Wortify ' . ($GLOBALS['wortify']['module']->getVar('version')/100));
 	
 	$serverup=false;
-	if ($servers = $GLOBALS['wortifyCache']->read('server_list_wortify')) {
+	if ($servers = wortifyCache::read('server_list_wortify')) {
 		foreach($servers as $sid => $server) {
 			$source = wortify_getURLData($server['server'], $server['search'], $nativecurl);
 			if ($source['found']==true) {
 				$serverup=true;
-				WoriftyConfig::set('wortify_urirest', str_replace($source['protwas'], $source['prot'], strtolower(strpos($server['server'], 'module/')>0?str_replace($server['replace'], XREST, $server['server']):str_replace($server['replace'], REST, $server['server']))));
+				WoriftyConfig::set('xortify_urirest', str_replace($source['protwas'], $source['prot'], strtolower(strpos($server['server'], 'module/')>0?str_replace($server['replace'], XREST, $server['server']):str_replace($server['replace'], REST, $server['server']))));
 			}
 		}
 	}
 	
-	unlinkOldCachefiles('wortify_',wortifyConfig::get('xortify_wortify_ip_cache'));	
+	unlinkOldCachefiles('xortify_',wortifyConfig::get('xortify_wortify_ip_cache'));	
 ?>

@@ -46,7 +46,7 @@ if ($nativecurl==true) {
 if (!defined('WORTIFY_REST_API'))
 	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/serial/?%s');
 
-include_once(WORTIFY_VAR_PATH . '/lib/xortify/include/functions.php');
+include_once(dirname(dirname(__FILE__)) . '/include/functions.php');
 
 class REST_CURLSERIALISEDWortifyExchange {
 
@@ -77,7 +77,8 @@ class REST_CURLSERIALISEDWortifyExchange {
 		curl_setopt($this->curl_client, CURLOPT_TIMEOUT, WortifyConfig::get('xortify_curl_timeout'));
 		curl_setopt($this->curl_client, CURLOPT_COOKIEJAR, $cookies); 
 		curl_setopt($this->curl_client, CURLOPT_RETURNTRANSFER, 1); 
-		curl_setopt($this->curl_client, CURLOPT_USERAGENT, WORTIFY_USER_AGENT); 
+		curl_setopt($this->curl_client, CURLOPT_USERAGENT, WORTIFY_USER_AGENT);
+		curl_setopt($this->curl_client, CURLOPT_SSL_VERIFYPEER, false);
 		$this->curl_client =& $ch;			
 	}
 
@@ -265,16 +266,9 @@ class REST_CURLSERIALISEDWortifyExchange {
 	}
 	
 	function getBans() {
-		wortify_load('wortifyCache');
-		if (!class_exists('WortifyCache')) {
-			// WORTIFY 2.4 Compliance
-			wortify_load('cache');
-			if (!class_exists('WortifyCache')) {
-				include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-			}
-		}
-        if (! $bans = @$GLOBALS['wortifyCache']->read('wortify_bans_cache')) {
-				$bans = @$GLOBALS['wortifyCache']->read('wortify_bans_cache_backup');
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+        if (! $bans = wortifyCache::read('xortify_bans_cache')) {
+				$bans = wortifyCache::read('xortify_bans_cache_backup');
 				$GLOBALS['xoDoSoap'] = true;
         }
 		return $bans;

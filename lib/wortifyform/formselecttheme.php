@@ -20,8 +20,9 @@
 
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyLists');
-wortify_load('WortifyFormSelect');
+include_once (dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR .'wortifyLists.php');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formselect.php');
+
 
 /**
  * A select box with available themes

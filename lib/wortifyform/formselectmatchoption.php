@@ -20,7 +20,7 @@
 
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormSelect');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formselect.php');
 
 /**
  * A selection box with options for matching search terms.

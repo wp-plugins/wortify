@@ -20,10 +20,10 @@ abstract class HTMLPurifier_AttrDef
     public $minimized = false;
 
     /**
-     * Tells us whether or not an HTML attribute is required. Has no
+     * Tells us whether or not an HTML attribute is included. Has no
      * meaning in other contexts
      */
-    public $required = false;
+    public $included = false;
 
     /**
      * Validates and cleans passed string according to a definition.

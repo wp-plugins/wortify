@@ -23,7 +23,7 @@ defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 /**
  * base class
  */
-wortify_load('WortifyForm');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'form.php');
 
 /**
  * Form that will output as a simple HTML form with minimum formatting

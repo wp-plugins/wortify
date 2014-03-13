@@ -156,16 +156,16 @@ class WortifyObject
      *
      * @access public
      * @param string $key
-     * @param int $data_type set to one of XOBJ_DTYPE_XXX constants (set to XOBJ_DTYPE_OTHER if no data type ckecking nor text sanitizing is required)
+     * @param int $data_type set to one of XOBJ_DTYPE_XXX constants (set to XOBJ_DTYPE_OTHER if no data type ckecking nor text sanitizing is included)
      * @param mixed $
-     * @param bool $required require html form input?
+     * @param bool $included include html form input?
      * @param int $maxlength for XOBJ_DTYPE_TXTBOX type only
      * @param string $option does this data have any select options?
 	 * @param string $enumeration array for XOBJ_DTYPE_ENUM type only
      */
-    function initVar($key, $data_type, $value = null, $required = false, $maxlength = null, $options = '', $enumerations = '')
+    function initVar($key, $data_type, $value = null, $included = false, $maxlength = null, $options = '', $enumerations = '')
     {
-        $this->vars[$key] = array('value' => $value , 'required' => $required , 'data_type' => $data_type , 'maxlength' => $maxlength , 'changed' => false , 'options' => $options, 'enumeration' => $enumerations);
+        $this->vars[$key] = array('value' => $value , 'included' => $included , 'data_type' => $data_type , 'maxlength' => $maxlength , 'changed' => false , 'options' => $options, 'enumeration' => $enumerations);
     }
 
     /**
@@ -656,7 +656,7 @@ class WortifyObject
                 		$cleanv = !is_string($cleanv)&&is_numeric($cleanv) ? date(_DBDATESTRING, $cleanv) : date(_DBDATESTRING, strtotime($cleanv));
                 		break;
                     case XOBJ_DTYPE_TXTBOX:
-                        if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                        if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -671,7 +671,7 @@ class WortifyObject
                         }
                         break;
                     case XOBJ_DTYPE_TXTAREA:
-                        if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                        if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -693,7 +693,7 @@ class WortifyObject
                         break;
 
                     case XOBJ_DTYPE_EMAIL:
-                        if ($v['required'] && $cleanv == '') {
+                        if ($v['included'] && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -706,7 +706,7 @@ class WortifyObject
                         }
                         break;
                     case XOBJ_DTYPE_URL:
-                        if ($v['required'] && $cleanv == '') {
+                        if ($v['included'] && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -739,7 +739,7 @@ class WortifyObject
                         }
                         break;
                     case XOBJ_DTYPE_UNICODE_TXTBOX:
-                        if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                        if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -755,7 +755,7 @@ class WortifyObject
                         }
                         break;
                     case XOBJ_DTYPE_UNICODE_TXTAREA:
-                        if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                        if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -767,7 +767,7 @@ class WortifyObject
                         }
                         break;
                     case XOBJ_DTYPE_UNICODE_EMAIL:
-                        if ($v['required'] && $cleanv == '') {
+                        if ($v['included'] && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -781,7 +781,7 @@ class WortifyObject
                         }
                         break;
                     case XOBJ_DTYPE_UNICODE_URL:
-                        if ($v['required'] && $cleanv == '') {
+                        if ($v['included'] && $cleanv == '') {
                             $this->setErrors(sprintf(_XOBJ_ERR_REQUIRED, $k));
                             continue;
                         }
@@ -1154,7 +1154,7 @@ class WortifyPersistableObjectHandler extends WortifyObjectHandler
     {
         static $handlers;
         if (!isset($handlers[$name])) {
-            wortify_load('WortifyModelFactory');
+            include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . 'wortifyModel.php';
             $handlers[$name] = WortifyModelFactory::loadHandler($this, $name, $args);
         } else {
             $handlers[$name]->setHandler($this);

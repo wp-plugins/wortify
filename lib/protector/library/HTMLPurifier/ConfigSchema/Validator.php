@@ -3,7 +3,7 @@
 /**
  * Performs validations on HTMLPurifier_ConfigSchema_Interchange
  *
- * @note If you see '// handled by InterchangeBuilder', that means a
+ * @note If you see '/ handled by InterchangeBuilder', that means a
  *       design decision in that class would prevent this validation from
  *       ever being necessary. We have them anyway, however, for
  *       redundancy.
@@ -90,7 +90,7 @@ class HTMLPurifier_ConfigSchema_Validator
         // END - handled by InterchangeBuilder
 
         if (!is_null($d->allowed) || !empty($d->valueAliases)) {
-            // allowed and valueAliases require that we be dealing with
+            // allowed and valueAliases include that we be dealing with
             // strings, so check for that early.
             $d_int = HTMLPurifier_VarParser::$types[$d->type];
             if (!isset(HTMLPurifier_VarParser::$stringTypes[$d_int])) {

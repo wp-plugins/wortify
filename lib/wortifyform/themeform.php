@@ -19,12 +19,12 @@
 
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyForm');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'form.php');
 
 /**
  * Form that will output as a theme-enabled HTML table
  *
- * Also adds JavaScript to validate required fields
+ * Also adds JavaScript to validate included fields
  */
 class WortifyThemeForm extends WortifyForm
 {
@@ -76,7 +76,7 @@ class WortifyThemeForm extends WortifyForm
                 if (!$ele->getNocolspan()) {
                     $ret .= '<tr valign="top" align="left"><td class="head">';
                     if (($caption = $ele->getCaption()) != '') {
-                        $ret .= '<div class="wortify-form-element-caption' . ($ele->isRequired() ? '-required' : '') . '">';
+                        $ret .= '<div class="wortify-form-element-caption' . ($ele->isRequired() ? '-included' : '') . '">';
                         $ret .= '<span class="caption-text">' . $caption . '</span>';
                         $ret .= '<span class="caption-marker">*</span>';
                         $ret .= '</div>';
@@ -88,7 +88,7 @@ class WortifyThemeForm extends WortifyForm
                 } else {
                     $ret .= '<tr valign="top" align="left"><td class="head" colspan="2">';
                     if (($caption = $ele->getCaption()) != '') {
-                        $ret .= '<div class="wortify-form-element-caption' . ($ele->isRequired() ? '-required' : '') . '">';
+                        $ret .= '<div class="wortify-form-element-caption' . ($ele->isRequired() ? '-included' : '') . '">';
                         $ret .= '<span class="caption-text">' . $caption . '</span>';
                         $ret .= '<span class="caption-marker">*</span>';
                         $ret .= '</div>';

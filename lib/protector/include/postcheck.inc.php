@@ -1,9 +1,9 @@
 <?php
 
-require_once dirname(__FILE__).'/postcheck_functions.php' ;
+include_once dirname(__FILE__).'/postcheck_functions.php' ;
 
 if( ! defined( 'PROTECTOR_PRECHECK_INCLUDED' ) ) {
-	require dirname(__FILE__).'/precheck.inc.php' ;
+	include dirname(__FILE__).'/precheck.inc.php' ;
 	return ;
 }
 

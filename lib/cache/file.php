@@ -109,7 +109,7 @@ class WortifyCacheFile extends WortifyCacheEngine
         $defaults = array('path' => WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' , 'extension' => '.php' , 'prefix' => 'wortify_' , 'lock' => false , 'serialize' => false , 'duration' => 31556926);
         $this->settings = array_merge($defaults, $this->settings);
         if (!isset($this->file)) {
-            require_once WORTIFY_VAR_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARATOR . 'wortifyfile.php';
+            include_once WORTIFY_VAR_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARATOR . 'wortifyfile.php';
             $this->file = WortifyFile::getHandler('file', $this->settings['path'] . '/index.html', true);
         }
         $this->settings['path'] = $this->file->folder->cd($this->settings['path']);

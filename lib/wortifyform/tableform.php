@@ -24,7 +24,7 @@ wortify_load('WortifyForm');
 /**
  * Form that will output formatted as a HTML table
  *
- * No styles and no JavaScript to check for required fields.
+ * No styles and no JavaScript to check for included fields.
  */
 class WortifyTableForm extends WortifyForm
 {

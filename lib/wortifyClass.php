@@ -9,9 +9,11 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARA
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortifyCache.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . 'wortifyModel.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'functions.php';
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'functions.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifySchema.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyUtils.php';
+
+error_reporting(E_ERROR);
+ini_set('display_errors', true);
 
 class wortify {
 	public static $printStatus = false;
@@ -21,10 +23,9 @@ class wortify {
 	var $conn = NULL;
 
 	public static function __constructor() {
-		global $wpdb;
-		$GLOBALS['wortifydb'] = new wortifydb($wpdb);
+
 	}
-	
+		
 	public static function installPlugin(){
 		self::runInstall();
 		//Used by MU code below
@@ -48,14 +49,9 @@ class wortify {
 	}
 	
 	public static function hourlyCron(){
-		global $wpdb; $p = $wpdb->base_prefix;
-		
 	}
 	
 	public static function dailyCron(){
-		$wortifydb = new wortifyDB();
-		global $wpdb; $p = $wpdb->base_prefix;
-		
 	}
 	
 	public static function runInstall(){
@@ -72,27 +68,16 @@ class wortify {
 	}
 	
 	public static function install_actions(){
-		$versionInOptions = get_option('wortify_version', false);
-		if( (! $versionInOptions) || version_compare(WORTIFY_VERSION, $versionInOptions, '>')){
-			//Either there is no version in options or the version in options is greater and we need to run the upgrade
-			self::runInstall();
-		}
+		self::runInstall();
 		add_action('wortify_daily_cron', 'wortify::dailyCron');
 		add_action('wortify_hourly_cron', 'wortify::hourlyCron');
-		add_action('wp_loaded', 'wortify::loadedAction');
 		add_action('init', 'wortify::initAction');
-		add_action('shutdown', 'wortify::shutdownAction');
 		add_action('wp_authenticate','wortify::authActionNew', 1, 2);
-		if(is_admin()){
-			add_action('admin_init', 'wortify::admin_init');
-			if(is_multisite()){
-				if(wortifyUtils::isAdminPageMU()){
-					add_action('network_admin_menu', 'wortify::admin_menus');
-				} //else don't show menu
-			} else {
-				add_action('admin_menu', 'wortify::admin_menus');
-			}
-		}
+		add_action('admin_init', 'wortify::admin_init');
+		add_action('admin_menu', 'wortify::admin_menus');
+		add_action('wp_loaded', 'wortify::wpAction');
+		add_action('shutdown', 'wortify::wpShutdown');
+		
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache'))
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache', 0777);
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify'))
@@ -113,7 +98,7 @@ class wortify {
 	public static function logoutAction(){
 		$userID = get_current_user_id();
 		$userDat = get_user_by('id', $userID);
-		self::getLog()->logLogin('logout', 0, $userDat->user_login); 
+		self::getLog()->logLogin('logout', 0, $userDat->user_login);
 	}
 	
 	public static function loginInitAction(){
@@ -145,56 +130,72 @@ class wortify {
 		}
 	}
 	
-	public static function loadedAction() {
-		@include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'precheck.inc.php';
-		@include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'pre.loader.mainfile.php';
+	public static function wpAction() {
+		
+		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'postcheck.inc.php';
+		
+		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.loader.mainfile.php';
+		
 	}
 	
+	public static function shutdownAction() {
+		
+	}
+	
+	static function wpShutdown() {
+		
+		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.footer.end.php';
+		
+	}
+	
+	
 	public static function initAction(){	
-		global $wp;
+				global $wp;
 		if (!is_object($wp)) return; //Suggested fix for compatability with "Portable phpmyadmin"
 		$wp->add_query_var('_wortifysf');
-		//add_rewrite_rule('wortifyStaticFunc/([a-zA-Z0-9]+)/?$', 'index.php?wortifyStaticFunc=' . $matches[1], 'top');
+				//add_rewrite_rule('wortifyStaticFunc/([a-zA-Z0-9]+)/?$', 'index.php?wortifyStaticFunc=' . $matches[1], 'top');
 		$cookieName = 'wortifyvt_' . crc32(site_url());
-		$c = isset($_COOKIE[$cookieName]) ? isset($_COOKIE[$cookieName]) : false;
+				$c = isset($_COOKIE[$cookieName]) ? isset($_COOKIE[$cookieName]) : false;
 		if($c){
 			self::$newVisit = false;
 		} else {
 			self::$newVisit = true;
 		}
 		@setcookie($cookieName, uniqid(), time() + 1800, '/');
-		@include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'postcheck.inc.php';
-		@include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.loader.mainfile.php';
+		
+		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'precheck.inc.php';
+		
+		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'pre.loader.mainfile.php';
+		
 	}
 	
 	public static function admin_init(){
-		if(! wortifyUtils::isAdmin()){ return; }
-		foreach(array('activate', 'scan', 'updateAlertEmail', 'sendActivityLog', 'restoreFile', 'bulkOperation', 'deleteFile', 'removeExclusion', 'activityLogUpdate', 'ticker', 'loadIssues', 'updateIssueStatus', 'deleteIssue', 'updateAllIssues', 'reverseLookup', 'unlockOutIP', 'loadBlockRanges', 'unblockRange', 'blockIPUARange', 'whois', 'unblockIP', 'blockIP', 'permBlockIP', 'loadStaticPanel', 'saveConfig', 'clearAllBlocked', 'killBans', 'saveCountryBlocking', 'saveBansSchedule', 'tourClosed', 'startTourAgain', 'downgradeLicense', 'addTwoFactor', 'twoFacActivate', 'twoFacDel', 'loadTwoFactor') as $func){
-			add_action('wp_ajax_wortify_' . $func, 'wortify::ajaxReceiver');
-		}
-		if(isset($_GET['page']) && preg_match('/^Wortify/', @$_GET['page']) ){
-			wp_enqueue_style('wp-pointer');
-			wp_enqueue_script('wp-pointer');
-			wp_enqueue_style('wortify-main-style', wortifyUtils::getBaseURL() . 'css/main.css', '', WORTIFY_VERSION);
-			wp_enqueue_style('wortify-colorbox-style', wortifyUtils::getBaseURL() . 'css/colorbox.css', '', WORTIFY_VERSION);
-			wp_enqueue_style('wortify-dttable-style', wortifyUtils::getBaseURL() . 'css/dt_table.css', '', WORTIFY_VERSION);
-			wp_enqueue_script('json2');
-			wp_enqueue_script('jquery.tmpl', wortifyUtils::getBaseURL() . 'js/jquery.tmpl.min.js', array('jquery'), WORTIFY_VERSION);
-			wp_enqueue_script('jquery.colorbox', wortifyUtils::getBaseURL() . 'js/jquery.colorbox-min.js', array('jquery'), WORTIFY_VERSION);
-			wp_enqueue_script('jquery.dataTables', wortifyUtils::getBaseURL() . 'js/jquery.dataTables.min.js', array('jquery'), WORTIFY_VERSION);
-			//wp_enqueue_script('jquery.tools', wortifyUtils::getBaseURL() . 'js/jquery.tools.min.js', array('jquery'));
-			wp_enqueue_script('wortifyAdminjs', wortifyUtils::getBaseURL() . 'js/admin.js', array('jquery'), WORTIFY_VERSION);
-			self::setupAdminVars();
-		} else {
-			wp_enqueue_style('wp-pointer');
-			wp_enqueue_script('wp-pointer');
-			wp_enqueue_script('wortifyAdminjs', wortifyUtils::getBaseURL() . 'js/tourTip.js', array('jquery'), WORTIFY_VERSION);
-			self::setupAdminVars();
-		}
+		self::setupAdminVars();
 	}
 	
+	public static function _network_admin_menu() {
+		self::admin_menus();
+	}
+
+	public static function _user_admin_menu() {
+		self::admin_menus();
+	}
+
+	public static function _admin_menu() {
+		self::admin_menus();
+	}
+	
+	public static function network_admin_menu() {
+		self::admin_menus();
+	}
+	
+	public static function user_admin_menu() {
+		self::admin_menus();
+	}
+	
+	
 	private static function setupAdminVars(){
-		$updateInt = wortifyConfig::get('actUpdateInterval', 2);
+				$updateInt = wortifyConfig::get('actUpdateInterval', 2);
 		if(! preg_match('/^\d+$/', $updateInt)){
 			$updateInt = 2;
 		}
@@ -207,7 +208,7 @@ class wortify {
 			'actUpdateInterval' => $updateInt,
 			'tourClosed' => wortifyConfig::get('tourClosed', 0)
 			));
-	}
+			}
 	
 	public static function activation_warning(){
 		if (strlen(get_option('xortify_username'))==0 && strlen(get_option('xortify_password'))==0 ){
@@ -216,22 +217,22 @@ class wortify {
 	}
 	
 	public static function admin_menus(){
-		if(! wortifyUtils::isAdmin()){ return; }
 		$warningAdded = false;
 		
-		if (strlen(get_option('xortify_username'))==0 && strlen(get_option('xortify_password'))==0 ){
+		if (strlen(wortifyConfig::get('xortify_username'))==0 && strlen(wortifyConfig::get('xortify_password'))==0 ){
 			add_action('network_admin_notices', 'wortify::activation_warning');
+			$warningAdded = true;
 		}
-		$warningAdded = true;
+		
 
-		add_submenu_page("Wortify", "Bans", "Bans", "wortify_bans", "Wortify", 'wortify::menu_bans');
-		add_menu_page('Wortify', 'Wortify', 'wortify_bans', 'Wortify', 'wortify::menu_bans', wortifyUtils::getBaseURL() . 'images/wortify-logo-16x16.png'); 
-		add_submenu_page('Wortify', 'Wortify Log', 'Wortify Log', 'wortify_bans', 'WortifyLog', 'wortify::menu_logs');
-		add_submenu_page("Wortify", "Protector", "Protector", "wortify_bans", "WortifyProtector", 'wortify::menu_protector');
-		if ($warningAdded == false ){
-			add_submenu_page("Wortify", "Cloud Signup", "Cloud Signup", "wortify_bans", "WortifyCloudSignup", 'wortify::menu_signup');
+		add_menu_page( 'Wortify', 'Wortify', 'manage_options', 'wortify-menu', 'wortify::menu_bans', site_url("/wp-content/plugins/wortify/images/wortify-logo-16x16.png") );
+		add_submenu_page( 'wortify-menu', "Bans", "Bans", 'manage_options', 'wortify-menu-bans', 'wortify::menu_bans');
+		add_submenu_page( 'wortify-menu', "Wortify Log", "Wortify Log", 'manage_options', 'wortify-menu-logs', 'wortify::menu_logs');
+		add_submenu_page( 'wortify-menu', "Protector", "Protector", 'manage_options', 'wortify-menu-protector', 'wortify::menu_protector');
+		add_submenu_page( 'wortify-menu', "Options", "Options", 'manage_options', 'wortify-menu-options', 'wortify::menu_options');
+		if ($warningAdded == true ){
+			add_submenu_page( 'wortify-menu', "Cloud Signup", "Cloud Signup", 'manage_options', 'wortify-menu-signup', 'wortify::menu_signup');
 		}
-		add_submenu_page("Wortify", "Options", "Options", "wortify_bans", "WortifySecOpt", 'wortify::menu_options');
 	}
 	
 	public static function menu_options(){
@@ -239,7 +240,7 @@ class wortify {
 	}
 	
 	public static function menu_logs(){
-		require 'menu_logs.php';
+		require 'menu_log.php';
 	}
 	
 	public static function menu_protector(){
@@ -304,9 +305,6 @@ class wortify {
 		);
 	}
 	
-	function __destruct() {
-		@include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.footer.end.php';
-	}
 	
 }
 ?>

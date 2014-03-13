@@ -34,10 +34,7 @@
 if (!defined('WORTIFY_ROOT_PATH')) die ('Restricted Access');
 
 
-
-include_once( WORTIFY_VAR_PATH . '/lib/xortify/include/functions.php' );
-include_once( WORTIFY_VAR_PATH . '/lib/xortify/include/instance.php' );
-include_once( WORTIFY_VAR_PATH . '/lib/xortify/language/english/modinfo.php' );
+include_once( dirname(dirname(__FILE__)) . '/include/functions.php' );
 
 class Providers 
 {
@@ -45,90 +42,6 @@ class Providers
 	
 	function init($check) {
 		
-		defined('DS') or define('DS', DIRECTORY_SEPARATOR);
-		defined('NWLINE')or define('NWLINE', "\n");
-		
-		global $wortify, $wortifyPreload, $wortifyLogger, $wortifyErrorHandler, $wortifySecurity, $sess_handler, $wortifyConfig;
-		
-		include_once WORTIFY_ROOT_PATH . DS . 'include' . DS . 'defines.php';
-		include_once WORTIFY_ROOT_PATH . DS . 'include' . DS . 'version.php';
-		include_once WORTIFY_ROOT_PATH . DS . 'include' . DS . 'license.php';
-		require_once WORTIFY_ROOT_PATH . DS . 'class' . DS . 'cache' . DS . 'wortifyCache.php';
-		require_once WORTIFY_ROOT_PATH . DS . 'class' . DS . 'wortifyload.php';
-		
-		$GLOBALS['wortifyCache'] = new WortifyCache();
-		$GLOBALS['wortifyLoad'] = new WortifyLoad();
-		
-		$GLOBALS['wortifyLoad']->load('preload');
-		$wortifyPreload =& WortifyPreload::getInstance();
-		
-		$GLOBALS['wortifyLoad']->load('wortifykernel');
-		$wortify = new xos_kernel_Wortify2();
-		$wortify->pathTranslation();
-		$wortifyRequestUri =& $_SERVER['REQUEST_URI'];// Deprecated (use the corrected $_SERVER variable now)
-		
-		$GLOBALS['wortifyLoad']->load('wortifysecurity');
-		$wortifySecurity = new WortifySecurity();
-		$wortifySecurity->checkSuperglobals();
-		
-		$GLOBALS['wortifyLoad']->load('wortifylogger');
-		$wortifyLogger =& WortifyLogger::getInstance();
-		$wortifyErrorHandler =& WortifyLogger::getInstance();
-		
-		include_once $wortify->path('kernel/object.php');
-		include_once $wortify->path('class/criteria.php');
-		include_once $wortify->path('class/module.textsanitizer.php');
-		include_once $wortify->path('include/functions.php');
-		
-		include_once $wortify->path('class/database/databasefactory.php');
-		$GLOBALS['wortifyDB'] =& WortifyDatabaseFactory::getDatabaseConnection();
-		
-		/**
-		 * Get wortify configs
-		 * Requires functions and database loaded
-		 */
-		$config_handler =& wortify_gethandler('config');
-		$wortifyConfig = $config_handler->getConfigsByCat(WORTIFY_CONF);
-		
-		/**
-		 * User Sessions
-		 */
-		$wortifyUser = '';
-		$wortifyUserIsAdmin = false;
-		$member_handler =& wortify_gethandler('member');
-		$sess_handler =& wortify_gethandler('session');
-		if ($wortifyConfig['use_ssl']
-				&& isset($_POST[$wortifyConfig['sslpost_name']])
-				&& $_POST[$wortifyConfig['sslpost_name']] != ''
-		) {
-			session_id($_POST[$wortifyConfig['sslpost_name']]);
-		} else if ($wortifyConfig['use_mysession'] && $wortifyConfig['session_name'] != '' && $wortifyConfig['session_expire'] > 0) {
-			if (isset($_COOKIE[$wortifyConfig['session_name']])) {
-				session_id($_COOKIE[$wortifyConfig['session_name']]);
-			}
-			if (function_exists('session_cache_expire')) {
-				session_cache_expire($wortifyConfig['session_expire']);
-			}
-			@ini_set('session.gc_maxlifetime', $wortifyConfig['session_expire'] * 60);
-		}
-		session_set_save_handler(array(&$sess_handler, 'open'),
-		array(&$sess_handler, 'close'),
-		array(&$sess_handler, 'read'),
-		array(&$sess_handler, 'write'),
-		array(&$sess_handler, 'destroy'),
-		array(&$sess_handler, 'gc'));
-		if (strlen(session_id())==0)
-			session_start();
-		
-		$module_handler = wortify_gethandler('module');
-		$config_handler = wortify_gethandler('config');	
-		if (!isset($GLOBALS['wortify']['module']))		
-			$GLOBALS['wortify']['module'] = $module_handler->getByDirname('wortify');
-		if (!isset($GLOBALS['wortify']['moduleConfig']))
-			$GLOBALS['wortify']['moduleConfig'] = $config_handler->getConfigList($GLOBALS['wortify']['module']->getVar('mid'));
-		
-		global $wortifyConfig; 
-		$wortifyConfig = $config_handler->getConfigsByCat(WORTIFY_CONF);
 	}
 		
 	function __construct($check = 'precheck')
@@ -138,28 +51,25 @@ class Providers
 			return false;
 		}
 		
-		$this->init($check);	
+		$this->init($check);
+		
 		$this->providers = WortifyConfig::get('xortify_providers');
 		
 		$this->$check();
+		
 	}
 	
 	private function precheck()
 	{
 		
-		
-		if (!isset($GLOBALS['wortify']['module']))
-			return false;
-		if ($GLOBALS['wortify']['module']->getVar('version')<305)
-			return false;
 		foreach($this->providers as $id => $key)
 		switch ($key) {
 		default:
 			
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/precheck.inc.php')) 
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/precheck.inc.php');
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/pre.loader.php')) 
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/pre.loader.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/precheck.inc.php')) 
+				include_once(dirname(__FILE__) . '/'.$key.'/precheck.inc.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/pre.loader.php')) 
+				include_once(dirname(__FILE__) . '/'.$key.'/pre.loader.php');
 			
 		}
 		
@@ -168,17 +78,15 @@ class Providers
 	private function postcheck()
 	{
 		
-		if (!isset($GLOBALS['wortify']['module']))
-			return false;
-		if ($GLOBALS['wortify']['module']->getVar('version')<305)
-			return false;
 		foreach($this->providers as $id => $key)
 		switch ($key) {
 		default:
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/postcheck.inc.php'))
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/postcheck.inc.php');
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/post.loader.php'))
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/post.loader.php');
+			
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/postcheck.inc.php'))
+				include_once(dirname(__FILE__) . '/'.$key.'/postcheck.inc.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/post.loader.php'))
+				include_once(dirname(__FILE__) . '/'.$key.'/post.loader.php');
+			
 		}
 		
 	}
@@ -186,20 +94,15 @@ class Providers
 	private function headerpostcheck()
 	{
 		
-		
-		if (!isset($GLOBALS['wortify']['module']))
-			return false;
-		
-		if ($GLOBALS['wortify']['module']->getVar('version')<305)
-			return false;
+
 		foreach($this->providers as $id => $key)
 		switch ($key) {
 		default:
 			
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/headerpostcheck.inc.php'))
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/headerpostcheck.inc.php');
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/header.post.loader.php'))
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/header.post.loader.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/headerpostcheck.inc.php'))
+				include_once(dirname(__FILE__) . '/'.$key.'/headerpostcheck.inc.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/header.post.loader.php'))
+				include_once(dirname(__FILE__) . '/'.$key.'/header.post.loader.php');
 			
 		}
 		
@@ -208,17 +111,16 @@ class Providers
 	private function footerpostcheck()
 	{
 		
-		
-		if ($GLOBALS['wortify']['module']->getVar('version')<305)
-			return false;
+
 		foreach($this->providers as $id => $key)
 		switch ($key) {
 		default:
 			
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/footerpostcheck.inc.php'))
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/footerpostcheck.inc.php');
-			if (file_exists(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/footer.post.loader.php'))
-				include_once(WORTIFY_VAR_PATH . '/lib/xortify/providers/'.$key.'/footer.post.loader.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/footerpostcheck.inc.php'))
+				include_once(dirname(__FILE__) . '/'.$key.'/footerpostcheck.inc.php');
+			if (file_exists(dirname(__FILE__) . '/'.$key.'/footer.post.loader.php'))
+				include_once(dirname(__FILE__) . '/'.$key.'/footer.post.loader.php');
+			
 			
 		}
 		

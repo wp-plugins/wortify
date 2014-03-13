@@ -33,13 +33,13 @@
 
 
 	include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-	if (!$servers = $GLOBALS['wortifyCache']->read('server_list_wortify')) {
-		require_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+	if (!$servers = wortifyCache::read('server_list_wortify')) {
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
-		@$poll = $apiExchange->getServers();
+		$poll = $apiExchange->getServers();
 		if (!isset($poll['success'])||$poll['success']==false) {
-			$GLOBALS['wortifyCache']->write('server_list_wortify', array(0=>array('server'=>'http://wortify.com/unban/?op=unban', 'replace' => 'unban/?op=unban', 'search' => 'Solve Puzzel:'), 1=>array('server'=>'http://wortify.wortify.org/unban/?op=unban', 'replace' => 'unban/?op=unban', 'search' => 'Solve Puzzel:')), (integer)WortifyConfig::get('xortify_server_cache'));
+			wortifyCache::write('server_list_wortify', array(0=>array('server'=>'http://wortify.com/unban/?op=unban', 'replace' => 'unban/?op=unban', 'search' => 'Solve Puzzel:'), 1=>array('server'=>'http://wortify.wortify.org/unban/?op=unban', 'replace' => 'unban/?op=unban', 'search' => 'Solve Puzzel:')), (integer)WortifyConfig::get('xortify_server_cache'));
 		}
 	}	
 

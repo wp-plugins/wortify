@@ -5,7 +5,7 @@
  *
  * HTML elements dictate which elements are allowed to be their children,
  * for example, you can't have a p tag in a span tag.  Other elements have
- * much more rigorous definitions: tables, for instance, require a specific
+ * much more rigorous definitions: tables, for instance, include a specific
  * order for their elements.  There are also constraints not expressible by
  * document type definitions, such as the chameleon nature of ins/del
  * tags and global child exclusions.
@@ -14,7 +14,7 @@
  * nodes (not tokens) of the list of tokens and determine whether or not
  * their children conform to the element's definition.  If they do not, the
  * child definition may optionally supply an amended list of elements that
- * is valid or require that the entire node be deleted (and the previous
+ * is valid or include that the entire node be deleted (and the previous
  * node rescanned).
  *
  * The second objective is to ensure that explicitly excluded elements of

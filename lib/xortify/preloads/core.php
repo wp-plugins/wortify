@@ -47,19 +47,19 @@ class WortifyCorePreload extends WortifyPreloadItem
 		$GLOBALS['wortifyCache'] = new WortifyCache();
 		// Detect if it is an internal refereer.
 		$ip = wortify_getIP();
-		if (isset($_SERVER['HTTP_REFERER'])&&$result = $GLOBALS['wortifyCache']->read('wortify_'.strtolower(__FUNCTION__).'_'.md5($ip))) {
+		if (isset($_SERVER['HTTP_REFERER'])&&$result = wortifyCache::read('xortify_'.strtolower(__FUNCTION__).'_'.md5($ip))) {
 			if (strtolower(WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(WORTIFY_URL)))&&$result['time']<microtime(true)) {
-				$GLOBALS['wortifyCache']->write('wortify_'.strtolower(__FUNCTION__).'_'.md5($ip), array('time'=>microtime(true)+1800), 1800);
+				wortifyCache::write('xortify_'.strtolower(__FUNCTION__).'_'.md5($ip), array('time'=>microtime(true)+1800), 1800);
 				return false;
 			}
 		}
-		$GLOBALS['wortifyCache']->write('wortify_'.strtolower(__FUNCTION__).'_'.md5($ip), array('time'=>microtime(true)+1800), 1800);
+		wortifyCache::write('xortify_'.strtolower(__FUNCTION__).'_'.md5($ip), array('time'=>microtime(true)+1800), 1800);
 		// Runs Security Preloader
-		$result = $GLOBALS['wortifyCache']->read('wortify_core_include_common_start');
+		$result = wortifyCache::read('xortify_core_include_common_start');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
-			$GLOBALS['wortifyCache']->write('wortify_core_include_common_start', array('time'=>microtime(true)+600), 600);
+			wortifyCache::write('xortify_core_include_common_start', array('time'=>microtime(true)+600), 600);
 			include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/pre.loader.mainfile.php' );
-			$GLOBALS['wortifyCache']->write('wortify_core_include_common_start', array('time'=>microtime(true)), -1);
+			wortifyCache::write('xortify_core_include_common_start', array('time'=>microtime(true)), -1);
 		}
 	}
 
@@ -73,7 +73,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 		if (!isset($GLOBALS['wortify']['moduleConfig'])&&is_object($GLOBALS['wortify']['module']))
 			$GLOBALS['wortify']['moduleConfig'] = $config_handler->getConfigList($GLOBALS['wortify']['module']->getVar('mid'));
 		
-		$result = $GLOBALS['wortifyCache']->read('wortify_cleanup_last');
+		$result = wortifyCache::read('xortify_cleanup_last');
 		if ((isset($result['when'])?(float)$result['when']:-microtime(true))+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache']<=microtime(true)) {
 			$result = array();
 			$result['when'] = microtime(true);
@@ -89,7 +89,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 				}
 			}
 			$result['took'] = microtime(true)-$result['when'];
-			$GLOBALS['wortifyCache']->write('wortify_cleanup_last', $result, $GLOBALS['wortify']['moduleConfig']['wortify_ip_cache']*2);
+			wortifyCache::write('xortify_cleanup_last', $result, $GLOBALS['wortify']['moduleConfig']['wortify_ip_cache']*2);
 		}
 		
 		if (isset($_POST)&&isset($_POST['wortify_check'])) {
@@ -119,13 +119,13 @@ class WortifyCorePreload extends WortifyPreloadItem
 		$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 		
 		// Runs Security Preloader
-	    $result = $GLOBALS['wortifyCache']->read('wortify_core_include_common_end');
+	    $result = wortifyCache::read('xortify_core_include_common_end');
 	    if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
-			$GLOBALS['wortifyCache']->write('wortify_core_include_common_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+			wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) {
 				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.loader.mainfile.php' );
 			}
-			$GLOBALS['wortifyCache']->write('wortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+			wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 		}
 		
 		
@@ -144,13 +144,13 @@ class WortifyCorePreload extends WortifyPreloadItem
 		$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 		// Runs Security Preloader
 		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-		$result = $GLOBALS['wortifyCache']->read('wortify_core_header_cache_end');
+		$result = wortifyCache::read('xortify_core_header_cache_end');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
-			$GLOBALS['wortifyCache']->write('wortify_core_header_cache_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+			wortifyCache::write('xortify_core_header_cache_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) { 		
 				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.header.endcache.php' );
 			}
-			$GLOBALS['wortifyCache']->write('wortify_core_header_cache_end', array('time'=>microtime(true)), -1);
+			wortifyCache::write('xortify_core_header_cache_end', array('time'=>microtime(true)), -1);
 		}
 		
 	}
@@ -167,13 +167,13 @@ class WortifyCorePreload extends WortifyPreloadItem
 		$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 		// Runs Security Preloader
 		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-		$result = $GLOBALS['wortifyCache']->read('wortify_core_footer_end');
+		$result = wortifyCache::read('xortify_core_footer_end');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
-			$GLOBALS['wortifyCache']->write('wortify_core_footer_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+			wortifyCache::write('xortify_core_footer_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) { 		
 				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.footer.end.php' );
 			}
-			$GLOBALS['wortifyCache']->write('wortify_core_footer_end', array('time'=>microtime(true)), -1);
+			wortifyCache::write('xortify_core_footer_end', array('time'=>microtime(true)), -1);
 		}
 		
 	}
@@ -193,13 +193,13 @@ class WortifyCorePreload extends WortifyPreloadItem
 		}*/
 		
 		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-		$result = $GLOBALS['wortifyCache']->read('wortify_core_header_add_meta');
+		$result = wortifyCache::read('xortify_core_header_add_meta');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
-			$GLOBALS['wortifyCache']->write('wortify_core_header_add_meta', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+			wortifyCache::write('xortify_core_header_add_meta', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) {	
 				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.header.addmeta.php' );
 			}
-			$GLOBALS['wortifyCache']->write('wortify_core_header_add_meta', array('time'=>microtime(true)), -1);
+			wortifyCache::write('xortify_core_header_add_meta', array('time'=>microtime(true)), -1);
 		}
 		
 	}
@@ -241,7 +241,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 	
 	static public function doSpamCheck( $_from = array(), $source = 'wortify_check') {
 		if (isset($_from[$source])&&count($_from[$source])>0) {
-			require_once( WORTIFY_ROOT_PATH.'/modules/xortify/class/'.$GLOBALS['wortify']['moduleConfig']['protocol'].'.php' );
+			include_once( WORTIFY_ROOT_PATH.'/modules/xortify/class/'.$GLOBALS['wortify']['moduleConfig']['protocol'].'.php' );
 			$func = strtoupper($GLOBALS['wortify']['moduleConfig']['protocol']).'WortifyExchange';
 			$apiExchange = new $func;
 			foreach ($_from[$source] as $id => $field) {
@@ -273,9 +273,9 @@ class WortifyCorePreload extends WortifyPreloadItem
 								}
 		
 								$lid = $log_handler->insert($log, true);
-								$GLOBALS['wortifyCache']->write('wortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+								wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 								$GLOBALS['wortify']['lid'] = $lid;
-								setcookie('wortify_lid', $lid, time()+3600*24*7*4*3);
+								setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
 								header('Location: '.WORTIFY_URL.'/banned.php');
 								exit(0);
 							} else {
@@ -304,7 +304,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 									addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
 								}
 		
-								$GLOBALS['wortifyTpl']->assign('wortify_pagetitle', _XOR_SPAM_PAGETITLE);
+								$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _XOR_SPAM_PAGETITLE);
 								$GLOBALS['wortifyTpl']->assign('description', _XOR_SPAM_DESCRIPTION);
 								$GLOBALS['wortifyTpl']->assign('version', $GLOBALS['wortifyModule']->getVar('version')/100);
 								$GLOBALS['wortifyTpl']->assign('platform', WORTIFY_VERSION);
@@ -312,14 +312,14 @@ class WortifyCorePreload extends WortifyPreloadItem
 								$GLOBALS['wortifyTpl']->assign('spam', htmlspecialchars($data));
 								$GLOBALS['wortifyTpl']->assign('agent', $_SERVER['HTTP_USER_AGENT']);
 		
-								$GLOBALS['wortifyTpl']->assign('wortify_lblocks', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_rblocks', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_ccblocks', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_clblocks', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_crblocks', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_showlblock', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_showrblock', false);
-								$GLOBALS['wortifyTpl']->assign('wortify_showcblock', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_lblocks', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_rblocks', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_ccblocks', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_clblocks', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_crblocks', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_showlblock', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_showrblock', false);
+								$GLOBALS['wortifyTpl']->assign('xortify_showcblock', false);
 		
 								include_once WORTIFY_ROOT_PATH.'/footer.php';
 							}
@@ -358,9 +358,9 @@ class WortifyCorePreload extends WortifyPreloadItem
 							}
 		
 							$lid = $log_handler->insert($log, true);
-							$GLOBALS['wortifyCache']->write('wortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
+							wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 							$GLOBALS['wortify']['lid'] = $lid;
-							setcookie('wortify_lid', $lid, time()+3600*24*7*4*3);
+							setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
 							header('Location: '.WORTIFY_URL.'/banned.php');
 							exit(0);
 		
@@ -388,7 +388,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 								addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
 							}
 		
-							$GLOBALS['wortifyTpl']->assign('wortify_pagetitle', _XOR_SPAM_PAGETITLE);
+							$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _XOR_SPAM_PAGETITLE);
 							$GLOBALS['wortifyTpl']->assign('description', _XOR_SPAM_DESCRIPTION);
 							$GLOBALS['wortifyTpl']->assign('version', $GLOBALS['wortifyModule']->getVar('version')/100);
 							$GLOBALS['wortifyTpl']->assign('platform', WORTIFY_VERSION);
@@ -396,14 +396,14 @@ class WortifyCorePreload extends WortifyPreloadItem
 							$GLOBALS['wortifyTpl']->assign('spam', htmlspecialchars($_REQUEST[$field]));
 							$GLOBALS['wortifyTpl']->assign('agent', $_SERVER['HTTP_USER_AGENT']);
 		
-							$GLOBALS['wortifyTpl']->assign('wortify_lblocks', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_rblocks', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_ccblocks', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_clblocks', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_crblocks', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_showlblock', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_showrblock', false);
-							$GLOBALS['wortifyTpl']->assign('wortify_showcblock', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_lblocks', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_rblocks', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_ccblocks', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_clblocks', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_crblocks', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_showlblock', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_showrblock', false);
+							$GLOBALS['wortifyTpl']->assign('xortify_showcblock', false);
 		
 							include_once WORTIFY_ROOT_PATH.'/footer.php';
 						}

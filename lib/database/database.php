@@ -37,7 +37,7 @@ define('WORTIFY_C_DATABASE_INCLUDED', 1);
  * @package kernel
  * @subpackage database
  */
-class WortifyDatabase extends wortifydb
+class WortifyDatabase
 {
 
 

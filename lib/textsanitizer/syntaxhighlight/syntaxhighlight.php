@@ -54,7 +54,7 @@ class WortifytsSyntaxhighlight extends WortifyTextSanitizerExtension
             $text .= "?>";
             $addedtag_close = 1;
         }
-        $oldlevel = error_reporting(0);
+        $oldlevel = error_reporting(E_ERROR);
 
         //There is a bug in the highlight function(php < 5.3) that it doesn't render
         //backslashes properly like in \s. So here we replace any backslashes

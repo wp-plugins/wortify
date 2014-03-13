@@ -18,7 +18,7 @@ class protector_postcommon_post_deny_by_rbl extends ProtectorFilterAbstract {
 	
 		global $wortifyUser ;
 	
-		$rev_ip = implode( '.' , array_reverse( explode( '.' , @$_SERVER['REMOTE_ADDR'] ) ) ) ;
+		$rev_ip = implode( '.' , array_reverse( explode( '.' , $_SERVER['REMOTE_ADDR'] ) ) ) ;
 	
 		foreach( $rbls as $rbl ) {
 			$host = $rev_ip . '.' . $rbl ;

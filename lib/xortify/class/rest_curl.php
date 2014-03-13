@@ -64,7 +64,7 @@ if ($nativecurl==true) {
 if (!defined('WORTIFY_REST_API'))
 	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
 
-include_once(WORTIFY_VAR_PATH . '/lib/xortify/include/functions.php');
+include_once(dirname(dirname(__FILE__)) . '/include/functions.php');
 
 class REST_CURLWortifyExchange {
 
@@ -79,7 +79,7 @@ class REST_CURLWortifyExchange {
 	}
 	
 	function REST_CURLWortifyExchange ($url) {
-		error_reporting(0);
+		error_reporting(E_ERROR);
 		
 		$this->curl_wortify_username = WortifyConfig::get('xortify_username');
 		$this->curl_wortify_password = md5(WortifyConfig::get('xortify_password'));
@@ -96,6 +96,7 @@ class REST_CURLWortifyExchange {
 		curl_setopt($this->curl_client, CURLOPT_COOKIEJAR, $cookies); 
 		curl_setopt($this->curl_client, CURLOPT_RETURNTRANSFER, 1); 
 		curl_setopt($this->curl_client, CURLOPT_USERAGENT, WORTIFY_USER_AGENT); 
+		curl_setopt($this->curl_client, CURLOPT_SSL_VERIFYPEER, false);
 		
 	}
 
@@ -284,16 +285,9 @@ class REST_CURLWortifyExchange {
 		return $result;	
 	}
 	function getBans() {
-		wortify_load('wortifyCache');
-		if (!class_exists('WortifyCache')) {
-			// WORTIFY 2.4 Compliance
-			wortify_load('cache');
-			if (!class_exists('WortifyCache')) {
-				include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-			}
-		}
-        if (! $bans = @$GLOBALS['wortifyCache']->read('wortify_bans_cache')) {
-				$bans = @$GLOBALS['wortifyCache']->read('wortify_bans_cache_backup');
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+        if (! $bans = wortifyCache::read('xortify_bans_cache')) {
+				$bans = wortifyCache::read('xortify_bans_cache_backup');
 				$GLOBALS['xoDoSoap'] = true;
         }
 		return $bans;

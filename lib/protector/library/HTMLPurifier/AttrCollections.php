@@ -91,8 +91,8 @@ class HTMLPurifier_AttrCollections
 
             if (isset($processed[$def_i])) continue;
 
-            // determine whether or not attribute is required
-            if ($required = (strpos($def_i, '*') !== false)) {
+            // determine whether or not attribute is included
+            if ($included = (strpos($def_i, '*') !== false)) {
                 // rename the definition
                 unset($attr[$def_i]);
                 $def_i = trim($def_i, '*');
@@ -103,8 +103,8 @@ class HTMLPurifier_AttrCollections
 
             // if we've already got a literal object, move on
             if (is_object($def)) {
-                // preserve previous required
-                $attr[$def_i]->required = ($required || $attr[$def_i]->required);
+                // preserve previous included
+                $attr[$def_i]->included = ($included || $attr[$def_i]->included);
                 continue;
             }
 
@@ -115,7 +115,7 @@ class HTMLPurifier_AttrCollections
 
             if ($t = $attr_types->get($def)) {
                 $attr[$def_i] = $t;
-                $attr[$def_i]->required = $required;
+                $attr[$def_i]->included = $included;
             } else {
                 unset($attr[$def_i]);
             }

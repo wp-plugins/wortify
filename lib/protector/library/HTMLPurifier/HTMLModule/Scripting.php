@@ -25,7 +25,7 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
         // auto-wraps stray #PCDATA in a similar manner to
         // blockquote's custom definition (we would use it but
         // blockquote's contents are optional while noscript's contents
-        // are required)
+        // are included)
 
         // TODO: convert this to new syntax, main problem is getting
         // both content sets working
@@ -35,7 +35,7 @@ class HTMLPurifier_HTMLModule_Scripting extends HTMLPurifier_HTMLModule
         $this->info['noscript'] = new HTMLPurifier_ElementDef();
         $this->info['noscript']->attr = array( 0 => array('Common') );
         $this->info['noscript']->content_model = 'Heading | List | Block';
-        $this->info['noscript']->content_model_type = 'required';
+        $this->info['noscript']->content_model_type = 'included';
 
         $this->info['script'] = new HTMLPurifier_ElementDef();
         $this->info['script']->attr = array(

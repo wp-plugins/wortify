@@ -75,9 +75,9 @@ class HTMLPurifier_EntityParser
     protected function nonSpecialEntityCallback($matches) {
         // replaces all but big five
         $entity = $matches[0];
-        $is_num = (@$matches[0][1] === '#');
+        $is_num = ($matches[0][1] === '#');
         if ($is_num) {
-            $is_hex = (@$entity[2] === 'x');
+            $is_hex = ($entity[2] === 'x');
             $code = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
 
             // abort for special characters
@@ -125,9 +125,9 @@ class HTMLPurifier_EntityParser
      */
     protected function specialEntityCallback($matches) {
         $entity = $matches[0];
-        $is_num = (@$matches[0][1] === '#');
+        $is_num = ($matches[0][1] === '#');
         if ($is_num) {
-            $is_hex = (@$entity[2] === 'x');
+            $is_hex = ($entity[2] === 'x');
             $int = $is_hex ? hexdec($matches[1]) : (int) $matches[2];
             return isset($this->_special_dec2str[$int]) ?
                 $this->_special_dec2str[$int] :

@@ -63,7 +63,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                 	$cleanv = !is_string($cleanv)&&is_numeric($cleanv) ? date(_DBDATESTRING, $cleanv) : date(_DBDATESTRING, strtotime($cleanv));
                 	break;
                 case XOBJ_DTYPE_UNICODE_TXTBOX:
-                    if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                    if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -81,7 +81,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                     break;
 
                 case XOBJ_DTYPE_UNICODE_TXTAREA:
-                    if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                    if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -98,7 +98,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                     break;
 
                 case XOBJ_DTYPE_TXTBOX:
-                    if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                    if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -115,7 +115,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                     break;
 
                 case XOBJ_DTYPE_TXTAREA:
-                    if ($v['required'] && $cleanv != '0' && $cleanv == '') {
+                    if ($v['included'] && $cleanv != '0' && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -142,7 +142,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                 // Should not be used!
                 case XOBJ_DTYPE_UNICODE_EMAIL:
                     $cleanv = trim($cleanv);
-                    if ($v['required'] && $cleanv == '') {
+                    if ($v['included'] && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -154,7 +154,7 @@ class WortifyModelWrite extends WortifyModelAbstract
 
                 case XOBJ_DTYPE_EMAIL:
                     $cleanv = trim($cleanv);
-                    if ($v['required'] && $cleanv == '') {
+                    if ($v['included'] && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -171,7 +171,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                 // Should not be used!
                 case XOBJ_DTYPE_UNICODE_URL:
                     $cleanv = trim($cleanv);
-                    if ($v['required'] && $cleanv == '') {
+                    if ($v['included'] && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }
@@ -185,7 +185,7 @@ class WortifyModelWrite extends WortifyModelAbstract
                     break;
                 case XOBJ_DTYPE_URL:
                     $cleanv = trim($cleanv);
-                    if ($v['required'] && $cleanv == '') {
+                    if ($v['included'] && $cleanv == '') {
                         $errors[] = sprintf(_XOBJ_ERR_REQUIRED, $k);
                         continue;
                     }

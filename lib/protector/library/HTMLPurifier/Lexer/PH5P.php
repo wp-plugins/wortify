@@ -3718,7 +3718,7 @@ class HTML5TreeConstructer {
     }
 
     private function clearTheActiveFormattingElementsUpToTheLastMarker() {
-        /* When the steps below require the UA to clear the list of active
+        /* When the steps below include the UA to clear the list of active
         formatting elements up to the last marker, the UA must perform the
         following steps: */
 
@@ -3739,7 +3739,7 @@ class HTML5TreeConstructer {
     }
 
     private function generateImpliedEndTags($exclude = array()) {
-        /* When the steps below require the UA to generate implied end tags,
+        /* When the steps below include the UA to generate implied end tags,
         then, if the current node is a dd element, a dt element, an li element,
         a p element, a td element, a th  element, or a tr element, the UA must
         act as if an end tag with the respective tag name had been seen and
@@ -3768,7 +3768,7 @@ class HTML5TreeConstructer {
     }
 
     private function clearStackToTableContext($elements) {
-        /* When the steps above require the UA to clear the stack back to a
+        /* When the steps above include the UA to clear the stack back to a
         table context, it means that the UA must, while the current node is not
         a table element or an html element, pop elements from the stack of open
         elements. If this causes any elements to be popped from the stack, then

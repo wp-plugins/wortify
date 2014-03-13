@@ -36,11 +36,11 @@
 		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 		
 		$bad_ips = Protector::get_bad_ips(false);
-		$cache_bad_ips = $GLOBALS['wortifyCache']->read('wortify_bans_protector');
+		$cache_bad_ips = wortifyCache::read('xortify_bans_protector');
 		if (empty($cache_bad_ips))
 			$cache_bad_ips = array();
 	
-		require_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		
@@ -48,7 +48,7 @@
 			foreach($bad_ips as $id => $ip) {
 				if (!in_array($ip, $cache_bad_ips)) { 
 					  
-						$sql = 'SELECT `timestamp`, `type`, `agent`, `description` FROM '.DB_PREFIX . ('wortify_protector_log').' WHERE ip = "'.$ip.'" ORDER BY `timestamp`';
+						$sql = 'SELECT `timestamp`, `type`, `agent`, `description` FROM '.$GLOBALS['wpdb']->base_prefix . ('xortify_protector_log').' WHERE ip = "'.$ip.'" ORDER BY `timestamp`';
 						$result = $GLOBALS['wortifyDB']->queryF($sql);
 						$comment = '';
 						while($row = $GLOBALS['wortifyDB']->fetchArray($result)) {
@@ -72,8 +72,8 @@
 				}
 			}
 		}		
-		unlinkOldCachefiles('wortify_',WortifyConfig::get('xortify_ip_cache'));
-		$GLOBALS['wortifyCache']->delete('wortify_bans_protector');
-		$GLOBALS['wortifyCache']->write('wortify_bans_protector', $bad_ips);			
+		unlinkOldCachefiles('xortify_',WortifyConfig::get('xortify_ip_cache'));
+		wortifyCache::delete('xortify_bans_protector');
+		wortifyCache::write('xortify_bans_protector', $bad_ips);			
 	}
 ?>

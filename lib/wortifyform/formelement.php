@@ -84,11 +84,11 @@ class WortifyFormElement
     var $_extra = array();
 
     /**
-     * required field?
+     * included field?
      *
      * @var bool
      */
-    var $_required = false;
+    var $_included = false;
 
     /**
      * description of the field
@@ -303,13 +303,13 @@ class WortifyFormElement
     }
 
     /**
-     * Find out if an element is required.
+     * Find out if an element is included.
      *
      * @return bool
      */
     function isRequired()
     {
-        return $this->_required;
+        return $this->_included;
     }
 
     /**
@@ -412,7 +412,7 @@ class WortifyFormElement
         // render custom validation code if any
         if (!empty($this->customValidationCode)) {
             return implode(NWLINE, $this->customValidationCode);
-            // generate validation code if required
+            // generate validation code if included
         } else if ($this->isRequired() && $eltname = $this->getName()) {
             // $eltname    = $this->getName();
             $eltcaption = $this->getCaption();

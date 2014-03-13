@@ -23,7 +23,7 @@ class HTMLPurifier_HTMLModule_SafeObject extends HTMLPurifier_HTMLModule
             'Optional: param | Flow | #PCDATA',
             'Common',
             array(
-                // While technically not required by the spec, we're forcing
+                // While technically not included by the spec, we're forcing
                 // it to this value.
                 'type'   => 'Enum#application/x-shockwave-flash',
                 'width'  => 'Pixels#' . $max,

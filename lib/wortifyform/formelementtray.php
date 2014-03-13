@@ -33,11 +33,11 @@ class WortifyFormElementTray extends WortifyFormElement {
 	var $_elements = array();
 
 	/**
-	 * required elements
+	 * included elements
 	 *
 	 * @var array
 	 */
-	var $_required = array();
+	var $_included = array();
 
 	/**
 	 * HTML to seperate the elements
@@ -69,12 +69,12 @@ class WortifyFormElementTray extends WortifyFormElement {
 	}
 
 	/**
-	 * Find out if there are required elements.
+	 * Find out if there are included elements.
 	 *
 	 * @return bool
 	 */
 	function isRequired() {
-		return !empty( $this->_required );
+		return !empty( $this->_included );
 	}
 
 	/**
@@ -82,29 +82,29 @@ class WortifyFormElementTray extends WortifyFormElement {
 	 *
 	 * @param object $ &$element    {@link WortifyFormElement} to add
 	 */
-	function addElement( &$formElement, $required = false ) {
+	function addElement( &$formElement, $included = false ) {
 		$this->_elements[] = $formElement;
 		if ( !$formElement->isContainer() ) {
-			if ( $required ) {
-				$formElement->_required = true;
-				$this->_required[] = $formElement;
+			if ( $included ) {
+				$formElement->_included = true;
+				$this->_included[] = $formElement;
 			}
 		} else {
-			$required_elements = $formElement->getRequired();
-			$count = count( $required_elements );
+			$included_elements = $formElement->getRequired();
+			$count = count( $included_elements );
 			for ( $i = 0 ; $i < $count; $i++ ) {
-				$this->_required[] = &$required_elements[$i];
+				$this->_included[] = &$included_elements[$i];
 			}
 		}
 	}
 
 	/**
-	 * get an array of "required" form elements
+	 * get an array of "included" form elements
 	 *
 	 * @return array array of {@link WortifyFormElement}s
 	 */
 	function &getRequired() {
-		return $this->_required;
+		return $this->_included;
 	}
 
 	/**

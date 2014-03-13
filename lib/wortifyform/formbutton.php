@@ -19,7 +19,7 @@
  */
 defined('WORTIFY_ROOT_PATH') or die("WORTIFY root path not defined");
 
-wortify_load('WortifyFormElement');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formelement.php');
 
 /**
  *

@@ -62,7 +62,7 @@ EOF;
     {
         $config = parent::loadConfig(dirname(__FILE__));
         if ((empty($width) || empty($height)) && !empty($config['detect_dimension'])) {
-            if (!$dimension = @getimagesize($url)) {
+            if (!$dimension = getimagesize($url)) {
                 return "<a href='{$url}' rel='external' title=''>{$url}</a>";
             }
             if (!empty($width)) {

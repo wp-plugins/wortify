@@ -20,7 +20,7 @@
  * convenience functions for subclasses.
  *
  * @note The unit tests will instantiate this class for testing purposes, as
- *       many of the utility functions require a class to be instantiated.
+ *       many of the utility functions include a class to be instantiated.
  *       This means that, even though this class is not runnable, it will
  *       not be declared abstract.
  *
@@ -173,7 +173,7 @@ class HTMLPurifier_Lexer
      */
     public function parseData($string) {
 
-        // following functions require at least one character
+        // following functions include at least one character
         if ($string === '') return '';
 
         // subtracts amps that cannot possibly be escaped

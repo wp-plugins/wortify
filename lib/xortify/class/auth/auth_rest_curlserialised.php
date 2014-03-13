@@ -61,6 +61,7 @@ class WortifyAuthRest_Curlserialised extends WortifyAuth {
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookies); 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 		curl_setopt($ch, CURLOPT_USERAGENT, WORTIFY_USER_AGENT); 
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$this->curl_client =& $ch;
 	}
 
@@ -76,7 +77,7 @@ class WortifyAuthRest_Curlserialised extends WortifyAuth {
 	function authenticate($uname, $pwd = null) {
 		$authenticated = false;
 		$rnd = rand(-100000, 100000000);
-		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'wortify_authentication', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
+		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
 		$data = curl_exec($this->curl_client);
 		curl_close($this->curl_client);
 		$result = unserialize($data);
@@ -96,7 +97,7 @@ class WortifyAuthRest_Curlserialised extends WortifyAuth {
 	 */		
 	function validate($uname, $email, $pass, $vpass){
 		$rnd = rand(-100000, 100000000);
-		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'wortify_user_validate', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
+		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
 		$data = curl_exec($this->curl_client);
 		curl_close($this->curl_client);
 		$result = unserialize($data);
@@ -115,8 +116,9 @@ class WortifyAuthRest_Curlserialised extends WortifyAuth {
 	 * @return string
 	 */			
 	function network_disclaimer(){
-		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'wortify_network_disclaimer', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password))));
+		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password))));
 		$data = curl_exec($this->curl_client);
+		if (curl_errno($this->curl_client)>0) $GLOBALS['error'] = curl_errno($this->curl_client) . ' - ' . curl_error($this->curl_client);
 		curl_close($this->curl_client);
 		$result = unserialize($data);
 		if ($result['ERRNUM']==1){
@@ -148,7 +150,7 @@ class WortifyAuthRest_Curlserialised extends WortifyAuth {
 		$siteinfo = $this->check_siteinfo($siteinfo);
 
 		$rnd = rand(-100000, 100000000);
-		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'wortify_create_user', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
+		$this->WortifyAuthRest_Curlserialised($GLOBALS['wortifyDB'], sprintf(WORTIFY_REST_API, 'xortify_create_user', http_build_query(array("username"=> $this->curl_wortify_username, "password"=> $this->curl_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
 		$data = curl_exec($this->curl_client);
 		curl_close($this->curl_client);	
 		$result = unserialize($data);	

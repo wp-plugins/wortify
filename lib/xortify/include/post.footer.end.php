@@ -32,7 +32,7 @@
  */
 
 	set_time_limit(1800);
-	include_once (WORTIFY_VAR_PATH . '/lib/xortify/providers/providers.php');
+	include_once (dirname(dirname(__FILE__)) . '/providers/providers.php');
 	$check = new Providers('footerpostcheck');
 
 ?>

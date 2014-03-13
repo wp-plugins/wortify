@@ -73,7 +73,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
 				return FALSE;
 			}
 			$this->allowWebChanges = ($_SERVER['REQUEST_METHOD'] != 'GET');
-			$this->conn = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
+			$this->conn = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
 			if (!$this->conn) {
 				return FALSE;
 			}
@@ -247,6 +247,8 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function queryF($sql, $limit = 0, $start = 0)
     {
+    	//if (strpos($sql, 'protector')||strpos($sql, 'access'))
+    	//	echo "<pre>$sql</pre>";
         if (!empty($limit)) {
             if (empty($start)) {
                 $start = 0;
@@ -261,6 +263,9 @@ class WortifyMySQLDatabase extends WortifyDatabase
         }
     }
 
+    function prefix($table) {
+    	return $GLOBALS['wpdb']->base_prefix . $table;
+    }
     /**
      * perform a query
      *

@@ -37,13 +37,13 @@
 		
 	$ipdata = wortify_getIPData(false);
 
-	$checked = $GLOBALS['wortifyCache']->read('wortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']));
+	$checked = wortifyCache::read('xortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']));
 	
 	
 	if (!is_array($checked))
 	{
 		
-		require_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.wortifyConfig::get('xortify_protocol').'.php' );
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.wortifyConfig::get('xortify_protocol').'.php' );
 		$func = strtoupper(wortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		ob_start();
 		$apiExchange = new $func;
@@ -59,7 +59,7 @@
 						(strtotime($result['email']['lastseen'])>time()-wortifyConfig::get('xortify_email_lastseen')||strtotime($result['username']['lastseen'])>time()-wortifyConfig::get('xortify_uname_lastseen')||strtotime($result['ip']['lastseen'])>time()-wortifyConfig::get('xortify_ip_lastseen'))) {
 							
 							
-							$GLOBALS['wortifyCache']->write('wortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));					
+							wortifyCache::write('xortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));					
 							
 														
 							$result = $apiExchange->sendBan(WORTIFY_BAN_SFS_TYPE."\n".
@@ -83,15 +83,15 @@
 												  WORTIFY_BAN_SFS_IP_FREQ.': '.$result['ip']['frequency'].' >= '.wortifyConfig::get('xortify_ip_freq'). "\n".
 												  WORTIFY_BAN_SFS_IP_LASTSEEN.': '.date(_DATESTRING, strtotime($result['ip']['lastseen'])) . ' > ' . date(_DATESTRING, time()-wortifyConfig::get('xortify_ip_lastseen')));
 							$lid = $log_handler->insert($log, true);
-							$GLOBALS['wortifyCache']->write('wortify_core_include_common_end', array('time'=>microtime(true)), wortifyConfig::get('xortify_fault_delay'));
+							wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), wortifyConfig::get('xortify_fault_delay'));
 							$GLOBALS['wortify']['lid'] = $lid;
-							setcookie('wortify_lid', $lid, time()+3600*24*7*4*3);
+							setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
 							header('Location: '.WORTIFY_URL.'/banned.php');
 							exit(0);
 							
 						}
-			unlinkOldCachefiles('wortify_',wortifyConfig::get('xortify_wortify_ip_cache'));
-			$GLOBALS['wortifyCache']->write('wortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));
+			unlinkOldCachefiles('xortify_',wortifyConfig::get('xortify_wortify_ip_cache'));
+			wortifyCache::write('xortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));
 			$GLOBALS['wortify']['_pass'] = true;
 				
 		}	
@@ -112,9 +112,9 @@
 									  WORTIFY_BAN_SFS_IP_FREQ.': '.$checked['ip']['frequency'].' >= '.wortifyConfig::get('xortify_ip_freq'). "\n".
 									  WORTIFY_BAN_SFS_IP_LASTSEEN.': '.date(_DATESTRING, strtotime($checked['ip']['lastseen'])) . ' > ' . date(_DATESTRING, time()-wortifyConfig::get('xortify_ip_lastseen')));
 				$lid = $log_handler->insert($log, true);
-				$GLOBALS['wortifyCache']->write('wortify_core_include_common_end', array('time'=>microtime(true)), wortifyConfig::get('xortify_fault_delay'));
+				wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), wortifyConfig::get('xortify_fault_delay'));
 				$GLOBALS['wortify']['lid'] = $lid;
-				setcookie('wortify_lid', $lid, time()+3600*24*7*4*3);
+				setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
 				header('Location: '.WORTIFY_URL.'/banned.php');
 				exit(0);
 				

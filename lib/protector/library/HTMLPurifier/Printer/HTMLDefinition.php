@@ -153,8 +153,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
                 $ret .= $this->element('td',$this->listifyAttr($def->attr), array(), 0);
             $ret .= $this->end('tr');
 
-            if (!empty($def->required_attr)) {
-                $ret .= $this->row('Required attributes', $this->listify($def->required_attr));
+            if (!empty($def->included_attr)) {
+                $ret .= $this->row('Required attributes', $this->listify($def->included_attr));
             }
 
             $ret .= $this->renderChildren($def->child);

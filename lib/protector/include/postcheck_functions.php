@@ -6,12 +6,12 @@ function protector_postcommon()
 	if (!is_dir(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs'))
 		mkdir(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs', 0777, true);
 	
-	if( @$_SERVER['REQUEST_URI'] == '/wp-admin.php' && ! is_writable( WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs' ) ) {
+	if( $_SERVER['REQUEST_URI'] == '/wp-admin.php' && ! is_writable( WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs' ) ) {
 		trigger_error( 'You should turn the directory ' . WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs writable' , E_USER_WARNING ) ;
 	}
 
 	// Protector object
-	require_once dirname(dirname(__FILE__)).'/class/protector.php' ;
+	include_once dirname(dirname(__FILE__)).'/class/protector.php' ;
 	$db =& WortifyDatabaseFactory::getDatabaseConnection();
 	$protector =& Protector::getInstance() ;
 	$protector->setConn( $db->conn ) ;
@@ -33,7 +33,7 @@ function protector_postcommon()
 	}
 
 	// reliable ips
-	$reliable_ips = @unserialize( @WortifyConfig::get('wortify_reliable_ips') ) ;
+	$reliable_ips = unserialize( WortifyConfig::get('wortify_reliable_ips') ) ;
 	if( is_array( $reliable_ips ) ) foreach( $reliable_ips as $reliable_ip ) {
 		if( ! empty( $reliable_ip ) && preg_match( '/'.$reliable_ip.'/' , $_SERVER['REMOTE_ADDR'] ) ) {
 			return true ;
@@ -41,8 +41,8 @@ function protector_postcommon()
 	}
 
 	// user information (uid and can be banned)
-	if( $uid = @get_current_user_id() <> 0 ) {
-		$can_ban = count( @array_intersect( get_groups() , @unserialize( @WortifyConfig::get('wortify_bip_except') ) ) ) ? false : true ;
+	if( $uid = get_current_user_id() <> 0 ) {
+		$can_ban = count( array_intersect( get_groups() , @unserialize( WortifyConfig::get('wortify_bip_except') ) ) ) ? false : true ;
 	} else {
 		// login failed check
 		if( ( ! empty( $_POST['user_login'] ) && ! empty( $_POST['user_pass'] ) ) || ( ! empty( $_COOKIE['autologin_uname'] ) && ! empty( $_COOKIE['autologin_pass'] ) ) ) {
@@ -85,10 +85,10 @@ function protector_postcommon()
 
 
 	// check session hi-jacking
-	$ips = explode( '.' ,  @$_SESSION['protector_last_ip'] ) ;
-	$protector_last_numip = @$ips[0] * 0x1000000 + @$ips[1] * 0x10000 + @$ips[2] * 0x100 + @$ips[3] ;
+	$ips = explode( '.' ,  $_SESSION['protector_last_ip'] ) ;
+	$protector_last_numip = $ips[0] * 0x1000000 + $ips[1] * 0x10000 + $ips[2] * 0x100 + $ips[3] ;
 	$ips = explode( '.' ,  $_SERVER['REMOTE_ADDR'] ) ;
-	$remote_numip = @$ips[0] * 0x1000000 + @$ips[1] * 0x10000 + @$ips[2] * 0x100 + @$ips[3] ;
+	$remote_numip = $ips[0] * 0x1000000 + $ips[1] * 0x10000 + $ips[2] * 0x100 + $ips[3] ;
 	$shift = 32 - @WortifyConfig::get('wortify_session_fixed_topbit') ;
 	if( $shift < 32 && $shift >= 0 && ! empty( $_SESSION['protector_last_ip'] ) && $protector_last_numip >> $shift != $remote_numip >> $shift ) {
 		if( is_object( $wortifyUser ) && count( array_intersect( get_groups() , unserialize( WortifyConfig::get('wortify_groups_denyipmove') ) ) ) ) {
@@ -98,7 +98,7 @@ function protector_postcommon()
 	$_SESSION['protector_last_ip'] = $_SERVER['REMOTE_ADDR'] ;
 
 	// SQL Injection "Isolated /*"
-	if( ! $protector->check_sql_isolatedcommentin( @WortifyConfig::get('wortify_isocom_action') & 1 ) ) {
+	if( ! $protector->check_sql_isolatedcommentin( WortifyConfig::get('wortify_isocom_action') & 1 ) ) {
 		if( ( WortifyConfig::get('wortify_isocom_action') & 8 ) && $can_ban ) $protector->register_bad_ips() ;
 		else if( ( WortifyConfig::get('wortify_isocom_action') & 4 ) && $can_ban ) $protector->register_bad_ips( time() + WortifyConfig::get('wortify_banip_time0') ) ;
 		$protector->output_log( 'ISOCOM' , $uid , true , 32 ) ;
@@ -106,7 +106,7 @@ function protector_postcommon()
 	}
 
 	// SQL Injection "UNION"
-	if( ! $protector->check_sql_union( @WortifyConfig::get('wortify_union_action') & 1 ) ) {
+	if( ! $protector->check_sql_union( WortifyConfig::get('wortify_union_action') & 1 ) ) {
 		if( ( WortifyConfig::get('wortify_union_action') & 8 ) && $can_ban ) $protector->register_bad_ips() ;
 		else if( ( WortifyConfig::get('wortify_union_action') & 4 ) && $can_ban ) $protector->register_bad_ips( time() + WortifyConfig::get('wortify_banip_time0') ) ;
 		$protector->output_log( 'UNION' , $uid , true , 32 ) ;

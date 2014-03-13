@@ -19,7 +19,7 @@
  */
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'object.php';
+include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'wortifyObject.php';
 /**
  * Factory for object handlers
  *

@@ -191,7 +191,7 @@ class HTMLPurifier_URI
         // defer to the schemes to do the right thing.
         $result = '';
         if (!is_null($this->scheme))    $result .= $this->scheme . ':';
-        if (!is_null($authority))       $result .=  '//' . $authority;
+        if (!is_null($authority))       $result .=  '/' . $authority;
         $result .= $this->path;
         if (!is_null($this->query))     $result .= '?' . $this->query;
         if (!is_null($this->fragment))  $result .= '#' . $this->fragment;

@@ -53,7 +53,7 @@ if (!function_exists('json_decode')){
 if (!defined('WORTIFY_REST_API'))
 	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
 
-include_once(WORTIFY_VAR_PATH . '/lib/xortify/include/functions.php');
+include_once(dirname(dirname(__FILE__)) . '/include/functions.php');
 
 
 define('WORTIFY_JSON_LIB', 'PHPJSON');
@@ -256,16 +256,9 @@ class REST_JSONWortifyExchange {
 	}
 	
 	function getBans() {
-		wortify_load('wortifyCache');
-		if (!class_exists('WortifyCache')) {
-			// WORTIFY 2.4 Compliance
-			wortify_load('cache');
-			if (!class_exists('WortifyCache')) {
-				include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-			}
-		}
-        if (! $bans = @$GLOBALS['wortifyCache']->read('wortify_bans_cache')) {
-				$bans = @$GLOBALS['wortifyCache']->read('wortify_bans_cache_backup');
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+        if (! $bans = wortifyCache::read('xortify_bans_cache')) {
+				$bans = wortifyCache::read('xortify_bans_cache_backup');
 				$GLOBALS['xoDoSoap'] = true;
         }
 		return $bans;

@@ -316,7 +316,7 @@ class HTMLPurifier_Injector_AutoParagraph extends HTMLPurifier_Injector
     }
 
     /**
-     * Determines if a particular token requires an earlier inline token
+     * Determines if a particular token includes an earlier inline token
      * to get a paragraph. This should be used with _forwardUntilEndToken
      */
     private function _checkNeedsP($current) {

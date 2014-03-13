@@ -61,7 +61,7 @@ EOH;
         }
         $src = "http://www.youtube.com/v/" . $matches[2];
         if (empty($width) || empty($height)) {
-            if (!$dimension = @getimagesize($src) ) {
+            if (!$dimension = getimagesize($src) ) {
                 return "";
             }
             if (!empty($width)) {

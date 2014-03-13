@@ -48,7 +48,6 @@
 		$form->addElement(new WortifyFormSelectTimezone(WORTIFY_FRM_TIMEZONE, "timezone", (isset($_REQUEST['timezone'])?$_REQUEST['timezone']:'')));
 		$form->addElement(new WortifyFormLabel(WORTIFY_FRM_DISCLAIMER, $Wortifyts->nl2br($disclaimer)));	
 		$form->addElement(new WortifyFormRadioYN(WORTIFY_FRM_DISCLAIMER_AGREE, "agree", false));				
-		$form->addElement(new WortifyFormCaptcha(WORTIFY_FRM_PUZZEL, 'wortifycaptcha', false), true);
 		$form->addElement(new WortifyFormHidden('op', 'signup'));	
 		$form->addElement(new WortifyFormHidden('fct', 'save'));
 		if ($disclaimer != WORTIFY_FRM_NOSOAP_DISCLAIMER)

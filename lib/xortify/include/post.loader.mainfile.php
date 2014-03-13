@@ -31,8 +31,8 @@
  * 
  */
 	
-	include_once (WORTIFY_VAR_PATH . '/lib/xortify/providers/providers.php');
-	include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+	include_once (dirname(dirname(dirname(dirname(__FILE__)))) . '/lib/xortify/providers/providers.php');
+	include_once( dirname(dirname(dirname(dirname(__FILE__)))) . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 	$check = new Providers('postcheck');
-
+	
 ?>

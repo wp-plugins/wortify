@@ -1,12 +1,12 @@
 <div class="wortifyModeElem" id="wortifyMode_blockedIPs"></div>
 <div class="wrap">
 <?php 
-		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-		include_once WORTIFY_VAR_PATH.'/lib/xortify/wortifyPageNav.php';
+		include_once dirname(__FILE__).'/xortify/class/cache/wortifyCache.php';
+		include_once dirname(__FILE__).'/xortify/wortifyPageNav.php';
 		
 		if (!$bans = WortifyCache::read('xortify_bans_cache')) {
-			require_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
-			$func = strtoupper(WortifyConfig::get('xortify_protocol')).'XortifyExchange';
+			include_once( dirname(__FILE__) . '/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
+			$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 			ob_start();
 			$soapExchg = new $func;
 			$bans = $soapExchg->retrieveBans();

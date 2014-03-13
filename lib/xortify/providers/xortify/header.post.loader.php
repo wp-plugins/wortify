@@ -35,18 +35,18 @@
 	{
 		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 		
-		require_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		$result = $apiExchange->retrieveBans();
 				
 		if (is_array($result)) {
 		
-			unlinkOldCachefiles('wortify_',WortifyConfig::get('xortify_ip_cache'));
-			$GLOBALS['wortifyCache']->delete('wortify_bans_cache');
-			$GLOBALS['wortifyCache']->delete('wortify_bans_cache_backup');			
-			$GLOBALS['wortifyCache']->write('wortify_bans_cache', $result, WortifyConfig::get('xortify_seconds'));
-			$GLOBALS['wortifyCache']->write('wortify_bans_cache_backup', $result, (WortifyConfig::get('xortify_seconds') * 1.45));			
+			unlinkOldCachefiles('xortify_',WortifyConfig::get('xortify_ip_cache'));
+			wortifyCache::delete('xortify_bans_cache');
+			wortifyCache::delete('xortify_bans_cache_backup');			
+			wortifyCache::write('xortify_bans_cache', $result, WortifyConfig::get('xortify_seconds'));
+			wortifyCache::write('xortify_bans_cache_backup', $result, (WortifyConfig::get('xortify_seconds') * 1.45));			
 		}		
 	}
 	

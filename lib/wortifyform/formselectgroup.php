@@ -23,7 +23,7 @@ defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 /**
  * Parent
  */
-wortify_load('WortifyFormElement');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formelement.php');
 
 /**
  * A select field with a choice of available groups
@@ -43,7 +43,7 @@ class WortifyFormSelectGroup extends WortifyFormSelect
     function WortifyFormSelectGroup($caption, $name, $include_anon = false, $value = null, $size = 1, $multiple = false)
     {
         $this->WortifyFormSelect($caption, $name, $value, $size, $multiple);
-        $this->addOptionArray(get_groups());
+        $this->addOptionArray(array('superadmin'=>'Super Administrator', 'admin'=>'Administrator', 'author'=>'Author', 'editor'=>'Editor', 'contributor'=>'Contributor', 'anonymous'=>'Anonymous Guest'));
     }
 }
 

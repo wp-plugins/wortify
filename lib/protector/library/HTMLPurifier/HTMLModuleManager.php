@@ -399,10 +399,10 @@ class HTMLPurifier_HTMLModuleManager
         // mix it in with
         if (!$def) return false;
 
-        // add information on required attributes
+        // add information on included attributes
         foreach ($def->attr as $attr_name => $attr_def) {
-            if ($attr_def->required) {
-                $def->required_attr[] = $attr_name;
+            if ($attr_def->included) {
+                $def->included_attr[] = $attr_name;
             }
         }
 

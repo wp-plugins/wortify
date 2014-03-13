@@ -1,16 +1,91 @@
 <?php
+include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyFunctions.php';
+
 // Set constants
 define('WORTIFY_VAR_PATH', dirname(dirname(__FILE__)));
 define('WORTIFY_ROOT_PATH', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 define('WORTIFY_MAX_MEMORY', '256');
 define('WORTIFY_URL', site_url() . '/wp-content/plugins/wortify/');
-define('WORTIFY_API_URLWORTIFYTIFY', 'https://wortify.com/api/');
+define('WORTIFY_API_URL_WORTIFY', 'https://xortify.com/api/');
 define('WORTIFY_API_URL_IPINFODB', 'https://lookups.labs.coop/');
 define('WORTIFY_API_URL_PLACES', 'https://places.labs.coop/');
 define('WORTIFY_API_URL_WHOIS', 'https://whois.labs.coop/');
 define('DB_TYPE', 'mysql');
 define('WORTIFY_VERSION', '4.01');
 
+// Protector Admin
+// index.php
+define("WORTIFT_AM_TH_DATETIME","Time");
+define("WORTIFT_AM_TH_USER","User");
+define("WORTIFT_AM_TH_IP","IP");
+define("WORTIFT_AM_TH_AGENT","AGENT");
+define("WORTIFT_AM_TH_TYPE","Type");
+define("WORTIFT_AM_TH_DESCRIPTION","Description");
+
+define("WORTIFT_AM_TH_BADIPS" , 'Bad IPs<br /><br /><span style="font-weight:normal;">Write each IP a line<br />blank means all IPs are allowed</span>');
+
+define("WORTIFT_AM_TH_GROUP1IPS" , 'Allowed IPs for Group=1<br /><br /><span style="font-weight:normal;">Write each IP a line.<br />192.168. means 192.168.*<br />blank means all IPs are allowed</span>');
+
+define("WORTIFT_AM_LABEL_COMPACTLOG" , "Compact log");
+define("WORTIFT_AM_BUTTON_COMPACTLOG" , "Compact it!");
+define("WORTIFT_AM_JS_COMPACTLOGCONFIRM" , "Duplicated (IP,Type) records will be removed");
+define("WORTIFT_AM_LABEL_REMOVEALL" , "Remove all records");
+define("WORTIFT_AM_BUTTON_REMOVEALL" , "Remove all!");
+define("WORTIFT_AM_JS_REMOVEALLCONFIRM" , "All logs are removed absolutely. Are you really OK?");
+define("WORTIFT_AM_LABEL_REMOVE" , "Remove the records checked:");
+define("WORTIFT_AM_BUTTON_REMOVE" , "Remove!");
+define("WORTIFT_AM_JS_REMOVECONFIRM" , "Remove OK?");
+define("WORTIFT_AM_MSG_IPFILESUPDATED" , "Files for IPs have been updated");
+define("WORTIFT_AM_MSG_BADIPSCANTOPEN" , "The file for bad IP cannot be opened");
+define("WORTIFT_AM_MSG_GROUP1IPSCANTOPEN" , "The file for allowing group=1 cannot be opened");
+define("WORTIFT_AM_MSG_REMOVED" , "Records are removed");
+define("WORTIFT_AM_FMT_CONFIGSNOTWRITABLE" , "Turn the configs directory writable: %s");
+
+
+// prefix_manager.php
+define("WORTIFT_AM_H3_PREFIXMAN" , "Prefix Manager");
+define("WORTIFT_AM_MSG_DBUPDATED" , "Database Updated Successfully!");
+define("WORTIFT_AM_CONFIRM_DELETE" , "All data will be dropped. OK?");
+define("WORTIFT_AM_TXT_HOWTOCHANGEDB" , "If you want to change prefix,<br /> edit %s/mainfile.php manually.<br /><br />define('XOOPS_DB_PREFIX', '<b>%s</b>');");
+
+
+// advisory.php
+define("WORTIFT_AM_ADV_NOTSECURE","Not secure");
+
+define("WORTIFT_AM_ADV_TRUSTPATHPUBLIC","If you can see an image -NG- or the link returns normal page, your XOOPS_TRUST_PATH is not placed properly. The best place for XOOPS_TRUST_PATH is outside of DocumentRoot. If you cannot do that, you have to put .htaccess (DENY FROM ALL) just under XOOPS_TRUST_PATH as the second best way.");
+define("WORTIFT_AM_ADV_TRUSTPATHPUBLICLINK","Check that PHP files inside TRUST_PATH are set to read-only (it must be 404,403 or 500 error)");
+define("WORTIFT_AM_ADV_REGISTERGLOBALS","If 'ON', this setting invites a variety of injecting attacks. If you can, set 'register_globals off' in php.ini, or if not possible, create or edit .htaccess in your XOOPS directory:");
+define("WORTIFT_AM_ADV_ALLOWURLFOPEN","If 'ON', this setting allows attackers to execute arbitrary scripts on remote servers.<br />Only administrator can change this option.<br />If you are an admin, edit php.ini or httpd.conf.<br /><b>Sample of httpd.conf:<br /> &nbsp; php_admin_flag &nbsp; allow_url_fopen &nbsp; off</b><br />Else, claim it to your administrators.");
+define("WORTIFT_AM_ADV_USETRANSSID","If 'ON', your Session ID will be displayed in anchor tags etc.<br />To prevent session hi-jacking, add a line into .htaccess in XOOPS_ROOT_PATH.<br /><b>php_flag session.use_trans_sid off</b>");
+define("WORTIFT_AM_ADV_DBPREFIX","This setting invites 'SQL Injections'.<br />Don't forget turning 'Force sanitizing *' ON in this module's preferences.");
+define("WORTIFT_AM_ADV_LINK_TO_PREFIXMAN","Go to prefix manager");
+define("WORTIFT_AM_ADV_MAINUNPATCHED","You should edit your mainfile.php like written in README.");
+define("WORTIFT_AM_ADV_DBFACTORYPATCHED","Your databasefactory is ready for DBLayer Trapping anti-SQL-Injection");
+define("WORTIFT_AM_ADV_DBFACTORYUNPATCHED","Your databasefactory is not ready for DBLayer Trapping anti-SQL-Injection. Some patches are required.");
+
+define("WORTIFT_AM_ADV_SUBTITLECHECK","Check if Protector works well");
+define("WORTIFT_AM_ADV_CHECKCONTAMI","Contamination");
+define("WORTIFT_AM_ADV_CHECKISOCOM","Isolated Comments");
+
+//XOOPS 2.5.4
+define("WORTIFT_AM_ADV_REGISTERGLOBALS2","and place in it the line below:");
+
+//Signup form
+define('WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER', 'Network did not provide Disclaimer for signing up!');
+define('WORTIFY_ADMIN_SIGNUP_XORTIFY_H2', 'Sign-up to the Xortify.com cloud for full services!');
+define('WORTIFY_ADMIN_SIGNUP_XORTIFY_P', 'This form will allow you to sign-up to the Xortify cloud for full services from this software!');
+define('WORTIFY_ADMIN_ERROR_OCCURED', 'API Error Occurred');
+define('WORTIFY_ADMIN_ERROR_URL', 'API URL Reference');
+define('WORTIFY_ADMIN_ERROR_PROTOCOL', 'API Protocol Selected Currently');
+
+define('_SUBMIT', 'Submit & Save');
+define('_GO', 'Go...');
+define('_YES', 'Yes');
+define('_NO', 'No');
+define('_NONE', 'None');
+define('WORTIFY_AM_NOCACHEMSG', '<div style="font-size: 1.99em; color:red; margin-top:45px;"><center>Absolutely no ban\'s current hosted on Cloud Service!</center></div>');
+define('WORTIFY_MI_PHP_DAYS', '%s day(s)');
+define('WORTIFY_MI_PHP_SEVERITY', '%s percent');
 define('WORTIFY_ADMIN_IPTYPE_IP4', 'IPv4');
 define('WORTIFY_ADMIN_IPTYPE_IP6', 'IPv6');
 define('WORTIFY_ADMIN_IPTYPE_EMPTY', 'No IP');
@@ -62,7 +137,7 @@ define('WORTIFY_WORDS', 'Minimum Word Criteria');
 define('WORTIFY_SPAM', 'Spam Heuristics');
 define('WORTIFY_WORDS_PAGETITLE', 'Minimum Word Criteria not met!');
 define('WORTIFY_SPAM_PAGETITLE', 'Spam Heuristics Flagged!');
-define('WORTIFY_WORDS_DESCRIPTION', '<p align="center"><img align="middle" src="'.XOOPS_URL.'/modules/xortify/images/accessdenied.png"></p><p align="center" style="font-size:18px">You have been blocked from our site by Xortify, this is because you didn\'t meet the minimum word requirements for a submissions; you cannot be banned for this you will have to press the back button and try again!</p>');
+define('WORTIFY_WORDS_DESCRIPTION', '<p align="center"><img align="middle" src="'.XOOPS_URL.'/modules/xortify/images/accessdenied.png"></p><p align="center" style="font-size:18px">You have been blocked from our site by Xortify, this is because you didn\'t meet the minimum word includements for a submissions; you cannot be banned for this you will have to press the back button and try again!</p>');
 define('WORTIFY_SPAM_DESCRIPTION', '<p align="center"><img align="middle" src="'.XOOPS_URL.'/modules/xortify/images/accessdenied.png"></p><p align="center" style="font-size:18px">You have been blocked for submitted spam by our spam heuristic checking system Xortify, this is possibly done by one of our third parties like Stop Forum Spam or Project Honeypot, you will have to check the provider of the ban!</p><div style="clear:both; height: 25px;">&nbsp;</div><p align="center" style="font-size:14px">You can occur an IP Bans in a certain number of these; that is a ban that is based on the provider "Xortify" are with your IP Can be removed by going to <a href="http://wortify.com/modules/unban/">XORTIFY DOT COM</a><br/><br/>This ban is not permenant and will drop in 3 months!</p>');
 
 // Sets Language Constants for Configuration
@@ -128,7 +203,7 @@ define('WORTIFY_BIP_EXCEPT','Groups never registered as Bad IP');
 define('WORTIFY_BIP_EXCEPTDSC','A user who belongs to the group specified here will never be banned.<br />(I recommend to turn Administrator on.)');
 define('WORTIFY_DISABLES','Disable dangerous features in WORTIFY');
 define('DBLAYERTRAP','Enable DB Layer trapping anti-SQL-Injection');
-define('DBLAYERTRAPDSC','Almost SQL Injection attacks will be canceled by this feature. This feature is required a support from databasefactory. You can check it on Security Advisory page. This setting must be on. Never turn it off casually.');
+define('DBLAYERTRAPDSC','Almost SQL Injection attacks will be canceled by this feature. This feature is included a support from databasefactory. You can check it on Security Advisory page. This setting must be on. Never turn it off casually.');
 define('DBTRAPWOSRV','Never checking _SERVER for anti-SQL-Injection');
 define('DBTRAPWOSRVDSC','Some servers always enable DB Layer trapping. It causes wrong detections as SQL Injection attack. If you got such errors, turn this option on. You should know this option weakens the security of DB Layer trapping anti-SQL-Injection.');
 define('WORTIFY_BIGUMBRELLA','enable anti-XSS (BigUmbrella)');
@@ -140,9 +215,9 @@ define('WORTIFY_SPAMURI4GDSC','If this number of URLs are found in POST data fro
 define('WORTIFY_STOPFORUMSPAM_ACTION','Stop Forum Spam');
 define('WORTIFY_STOPFORUMSPAM_ACTIONDSC','Checks POST data against spammers registered on www.stopforumspam.com database. Requires php CURL lib.');
 define('WORTIFY_USERNAME', 'Wortify Cloud Username');
-define('WORTIFY_USERNAME_DESC', 'You can get one of these by going to the menu <a href="'.WORTIFY_URL.'/lib/xortify/admin/index.php?op=signup&fct=signup">Sign-up</a>');
+define('WORTIFY_USERNAME_DESC', 'You can get one of these by going to the menu <a href="admin.php?page=wortify-menu-signup">Sign-up</a>');
 define('WORTIFY_PASSWORD', 'Wortify Cloud Password');
-define('WORTIFY_PASSWORD_DESC', 'You assign one of these by going to the menu <a href="'.WORTIFY_URL.'/lib/xortify/admin/index.php?op=signup&fct=signup">Sign-up</a>');
+define('WORTIFY_PASSWORD_DESC', 'You assign one of these by going to the menu <a href="admin.php?page=wortify-menu-signup">Sign-up</a>');
 define('WORTIFY_SECONDS', 'Seconds to base Cache List on!');
 define('WORTIFY_SECONDS_DESC', 'Period of time for ban list to be invocated!');
 define('WORTIFY_PROVIDERS', 'Provider Plug-ins');
@@ -187,7 +262,7 @@ define('WORTIFY_RECORDS_300', '300 Records');
 define('WORTIFY_RECORDS_180', '180 Records');
 define('WORTIFY_RECORDS_60', '60 Records');
 define('WORTIFY_RECORDS_30', '30 Records');
-define('WORTIFY_PROVIDERWORTIFYTIFY', 'Wortify Module');
+define('WORTIFY_PROVIDER_XORTIFY', 'Wortify Module');
 define('WORTIFY_PROVIDER_PROTECTOR', 'Wortify Protector Module');
 define('WORTIFY_PROVIDER_STOPFORUMSPAM', 'Stop Forum Spam');
 define('WORTIFY_PROVIDER_PROJECTHONEYPOT', 'Project Honeypot');
@@ -307,37 +382,19 @@ define('WORTIFY_SPOOF_COMMENT_DESC', 'Displays a fake comment now form for the p
 define('WORTIFY_SPOOF_REGISTRATION_DESC', 'Displays a fake registrationw form for the purposes of capturing spam and banning the submitter!');
 define('WORTIFY_SPOOF_THREAD_DESC', 'Displays a fake thread form for the purposes of capturing spam and banning the submitter!');
 
+define('WORTIFY_IPINFODB_URL', 'URL for ipinfodb.com API');
+define('WORTIFY_IPINFODB_URL_DESC', 'This is the URL for the IP Information Databases API. <font style="color: red;">(Only included for minimal mode)</font>');
+define('WORTIFY_IPINFODB_KEY', 'Key for ipinfodb.com');
+define('WORTIFY_IPINFODB_KEY_DESC', 'This is the API Key provided by ipinfodb.com. <font style="color: red;">(Only included for minimal mode)</font>');
+define('WORTIFY_ALERT_EMAILS', 'Emails to be alerted on bans and blocks!');
+define('WORTIFY_ALERT_EMAILS_DESC', 'Seperated by a pipe symbol ("|") these are the emails that are sent IP Security Alerts!');
+define('WORTIFY_ALERT_ON_WARNINGS', 'Send an alert on warnings!');
+define('WORTIFY_ALERT_ON_WARNINGS_DESC', 'Enable this for alerts on spam warnings!');
+define('WORTIFY_ALERT_ON_CRITICAL', 'Send alter on critical spam ban!');
+define('WORTIFY_ALERT_ON_CRITICAL_DESC', 'Enable this for alerts on critical spam warnings!');
+define('WORTIFY_SERVERCACHE', 'Server list is kept for this time before refreshing!');
+define('WORTIFY_SERVERCACHE_DESC', 'The length a server list is kept for.');
 
-// Variable Constants
-$options = array();
-for($days=1;$days<=255;$days++)
-	$options[sprintf(WORTIFY_MI_PHP_DAYS, $days)] = $days;
-define('WORTIFY_OPTIONS_PHP_DAYS', $options);
-
-$options = array();
-for($severity=5;$severity<=255;$severity++)
-	$options[sprintf(WORTIFY_MI_PHP_SEVERITY, number_format($severity/255*100, 2))] = $severity;
-define('WORTIFY_OPTIONS_PHP_SEVERITY', $options);
-
-$options = array();
-for($num=1;$num<=150;$num++)
-	$options[sprintf(WORTIFY_MI_SFS_EMAIILFREQ, $num)] = $num;
-define('WORTIFY_OPTIONS_SFS_EMAIILFREQ', $options);
-
-$options = array();
-for($num=1;$num<=150;$num++)
-	$options[sprintf(WORTIFY_MI_SFS_UNAMEFREQ, $num)] = $num;
-define('WORTIFY_OPTIONS_SFS_UNAMEFREQ', $options);
-
-$options = array();
-for($num=1;$num<=150;$num++)
-	$options[sprintf(WORTIFY_MI_SFS_IPFREQ, $num)] = $num;
-define('WORTIFY_OPTIONS_SFS_IPFREQ', $options);
-
-define('WORTITY_DEFAULT_API_METHOD', wortify_apimethod(false));
-define('WORTITY_OPTIONS_API_METHOD', wortify_apimethod(false));
-
-// Load Database Objectivity
-$GLOBALS['wortifyDB'] = new wortifydb($GLOBALS['wpdb']);
+include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyDatabase.php';
 
 ?>

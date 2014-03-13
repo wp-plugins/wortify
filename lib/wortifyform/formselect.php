@@ -20,7 +20,7 @@
  */
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormElement');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formelement.php');
 
 /**
  * A select field
@@ -228,7 +228,7 @@ class WortifyFormSelect extends WortifyFormElement
         // render custom validation code if any
         if (! empty($this->customValidationCode)) {
             return implode("\n", $this->customValidationCode);
-            // generate validation code if required
+            // generate validation code if included
         } elseif ($this->isRequired()) {
             $eltname = $this->getName();
             $eltcaption = $this->getCaption();

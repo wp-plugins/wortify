@@ -20,7 +20,7 @@
 
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormElementTray');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formelementtray.php');
 
 /**
  * WortifyFormSelectEditor

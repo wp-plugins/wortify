@@ -30,8 +30,9 @@
 * License:		GNU3
 *
 */
+error_reporting(E_ERROR);
 
-if (!defined('WORTIFY_ROOT_PATH')) {
+if (!defined('WORTIFY_VAR_PATH')) {
 	exit();
 }
 /**
@@ -40,10 +41,10 @@ if (!defined('WORTIFY_ROOT_PATH')) {
  * @copyright copyright (c) 2009-2003 WORTIFY.org
  * @package kernel
  */
-class WortifyLog extends WortifyObject
+class XortifyLog extends WortifyObject
 {
 
-    function WortifyLog($id = null)
+    function XortifyLog($id = null)
     {
         $this->initVar('lid', XOBJ_DTYPE_INT, null, false);
 		$this->initVar('uid', XOBJ_DTYPE_INT, null, false);
@@ -72,7 +73,7 @@ class WortifyLog extends WortifyObject
     
     function runPrePlugin($default = true) {
 		
-		include_once(WORTIFY_VAR_PATH . ('/lib/xortify/plugin/'.$this->getVar('provider').'.php'));
+		include_once(dirname(dirname(__FILE__)) . ('/plugin/'.$this->getVar('provider').'.php'));
 		
 		switch ($this->getVar('action')) {
 			case 'banned':
@@ -86,14 +87,14 @@ class WortifyLog extends WortifyObject
 		}
 		
 		if (function_exists($func))  {
-			return @$func($default, $this);
+			return $func($default, $this);
 		}
 		return $default;
 	}
     
 	function runPostPlugin($lid) {
 		
-		include_once(WORTIFY_VAR_PATH . ('/lib/xortify/plugin/'.$this->getVar('provider').'.php'));
+		include_once(dirname(dirname(__FILE__)) . ('/plugin/'.$this->getVar('provider').'.php'));
 		
 		switch ($this->getVar('action')) {
 			case 'banned':
@@ -107,7 +108,7 @@ class WortifyLog extends WortifyObject
 		}
 		
 		if (function_exists($func))  {
-			return @$func($this, $lid);
+			return $func($this, $lid);
 		}
 		return $lid;
 	}
@@ -122,12 +123,12 @@ class WortifyLog extends WortifyObject
 * @author  Simon Roberts <simon@chronolabs.coop>
 * @package kernel
 */
-class WortifyLogHandler extends WortifyPersistableObjectHandler
+class XortifyLogHandler extends WortifyPersistableObjectHandler
 {
     function __construct(&$db) 
     {
 		$this->db = $db;
-        parent::__construct($db, 'wortify_log', 'WortifyLog', "lid", "network-addy");
+        parent::__construct($db, 'wortify_log', 'XortifyLog', "lid", "network-addy");
     }
 	
     function insert($object, $force = true) {

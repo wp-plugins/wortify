@@ -172,7 +172,7 @@ class HTMLPurifier_Generator
         if (!$token instanceof HTMLPurifier_Token_Text) return $this->generateFromToken($token);
         // Thanks <http://lachy.id.au/log/2005/05/script-comments>
         $data = preg_replace('#//\s*$#', '', $token->data);
-        return '<!--//--><![CDATA[//><!--' . "\n" . trim($data) . "\n" . '//--><!]]>';
+        return '<!--//--><![CDATA[//><!--' . "\n" . trim($data) . "\n" . '/--><!]]>';
     }
 
     /**

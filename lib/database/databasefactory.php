@@ -47,8 +47,8 @@ class WortifyDatabaseFactory
     {
         static $instance;
         if (!isset($instance)) {
-            if (file_exists($file = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . DB_TYPE . 'database.php')) {
-                require_once $file;
+            if (file_exists($file = dirname(__FILE__) . DIRECTORY_SEPARATOR . DB_TYPE . 'database.php')) {
+                include_once $file;
 
                 if (!defined('DB_PROXY')) {
                     $class = 'Wortify' . ucfirst(DB_TYPE) . 'DatabaseSafe';
@@ -56,7 +56,7 @@ class WortifyDatabaseFactory
                     $class = 'Wortify' . ucfirst(DB_TYPE) . 'DatabaseProxy';
                 }
 
-                $instance = new $class($dbh);
+                $instance = new $class(NULL);
                 if (!$instance->connect()) {
                     trigger_error('notrace:Unable to connect to database', E_USER_ERROR);
                 }
@@ -79,7 +79,7 @@ class WortifyDatabaseFactory
     {
         static $database;
         if (!isset($database)) {
-            if (file_exists($file = WORTIFY_ROOT_PATH . '/class/database/' . DB_TYPE . 'database.php')) {
+            if (file_exists($file = dirname(__FILE__) . DIRECTORY_SEPARATOR . DB_TYPE . 'database.php')) {
                 include_once $file;
                 if (!defined('DB_PROXY')) {
                     $class = 'Wortify' . ucfirst(DB_TYPE) . 'DatabaseSafe';

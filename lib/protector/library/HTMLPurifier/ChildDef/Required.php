@@ -33,7 +33,7 @@ class HTMLPurifier_ChildDef_Required extends HTMLPurifier_ChildDef
         $this->elements = $elements;
     }
     public $allow_empty = false;
-    public $type = 'required';
+    public $type = 'included';
     public function validateChildren($tokens_of_children, $config, $context) {
         // Flag for subclasses
         $this->whitespace = false;

@@ -23,7 +23,7 @@
  */
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormCheckBox');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formcheckbox.php');
 /**
  * Wortify Form Select Check Groups
  *

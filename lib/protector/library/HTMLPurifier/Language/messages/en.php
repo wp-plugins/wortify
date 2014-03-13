@@ -26,7 +26,7 @@ $messages = array(
 'Lexer: Extracted body'        => 'Removed document metadata tags',
 
 'Strategy_RemoveForeignElements: Tag transform'              => '<$1> element transformed into $CurrentToken.Serialized',
-'Strategy_RemoveForeignElements: Missing required attribute' => '$CurrentToken.Compact element missing required attribute $1',
+'Strategy_RemoveForeignElements: Missing included attribute' => '$CurrentToken.Compact element missing included attribute $1',
 'Strategy_RemoveForeignElements: Foreign element to text'    => 'Unrecognized $CurrentToken.Serialized tag converted to text',
 'Strategy_RemoveForeignElements: Foreign element removed'    => 'Unrecognized $CurrentToken.Serialized tag removed',
 'Strategy_RemoveForeignElements: Comment removed'            => 'Comment containing "$CurrentToken.Data" removed',

@@ -49,10 +49,10 @@ if (!class_exists('WortifyAuthFactory')) {
 					
 			static $auth_instance;		
 			if (!isset($auth_instance)) {
-				require_once WORTIFY_VAR_PATH . '/lib/xortify/class/auth/auth.php';
+				include_once 'auth.php';
 				// Verify if uname allow to bypass LDAP auth 
-				$file = WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_' . $xortify_auth_method . '.php';			
-				require_once $file;
+				$file = dirname(__FILE__) . DIRECTORY_SEPARATOR .'auth_' . $xortify_auth_method . '.php';
+				include_once $file;
 				$class = 'WortifyAuth' . ucfirst($xortify_auth_method);
 				switch ($xortify_auth_method) {
 					case 'soap';

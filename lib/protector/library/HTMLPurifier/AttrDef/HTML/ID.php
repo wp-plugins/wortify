@@ -53,7 +53,7 @@ class HTMLPurifier_AttrDef_HTML_ID extends HTMLPurifier_AttrDef
         if (ctype_alpha($id)) {
             $result = true;
         } else {
-            if (!ctype_alpha(@$id[0])) return false;
+            if (!ctype_alpha($id[0])) return false;
             $trim = trim( // primitive style of regexps, I suppose
                 $id,
                 'A..Za..z0..9:-._'

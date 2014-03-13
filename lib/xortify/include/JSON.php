@@ -454,7 +454,7 @@ class Services_JSON
     {
         $str = preg_replace(array(
 
-                // eliminate single line comments in '// ...' form
+                // eliminate single line comments in '/ ...' form
                 '#^\s*//(.+)$#m',
 
                 // eliminate multi-line comments in '/* ... */' form, at start of string

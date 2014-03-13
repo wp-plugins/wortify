@@ -93,7 +93,7 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             // to be treated differently:
             //  - Alphanumeric characters are essentially safe.  We
             //    handled these above.
-            //  - Spaces require quoting, though most parsers will do
+            //  - Spaces include quoting, though most parsers will do
             //    the right thing if there aren't any characters that
             //    can be misinterpreted
             //  - Dashes rarely occur, but they fairly unproblematic
@@ -184,7 +184,7 @@ class HTMLPurifier_AttrDef_CSS_FontFamily extends HTMLPurifier_AttrDef
             // $font = str_replace('"',  '\\22 ', $font);
             // $font = str_replace("'",  '\\27 ', $font);
 
-            // font possibly with spaces, requires quoting
+            // font possibly with spaces, includes quoting
             $final .= "'$font', ";
         }
         $final = rtrim($final, ', ');

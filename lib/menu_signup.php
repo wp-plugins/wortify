@@ -1,6 +1,8 @@
 <?php
+	global $error;
+	
 	include_once dirname(__FILE__) . '/xortify/include/forms.wortify.php';
-	include_once dirname(__FILE__) . '/xortify/class/auth/auth.php';
+	include_once dirname(__FILE__) . '/xortify/class/auth/authfactory.php';
 
 	$op = isset($_REQUEST['op'])?$_REQUEST['op']:"signup";
 	$fct = isset($_REQUEST['fct'])?$_REQUEST['fct']:"";
@@ -12,7 +14,7 @@
 		{
 		case "save":	
 
-			$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('wortify_protocol'));
+			$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('xortify_protocol'));
 			$myts =& MyTextSanitizer::getInstance();
 			$uname = isset($_POST['uname']) ? $myts->stripSlashesGPC(trim($_POST['uname'])) : '';
 			$email = isset($_POST['email']) ? $myts->stripSlashesGPC(trim($_POST['email'])) : '';
@@ -29,15 +31,9 @@
 			
 			if ($validate!=false)
 				$stop .= "User details didn't validate with Wortify.com<br/>$validate";
-			
-			$GLOBALS['xoopsLoad']->load("captcha");
-			$xoopsCaptcha = XoopsCaptcha::getInstance();
-			if (! $xoopsCaptcha->verify() ) {
-				$stop .= $xoopsCaptcha->getMessage();
-			}
-			
+					
 			if ($stop!='') {
-				$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('wortify_protocol'));
+				$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('xortify_protocol'));
 				$disclaimer = $wortifyAuth->network_disclaimer();
 				if (strlen(trim($disclaimer))==0)
 				{
@@ -51,29 +47,29 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 				} else {
 ?>
 <h2><?php echo WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
-<p><?php echo $error; ?></p>
+<p><?php echo $GLOBALS['error']; ?></p>
 <br/><br/>
 <h3><?php echo WORTIFY_ADMIN_ERROR_URL; ?></h3>
-<pre><?php echo WortifyConfig::get('wortify_urirest_'); ?></pre>
+<pre><?php echo WortifyConfig::get('xortify_urirest'); ?></pre>
 <br/><br/>
 <h3><?php echo WORTIFY_ADMIN_ERROR_PROTOCOL; ?></h3>
-<pre><?php echo WortifyConfig::get('wortify_protocol'); ?></pre>
+<pre><?php echo WortifyConfig::get('xortify_protocol'); ?></pre>
 <?php 
 									}
 					
 			} else {
-				@$wortifyAuth->create_user(	$_REQUEST['viewemail'], $uname, $email, $url, $actkey, 
+				$wortifyAuth->create_user(	$_REQUEST['viewemail'], $uname, $email, $url, $actkey, 
 											$pass, $_REQUEST['timezone'], $_REQUEST['mailok'], $wortifyAuth->check_siteinfo(array()));
 				
-				@WortifyConfig::set('wortify_username', $pass);
-				@WortifyConfig::set('wortify_password', $pass);
+				@WortifyConfig::set('xortify_username', $pass);
+				@WortifyConfig::set('xortify_password', $pass);
 				header('Location: ' . site_url());
 				exit(0);
 			}
 			break;
 		default:	
 		case "signup":
-			$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('wortify_protocol'));
+			$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('xortify_protocol'));
 			$disclaimer = $wortifyAuth->network_disclaimer();
 			if (strlen(trim($disclaimer))==0)
 			{
@@ -86,13 +82,13 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 			} else {
 ?>
 <h2><?php echo WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
-<p><?php echo $error; ?></p>
+<p><?php echo $GLOBALS['error']; ?></p>
 <br/><br/>
 <h3><?php echo WORTIFY_ADMIN_ERROR_URL; ?></h3>
-<pre><?php echo WortifyConfig::get('wortify_urirest_'); ?></pre>
+<pre><?php echo WortifyConfig::get('xortify_urirest'); ?></pre>
 <br/><br/>
 <h3><?php echo WORTIFY_ADMIN_ERROR_PROTOCOL; ?></h3>
-<pre><?php echo WortifyConfig::get('wortify_protocol'); ?></pre>
+<pre><?php echo WortifyConfig::get('xortify_protocol'); ?></pre>
 <?php 
 			}
 			break;

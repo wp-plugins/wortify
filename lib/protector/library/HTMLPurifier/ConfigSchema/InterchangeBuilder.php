@@ -78,7 +78,7 @@ class HTMLPurifier_ConfigSchema_InterchangeBuilder
     public function buildDirective($interchange, $hash) {
         $directive = new HTMLPurifier_ConfigSchema_Interchange_Directive();
 
-        // These are required elements:
+        // These are included elements:
         $directive->id = $this->id($hash->offsetGet('ID'));
         $id = $directive->id->toString(); // convenience
 

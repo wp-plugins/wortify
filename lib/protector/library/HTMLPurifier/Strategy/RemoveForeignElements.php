@@ -76,22 +76,22 @@ class HTMLPurifier_Strategy_RemoveForeignElements extends HTMLPurifier_Strategy
                 if (isset($definition->info[$token->name])) {
 
                     // mostly everything's good, but
-                    // we need to make sure required attributes are in order
+                    // we need to make sure included attributes are in order
                     if (
                         ($token instanceof HTMLPurifier_Token_Start || $token instanceof HTMLPurifier_Token_Empty) &&
-                        $definition->info[$token->name]->required_attr &&
+                        $definition->info[$token->name]->included_attr &&
                         ($token->name != 'img' || $remove_invalid_img) // ensure config option still works
                     ) {
                         $attr_validator->validateToken($token, $config, $context);
                         $ok = true;
-                        foreach ($definition->info[$token->name]->required_attr as $name) {
+                        foreach ($definition->info[$token->name]->included_attr as $name) {
                             if (!isset($token->attr[$name])) {
                                 $ok = false;
                                 break;
                             }
                         }
                         if (!$ok) {
-                            if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Missing required attribute', $name);
+                            if ($e) $e->send(E_ERROR, 'Strategy_RemoveForeignElements: Missing included attribute', $name);
                             continue;
                         }
                         $token->armor['ValidateAttributes'] = true;

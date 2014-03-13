@@ -63,17 +63,17 @@ abstract class HTMLPurifier_URIScheme
             // if the scheme is present, a missing host is always in error
             (!is_null($uri->scheme) && ($uri->host === '' || is_null($uri->host))) ||
             // if the scheme is not present, a *blank* host is in error,
-            // since this translates into '///path' which most browsers
+            // since this translates into '//path' which most browsers
             // interpret as being 'http://path'.
              (is_null($uri->scheme) && $uri->host === '')
         ) {
             do {
                 if (is_null($uri->scheme)) {
-                    if (substr($uri->path, 0, 2) != '//') {
+                    if (substr($uri->path, 0, 2) != '/') {
                         $uri->host = null;
                         break;
                     }
-                    // URI is '////path', so we cannot nullify the
+                    // URI is '///path', so we cannot nullify the
                     // host to preserve semantics.  Try expanding the
                     // hostname instead (fall through)
                 }

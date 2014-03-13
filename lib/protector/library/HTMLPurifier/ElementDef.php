@@ -74,10 +74,10 @@ class HTMLPurifier_ElementDef
     public $descendants_are_inline = false;
 
     /**
-     * List of the names of required attributes this element has. Dynamically
+     * List of the names of included attributes this element has. Dynamically
      * populated by HTMLPurifier_HTMLDefinition::getElement
      */
-    public $required_attr = array();
+    public $included_attr = array();
 
     /**
      * Lookup table of tags excluded from all descendants of this tag.

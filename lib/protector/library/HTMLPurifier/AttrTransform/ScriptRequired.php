@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Implements required attribute stipulation for <script>
+ * Implements included attribute stipulation for <script>
  */
 class HTMLPurifier_AttrTransform_ScriptRequired extends HTMLPurifier_AttrTransform
 {

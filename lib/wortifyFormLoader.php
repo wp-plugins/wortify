@@ -17,38 +17,38 @@
  */
 
 
-include_once dirname(__FILE__) . strtolower('/wortifyform/Form');
-include_once dirname(__FILE__) . strtolower('/wortifyform/ThemeForm');
-include_once dirname(__FILE__) . strtolower('/wortifyform/SimpleForm');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormElement');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormElementTray');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormLabel');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormCheckBox');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormPassword');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormButton');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormButtonTray'); // To be cleaned
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormHidden');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormFile');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormRadio');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormRadioYN');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelect');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectGroup');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectCheckGroup'); // To be cleaned
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectUser');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectTheme');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectMatchOption');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectCountry');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectTimeZone');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectLang');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectEditor');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormText');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormTextArea');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormTextDateSelect');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormDhtmlTextArea');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormDateTime');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormHiddenToken');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormColorPicker');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormCaptcha');
-include_once dirname(__FILE__) . strtolower('/wortifyform/FormEditor');
+include_once dirname(__FILE__) . strtolower('/wortifyform/Form.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/ThemeForm.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/SimpleForm.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormElement.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormElementTray.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormLabel.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormCheckBox.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormPassword.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormButton.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormButtonTray.php'); // To be cleaned
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormHidden.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormFile.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormRadio.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormRadioYN.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelect.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectGroup.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectCheckGroup.php'); // To be cleaned
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectUser.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectTheme.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectMatchOption.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectCountry.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectTimeZone.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectLang.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormSelectEditor.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormText.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormTextArea.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormTextDateSelect.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormDhtmlTextArea.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormDateTime.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormHiddenToken.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormColorPicker.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormCaptcha.php');
+include_once dirname(__FILE__) . strtolower('/wortifyform/FormEditor.php');
 
 ?>

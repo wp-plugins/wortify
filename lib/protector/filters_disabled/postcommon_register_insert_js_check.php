@@ -28,13 +28,13 @@ class protector_postcommon_register_insert_js_check extends ProtectorFilterAbstr
 	function getMd5( $time = null )
 	{
 		if( empty( $time ) ) $time = time() ;
-		return md5( gmdate( 'YmdH' , $time ) . DB_PREFIX . DB_NAME ) ;
+		return md5( gmdate( 'YmdH' , $time ) . $GLOBALS['wpdb']->base_prefix . DB_NAME ) ;
 	}
 
 	function getHtml4Assign()
 	{
 		$as_md5 = $this->getMd5() ;
-		$as_md5array = preg_split( '//' , $as_md5 , -1 , PREG_SPLIT_NO_EMPTY ) ;
+		$as_md5array = preg_split( '/' , $as_md5 , -1 , PREG_SPLIT_NO_EMPTY ) ;
 		$as_md5shuffle = array() ;
 		foreach( $as_md5array as $key => $val ) {
 			$as_md5shuffle[] = array( 'key' => $key , 'val' => $val ) ;
@@ -56,13 +56,13 @@ class protector_postcommon_register_insert_js_check extends ProtectorFilterAbstr
 	
 		return array(
 			'html_in_form' => '<input type="hidden" name="antispam_md5" id="antispam_md5" value="" />' ,
-			'js_global' => '<script type="text/javascript"><!--//'."\n".$js_in_validate_function."\n".'//--></script><noscript><div class="errorMsg">'._MD_PROTECTOR_TURNJAVASCRIPTON.'</div></noscript>' ,
+			'js_global' => '<script type="text/javascript"><!--//'."\n".$js_in_validate_function."\n".'/--></script><noscript><div class="errorMsg">'._MD_PROTECTOR_TURNJAVASCRIPTON.'</div></noscript>' ,
 		) ;
 	}
 
 	function checkValidate()
 	{
-		$user_md5 = trim( @$_POST['antispam_md5'] ) ;
+		$user_md5 = trim( $_POST['antispam_md5'] ) ;
 	
 		// 2-3 hour margin
 		if( $user_md5 != $this->getMd5() && $user_md5 != $this->getMd5( time() - 3600 ) && $user_md5 != $this->getMd5( time() - 7200 ) ) {

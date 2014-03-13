@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ERROR);
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'wortifyDatabase.php';
 
 class Protector {
 	
@@ -55,32 +57,34 @@ class Protector {
 	// Constructor
 	function Protector()
 	{
+		
 		$this->mydirname = 'protector' ;
-	
+		
 		// Preferences from configs/cache
-		$this->_conf_serialized = @file_get_contents( $this->get_filepath4confighcache() ) ;
-		$this->_conf = @unserialize( $this->_conf_serialized ) ;
+		$this->_conf_serialized = file_get_contents( $this->get_filepath4confighcache() ) ;
+		$this->_conf = unserialize( $this->_conf_serialized ) ;
 		if( empty( $this->_conf ) ) $this->_conf = array() ;
-	
+		
 		$global_disable = WortifyConfig::get('wortify_global_disabled');
 		if( ! empty( $global_disable ) ) return true ;
 	
 		// die if PHP_SELF XSS found (disabled in 2.53)
-	//	if( preg_match( '/[<>\'";\n ]/' , @$_SERVER['PHP_SELF'] ) ) {
+	//	if( preg_match( '/[<>\'";\n ]/' , $_SERVER['PHP_SELF'] ) ) {
 	//		$this->message .= "Invalid PHP_SELF '{$_SERVER['PHP_SELF']}' found.\n" ;
 	//		$this->output_log( 'PHP_SELF XSS' ) ;
 	//		die( 'invalid PHP_SELF' ) ;
 	//	}
 	
 		// sanitize against PHP_SELF/PATH_INFO XSS (disabled in 3.33)
-	//	$_SERVER['PHP_SELF'] = strtr( @$_SERVER['PHP_SELF'] , array( '<' => '%3C' , '>' => '%3E' , "'" => '%27' , '"' => '%22' ) ) ;
-	//	if( ! empty( $_SERVER['PATH_INFO'] ) ) $_SERVER['PATH_INFO'] = strtr( @$_SERVER['PATH_INFO'] , array( '<' => '%3C' , '>' => '%3E' , "'" => '%27' , '"' => '%22' ) ) ;
-	
+	//	$_SERVER['PHP_SELF'] = strtr( $_SERVER['PHP_SELF'] , array( '<' => '%3C' , '>' => '%3E' , "'" => '%27' , '"' => '%22' ) ) ;
+	//	if( ! empty( $_SERVER['PATH_INFO'] ) ) $_SERVER['PATH_INFO'] = strtr( $_SERVER['PATH_INFO'] , array( '<' => '%3C' , '>' => '%3E' , "'" => '%27' , '"' => '%22' ) ) ;
+		
 		$this->_bad_globals = array( 'GLOBALS' , '_SESSION' , 'HTTP_SESSION_VARS' , '_GET' , 'HTTP_GET_VARS' , '_POST' , 'HTTP_POST_VARS' , '_COOKIE' , 'HTTP_COOKIE_VARS' , '_SERVER' , 'HTTP_SERVER_VARS' , '_REQUEST' , '_ENV' , '_FILES' , 'wortifyDB' , 'wortifyUser' , 'wortifyUserId' , 'wortifyUserGroups' , 'wortifyUserIsAdmin' , 'wortifyConfig' , 'wortifyOption' , 'wortifyModule' , 'wortifyModuleConfig' ) ;
-	
+		
 		$this->_initial_recursive( $_GET , 'G' ) ;
 		$this->_initial_recursive( $_POST , 'P' ) ;
 		$this->_initial_recursive( $_COOKIE , 'C' ) ;
+		
 	}
 	
 	
@@ -98,7 +102,7 @@ class Protector {
 			}
 		} else {
 			// check nullbyte attack
-			$nullbyte = @WortifyConfig::get('wortify_san_nullbyte');
+			$nullbyte = WortifyConfig::get('wortify_san_nullbyte');
 			if( $nullbyte && strstr( $val , chr(0) ) ) {
 				$val = str_replace( chr(0) , ' ' , $val ) ;
 				$this->replace_doubtful( $key , $val ) ;
@@ -131,7 +135,7 @@ class Protector {
 	
 		if( empty( $this->_conn ) ) return false ;
 	
-		$result = @$GLOBALS['wortifydb']->query( "SELECT options_name,options_value FROM `".DB_PREFIX. "wortify_options` WHERE options_name like 'wortify_%'") ;
+		$result = $GLOBALS['wortifyDB']->query( "SELECT options_name,options_value FROM `".$GLOBALS['wpdb']->base_prefix. "wortify_options` WHERE options_name like 'wortify_%'") ;
 		if( ! $result || mysql_num_rows( $result ) < 5 ) {
 			return false ;
 		}
@@ -206,16 +210,16 @@ class Protector {
 		if( ! ( $loglevel & $level ) ) return true ;
 	
 		if( empty( $this->_conn ) ) {
-			$this->_conn = @mysql_connect( DB_HOST , DB_USER , DB_PASS ) ;
+			$this->_conn = mysql_connect( DB_HOST , DB_USER , DB_PASS ) ;
 			if( ! $this->_conn ) die( 'db connection failed.' ) ;
 			if( ! mysql_select_db( DB_NAME) ) die( 'db selection failed.' ) ;
 		}
 	
-		$ip = @$this->getIP(true) ;
-		$agent = @$_SERVER['HTTP_USER_AGENT'] ;
+		$ip = $this->getIP(true) ;
+		$agent = $_SERVER['HTTP_USER_AGENT'] ;
 	
 		if( $unique_check ) {
-			$result = $GLOBALS['wortifydb']->queryF( 'SELECT ip,type FROM '.DB_PREFIX.'_wortify_log ORDER BY timestamp DESC LIMIT 1') ;
+			$result = $GLOBALS['wortifyDB']->queryF( 'SELECT ip,type FROM '.$GLOBALS['wpdb']->base_prefix.'wortify_protector_log ORDER BY timestamp DESC LIMIT 1') ;
 			list( $last_ip , $last_type ) = mysql_fetch_row( $result ) ;
 			if( $last_ip == $ip && $last_type == $type ) {
 				$this->_logged = true ;
@@ -223,7 +227,7 @@ class Protector {
 			}
 		}
 	
-		$GLOBALS['wortifydb']->queryF( "INSERT INTO ".DB_PREFIX."_wortify_log SET ip='".$wpdb->escape($ip)."',agent='".$wpdb->escape($agent)."',type='".$wpdb->escape($type)."',description='".$wpdb->escape($this->message)."',uid='".intval($uid)."',timestamp=NOW()") ;
+		$GLOBALS['wortifyDB']->queryF( "INSERT INTO ".$GLOBALS['wpdb']->base_prefix."wortify_protector_log SET ip='".mysql_real_escape_string($ip)."',agent='".mysql_real_escape_string($agent)."',type='".mysql_real_escape_string($type)."',description='".mysql_real_escape_string($this->message)."',uid='".intval($uid)."',timestamp=NOW()") ;
 		$this->_logged = true ;
 		return true ;
 	}
@@ -233,11 +237,11 @@ class Protector {
 	{
 		$expire = min( intval( $expire ) , time() + 300 ) ;
 	
-		$fp = @fopen( $this->get_filepath4bwlimit() , 'w' ) ;
+		$fp = fopen( $this->get_filepath4bwlimit() , 'w' ) ;
 		if( $fp ) {
-			@flock( $fp , LOCK_EX ) ;
+			flock( $fp , LOCK_EX ) ;
 			fwrite( $fp , $expire . "\n" ) ;
-			@flock( $fp , LOCK_UN ) ;
+			flock( $fp , LOCK_UN ) ;
 			fclose( $fp ) ;
 			return true ;
 		} else {
@@ -248,7 +252,7 @@ class Protector {
 	
 	function get_bwlimit()
 	{
-		list( $expire ) = @file( Protector::get_filepath4bwlimit() ) ;
+		list( $expire ) = file( Protector::get_filepath4bwlimit() ) ;
 		$expire = min( intval( $expire ) , time() + 300 ) ;
 	
 		return $expire ;
@@ -265,11 +269,11 @@ class Protector {
 	{
 		asort( $bad_ips ) ;
 	
-		$fp = @fopen( $this->get_filepath4badips() , 'w' ) ;
+		$fp = fopen( $this->get_filepath4badips() , 'w' ) ;
 		if( $fp ) {
-			@flock( $fp , LOCK_EX ) ;
+			flock( $fp , LOCK_EX ) ;
 			fwrite( $fp , serialize( $bad_ips ) . "\n" ) ;
-			@flock( $fp , LOCK_UN ) ;
+			flock( $fp , LOCK_UN ) ;
 			fclose( $fp ) ;
 			return true ;
 		} else {
@@ -280,7 +284,7 @@ class Protector {
 	
 	function register_bad_ips( $jailed_time = 0 , $ip = null )
 	{
-		if( empty( $ip ) ) $ip = @$this->getIP(true) ;
+		if( empty( $ip ) ) $ip = $this->getIP(true) ;
 		if( empty( $ip ) ) return false ;
 	
 		$bad_ips = $this->get_bad_ips( true ) ;
@@ -292,8 +296,8 @@ class Protector {
 	
 	function get_bad_ips( $with_jailed_time = false )
 	{
-		list( $bad_ips_serialized ) = @file( Protector::get_filepath4badips() ) ;
-		$bad_ips = empty( $bad_ips_serialized ) ? array() : @unserialize( $bad_ips_serialized ) ;
+		list( $bad_ips_serialized ) = file( Protector::get_filepath4badips() ) ;
+		$bad_ips = empty( $bad_ips_serialized ) ? array() : unserialize( $bad_ips_serialized ) ;
 		if( ! is_array( $bad_ips ) || isset( $bad_ips[0] ) ) $bad_ips = array() ;
 	
 		// expire jailed_time
@@ -320,8 +324,8 @@ class Protector {
 	
 	function get_group1_ips( $with_info = false )
 	{
-		list( $group1_ips_serialized ) = @file( Protector::get_filepath4group1ips() ) ;
-		$group1_ips = empty( $group1_ips_serialized ) ? array() : @unserialize( $group1_ips_serialized ) ;
+		list( $group1_ips_serialized ) = file( Protector::get_filepath4group1ips() ) ;
+		$group1_ips = empty( $group1_ips_serialized ) ? array() : unserialize( $group1_ips_serialized ) ;
 		if( ! is_array( $group1_ips ) ) $group1_ips = array() ;
 	
 		if( $with_info ) {
@@ -351,7 +355,7 @@ class Protector {
 				switch( substr( $ip , -1 ) ) {
 					case '.' :
 						// foward match
-						if( substr( @$this->getIP(true) , 0 , strlen( $ip ) ) == $ip ) {
+						if( substr( $this->getIP(true) , 0 , strlen( $ip ) ) == $ip ) {
 							$this->ip_matched_info = $info ;
 							return true ;
 						}
@@ -367,14 +371,14 @@ class Protector {
 					case '8' :
 					case '9' :
 						// full match
-						if( @$this->getIP(true) == $ip ) {
+						if( $this->getIP(true) == $ip ) {
 							$this->ip_matched_info = $info ;
 							return true ;
 						}
 						break ;
 					default :
 						// perl regex
-						if( @preg_match( $ip , @$this->getIP(true) ) ) {
+						if( preg_match( $ip , $this->getIP(true) ) ) {
 							$this->ip_matched_info = $info ;
 							return true ;
 						}
@@ -423,7 +427,7 @@ class Protector {
 	
 	function deny_by_htaccess( $ip = null )
 	{
-		if( empty( $ip ) ) $ip = @$this->getIP(true) ;
+		if( empty( $ip ) ) $ip = $this->getIP(true) ;
 		if( empty( $ip ) ) return false ;
 		if( ! function_exists( 'file_get_contents' ) ) return false ;
 	
@@ -530,7 +534,7 @@ class Protector {
 	{
 		$this->_bigumbrella_doubtfuls = array() ;
 		$this->_bigumbrella_check_recursive( $_GET ) ;
-		$this->_bigumbrella_check_recursive( @$_SERVER['PHP_SELF'] ) ;
+		$this->_bigumbrella_check_recursive( $_SERVER['PHP_SELF'] ) ;
 	
 		if( ! empty( $this->_bigumbrella_doubtfuls ) ) {
 			ob_start( array( $this , 'bigumbrella_outputcheck' ) ) ;
@@ -734,12 +738,12 @@ class Protector {
 	
 				// anti camouflaged image file
 				if( in_array( $ext , $image_extensions ) ) {
-					$image_attributes = @getimagesize( $_file['tmp_name'] ) ;
+					$image_attributes = getimagesize( $_file['tmp_name'] ) ;
 					if( $image_attributes === false && is_uploaded_file( $_file['tmp_name'] ) ) {
 						// open_basedir restriction
 						$temp_file = WORTIFY_ROOT_PATH.'/uploads/protector_upload_temporary'.md5( time() ) ;
 						move_uploaded_file( $_file['tmp_name'] , $temp_file ) ;
-						$image_attributes = @getimagesize( $temp_file ) ;
+						$image_attributes = getimagesize( $temp_file ) ;
 						@unlink( $temp_file ) ;
 					}
 	
@@ -875,18 +879,17 @@ class Protector {
 	
 	function check_dos_attack( $uid = 0 , $can_ban = false )
 	{
-		global $wortifyDB ;
-	
+
 		if( $this->_done_dos ) return true ;
 	
-		$ip = @$this->getIP(true) ;
-		$uri = @$_SERVER['REQUEST_URI'] ;
-		$ip4sql = $wpdb->escape( $ip ) ;
-		$uri4sql = $wpdb->escape( $uri ) ;
+		$ip = $this->getIP(true) ;
+		$uri = $_SERVER['REQUEST_URI'] ;
+		$ip4sql = mysql_real_escape_string( $ip ) ;
+		$uri4sql = mysql_real_escape_string( $uri ) ;
 		if( empty( $ip ) || $ip == '' ) return true ;
 	
 		// gargage collection
-		$result = $wortifyDB->queryF( "DELETE FROM ".DB_PREFIX . ("wortify_access")." WHERE expire < UNIX_TIMESTAMP()" ) ;
+		$result = $GLOBALS['wortifyDB']->queryF( "DELETE FROM ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." WHERE expire < UNIX_TIMESTAMP()" ) ;
 	
 		// for older versions before updating this module 
 		if( $result === false ) {
@@ -895,27 +898,27 @@ class Protector {
 		}
 	
 		// sql for recording access log (INSERT should be placed after SELECT)
-		$sql4insertlog = "INSERT INTO ".DB_PREFIX . ("wortify_access")." SET ip='$ip4sql',request_uri='$uri4sql',expire=UNIX_TIMESTAMP()+'".intval(WortifyConfig::get('wortify_dos_expire'))."'" ;
+		$sql4insertlog = "INSERT INTO ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." SET ip='$ip4sql',request_uri='$uri4sql',expire=UNIX_TIMESTAMP()+'".intval(WortifyConfig::get('wortify_dos_expire'))."'" ;
 	
 		// bandwidth limitation
-		if( @WortifyConfig::get('wortify_bwlimit_count') >= 10 ) {
-			$result = $wpdb->get_row( "SELECT COUNT(*) FROM ".DB_PREFIX . ("wortify_access") ) ;
-			list( $bw_count ) = $wortifyDB->fetchRow( $result ) ;
+		if( WortifyConfig::get('wortify_bwlimit_count') >= 10 ) {
+			$result = $GLOBALS['wpdb']->get_row( "SELECT COUNT(*) FROM ".$GLOBALS['wpdb']->base_prefix . ("wortify_access") ) ;
+			list( $bw_count ) = $GLOBALS['wortifyDB']->fetchRow( $result ) ;
 			if( $bw_count > WortifyConfig::get('wortify_bwlimit_count') ) {
 				$this->write_file_bwlimit( time() + WortifyConfig::get('wortify_dos_expire') ) ;
 			}
 		}
 	
 		// F5 attack check (High load & same URI)
-		$result = $wpdb->get_row( "SELECT COUNT(*) FROM ".DB_PREFIX . ("wortify_access")." WHERE ip='$ip4sql' AND request_uri='$uri4sql'" ) ;
-		list( $f5_count ) = $wortifyDB->fetchRow( $result ) ;
+		$result = $GLOBALS['wpdb']->get_row( "SELECT COUNT(*) FROM ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." WHERE ip='$ip4sql' AND request_uri='$uri4sql'" ) ;
+		list( $f5_count ) = $GLOBALS['wortifyDB']->fetchRow( $result ) ;
 		if( $f5_count > WortifyConfig::get('wortify_dos_f5count') ) {
 	
 			// delayed insert
-			$wortifyDB->queryF( $sql4insertlog ) ;
+			$GLOBALS['wortifyDB']->queryF( $sql4insertlog ) ;
 	
 			// extends the expires of the IP with 5 minutes at least (pending)
-			// $result = $wortifyDB->queryF( "UPDATE ".DB_PREFIX . ("wortify_access")." SET expire=UNIX_TIMESTAMP()+300 WHERE ip='$ip4sql' AND expire<UNIX_TIMESTAMP()+300" ) ;
+			// $result = $GLOBALS['wortifyDB']->queryF( "UPDATE ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." SET expire=UNIX_TIMESTAMP()+300 WHERE ip='$ip4sql' AND expire<UNIX_TIMESTAMP()+300" ) ;
 	
 			// call the filter first
 			$ret = $this->call_filter( 'f5attack_overrun' ) ;
@@ -948,18 +951,18 @@ class Protector {
 		}
 	
 		// Check its Agent
-		if( trim( WortifyConfig::get('wortify_dos_crsafe') ) != '' && preg_match( WortifyConfig::get('wortify_dos_crsafe') , @$_SERVER['HTTP_USER_AGENT'] ) ) {
+		if( trim( WortifyConfig::get('wortify_dos_crsafe') ) != '' && preg_match( WortifyConfig::get('wortify_dos_crsafe') , $_SERVER['HTTP_USER_AGENT'] ) ) {
 			// welcomed crawler
 			$this->_done_dos = true ;
 			return true ;
 		}
 	
 		// Crawler check (High load & different URI)
-		$result = $wpdb->get_row( "SELECT COUNT(*) FROM ".DB_PREFIX . ("wortify_access")." WHERE ip='$ip4sql'" ) ;
-		list( $crawler_count ) = $wortifyDB->fetchRow( $result ) ;
+		$result = $GLOBALS['wpdb']->get_row( "SELECT COUNT(*) FROM ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." WHERE ip='$ip4sql'" ) ;
+		list( $crawler_count ) = $GLOBALS['wortifyDB']->fetchRow( $result ) ;
 	
 		// delayed insert
-		$wortifyDB->queryF( $sql4insertlog ) ;
+		$GLOBALS['wortifyDB']->queryF( $sql4insertlog ) ;
 	
 		if( $crawler_count > WortifyConfig::get('wortify_dos_crcount') ) {
 	
@@ -1000,37 +1003,36 @@ class Protector {
 	// 
 	function check_brute_force()
 	{
-		global $wortifyDB ;
 	
-		$ip = @$this->getIP(true) ;
-		$uri = @$_SERVER['REQUEST_URI'] ;
-		$ip4sql = $wpdb->escape( $ip ) ;
-		$uri4sql = $wpdb->escape( $uri ) ;
+		$ip = $this->getIP(true) ;
+		$uri = $_SERVER['REQUEST_URI'] ;
+		$ip4sql = mysql_real_escape_string( $ip ) ;
+		$uri4sql = mysql_real_escape_string( $uri ) ;
 		if( empty( $ip ) || $ip == '' ) return true ;
 	
 		$victim_uname = empty( $_COOKIE['autologin_uname'] ) ? $_POST['uname'] : $_COOKIE['autologin_uname'] ;
 		// some UA send 'deleted' as a value of the deleted cookie.
 		if( $victim_uname == 'deleted' ) return ;
-		$mal4sql = $wpdb->escape( "BRUTE FORCE: $victim_uname" ) ;
+		$mal4sql = mysql_real_escape_string( "BRUTE FORCE: $victim_uname" ) ;
 	
 		// gargage collection
-		$result = $wortifyDB->queryF( "DELETE FROM ".DB_PREFIX . ("wortify_access")." WHERE expire < UNIX_TIMESTAMP()" ) ;
+		$result = $GLOBALS['wortifyDB']->queryF( "DELETE FROM ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." WHERE expire < UNIX_TIMESTAMP()" ) ;
 	
 		// sql for recording access log (INSERT should be placed after SELECT)
-		$sql4insertlog = "INSERT INTO ".DB_PREFIX . ("wortify_access")." SET ip='$ip4sql',request_uri='$uri4sql',malicious_actions='$mal4sql',expire=UNIX_TIMESTAMP()+600" ;
+		$sql4insertlog = "INSERT INTO ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." SET ip='$ip4sql',request_uri='$uri4sql',malicious_actions='$mal4sql',expire=UNIX_TIMESTAMP()+600" ;
 	
 		// count check
-		$result = $wpdb->get_row( "SELECT COUNT(*) as bf_count FROM ".DB_PREFIX . ("wortify_access")." WHERE ip='$ip4sql' AND malicious_actions like 'BRUTE FORCE:%'", ARRAY_A, 0 ) ;
+		$result = $GLOBALS['wpdb']->get_row( "SELECT COUNT(*) as bf_count FROM ".$GLOBALS['wpdb']->base_prefix . ("wortify_access")." WHERE ip='$ip4sql' AND malicious_actions like 'BRUTE FORCE:%'", ARRAY_A, 0 ) ;
 		if( $result['bf_count'] > WortifyConfig::get('wortify_bf_count') ) {
 			$this->register_bad_ips( time() + WortifyConfig::get('wortify_banip_time0') ) ;
 			$this->last_error_type = 'BruteForce' ;
-			$this->message .= "Trying to login as '".$wpdb->escape($victim_uname)."' found.\n" ;
+			$this->message .= "Trying to login as '".mysql_real_escape_string($victim_uname)."' found.\n" ;
 			$this->output_log( 'BRUTE FORCE' , 0 , true , 1 ) ;
 			$ret = $this->call_filter( 'bruteforce_overrun' ) ;
 			if( $ret == false ) exit ;
 		}
 		// delayed insert
-		$wortifyDB->queryF( $sql4insertlog ) ;
+		$GLOBALS['wortifyDB']->queryF( $sql4insertlog ) ;
 	}
 	
 	
@@ -1066,7 +1068,7 @@ class Protector {
 		$this->_spam_check_point_recursive( $_POST ) ;
 	
 		if( $this->_spamcount_uri >= $points4deny ) {
-			$this->message .= @$_SERVER['REQUEST_URI']." SPAM POINT: $this->_spamcount_uri\n" ;
+			$this->message .= $_SERVER['REQUEST_URI']." SPAM POINT: $this->_spamcount_uri\n" ;
 			$this->output_log( 'URI SPAM' , $uid , false , 128 ) ;
 			$ret = $this->call_filter( 'spamcheck_overrun' ) ;
 			if( $ret == false ) exit ;
@@ -1089,7 +1091,7 @@ class Protector {
 		if( WortifyConfig::get('wortify_disable_features') & 1 ) {
 	
 			// zx 2005/1/5 disable xmlrpc.php in root
-			if( /* ! stristr( $_SERVER['SCRIPT_NAME'] , 'modules' ) && */ substr( @$_SERVER['SCRIPT_NAME'] , -10 ) == 'xmlrpc.php' ) {
+			if( /* ! stristr( $_SERVER['SCRIPT_NAME'] , 'modules' ) && */ substr( $_SERVER['SCRIPT_NAME'] , -10 ) == 'xmlrpc.php' ) {
 				$this->output_log( 'xmlrpc' , 0 , true , 1 ) ;
 				exit ;
 			}
@@ -1108,28 +1110,28 @@ class Protector {
 		if( WortifyConfig::get('wortify_disable_features') & 1024 ) {
 	
 			// root controllers
-			if( ! stristr( @$_SERVER['SCRIPT_NAME'] , 'modules' ) ) {
+			if( ! stristr( $_SERVER['SCRIPT_NAME'] , 'modules' ) ) {
 				// zx 2004/12/13 misc.php debug (file check)
-				if( substr( @$_SERVER['SCRIPT_NAME'] , -8 ) == 'misc.php' && ( $_GET['type'] == 'debug' || $_POST['type'] == 'debug' ) && ! preg_match( '/^dummy_[0-9]+\.html$/' , $_GET['file'] ) ) {
+				if( substr( $_SERVER['SCRIPT_NAME'] , -8 ) == 'misc.php' && ( $_GET['type'] == 'debug' || $_POST['type'] == 'debug' ) && ! preg_match( '/^dummy_[0-9]+\.html$/' , $_GET['file'] ) ) {
 					$this->output_log( 'misc debug' ) ;
 					exit ;
 				}
 			
 				// zx 2004/12/13 misc.php smilies
-				if( substr( @$_SERVER['SCRIPT_NAME'] , -8 ) == 'misc.php' && ( $_GET['type'] == 'smilies' || $_POST['type'] == 'smilies' ) && ! preg_match( '/^[0-9a-z_]*$/i' , $_GET['target'] ) ) {
+				if( substr( $_SERVER['SCRIPT_NAME'] , -8 ) == 'misc.php' && ( $_GET['type'] == 'smilies' || $_POST['type'] == 'smilies' ) && ! preg_match( '/^[0-9a-z_]*$/i' , $_GET['target'] ) ) {
 					$this->output_log( 'misc smilies' ) ;
 					exit ;
 				}
 			
 				// zx 2005/1/5 edituser.php avatarchoose
-				if( substr( @$_SERVER['SCRIPT_NAME'] , -12 ) == 'edituser.php' && $_POST['op'] == 'avatarchoose' && strstr( $_POST['user_avatar'] , '..' ) ) {
+				if( substr( $_SERVER['SCRIPT_NAME'] , -12 ) == 'edituser.php' && $_POST['op'] == 'avatarchoose' && strstr( $_POST['user_avatar'] , '..' ) ) {
 					$this->output_log( 'edituser avatarchoose' ) ;
 					exit ;
 				}
 			}
 		
 			// zx 2005/1/4 findusers
-			if( substr( @$_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'findusers' || $_POST['fct'] == 'findusers' ) ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'findusers' || $_POST['fct'] == 'findusers' ) ) {
 				foreach( $_POST as $key => $val ) {
 					if( strstr( $key , "'" ) || strstr( $val , "'" ) ) {
 						$this->output_log( 'findusers' ) ;
@@ -1140,23 +1142,23 @@ class Protector {
 		
 			// preview CSRF zx 2004/12/14 
 			// news submit.php
-			if( substr( @$_SERVER['SCRIPT_NAME'] , -23 ) == 'modules/news/submit.php' && isset( $_POST['preview'] ) && strpos( @$_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/news/submit.php' ) !== 0 ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -23 ) == 'modules/news/submit.php' && isset( $_POST['preview'] ) && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/news/submit.php' ) !== 0 ) {
 				$HTTP_POST_VARS['nohtml'] = $_POST['nohtml'] = 1 ;
 			}
 			// news admin/index.php
-			if( substr( @$_SERVER['SCRIPT_NAME'] , -28 ) == 'modules/news/admin/index.php' && ( $_POST['op'] == 'preview' || $_GET['op'] == 'preview' ) && strpos( @$_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/news/admin/index.php' ) !== 0 ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -28 ) == 'modules/news/admin/index.php' && ( $_POST['op'] == 'preview' || $_GET['op'] == 'preview' ) && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/news/admin/index.php' ) !== 0 ) {
 				$HTTP_POST_VARS['nohtml'] = $_POST['nohtml'] = 1 ;
 			}
 			// comment comment_post.php
-			if( isset( $_POST['com_dopreview'] ) && ! strstr( substr( @$_SERVER['HTTP_REFERER'] , -16 ) , 'comment_post.php' ) ) {
+			if( isset( $_POST['com_dopreview'] ) && ! strstr( substr( $_SERVER['HTTP_REFERER'] , -16 ) , 'comment_post.php' ) ) {
 				$HTTP_POST_VARS['dohtml'] = $_POST['dohtml'] = 0 ;
 			}
 			// disable preview of system's blocksadmin
-			if( substr( @$_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'blocksadmin' || $_POST['fct'] == 'blocksadmin') && isset( $_POST['previewblock'] ) /* && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/system/admin.php' ) !== 0 */ ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'blocksadmin' || $_POST['fct'] == 'blocksadmin') && isset( $_POST['previewblock'] ) /* && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/system/admin.php' ) !== 0 */ ) {
 				die( "Danger! don't use this preview. Use 'altsys module' instead.(by Protector)" ) ;
 			}
 			// tpl preview
-			if( substr( @$_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'tplsets' || $_POST['fct'] == 'tplsets') ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'tplsets' || $_POST['fct'] == 'tplsets') ) {
 				if( $_POST['op'] == 'previewpopup' || $_GET['op'] == 'previewpopup' || isset( $_POST['previewtpl'] ) ) {
 					die( "Danger! don't use this preview.(by Protector)" ) ;
 				}
@@ -1185,4 +1187,5 @@ class Protector {
 	
 
 }
+error_reporting(E_ERROR);
 ?>

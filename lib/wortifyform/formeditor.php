@@ -19,7 +19,7 @@
  */
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormTextArea');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formtextarea.php');
 
 /**
  * WORTIFY Form Editor
@@ -66,7 +66,7 @@ class WortifyFormEditor extends WortifyFormTextArea
             if (method_exists($this->editor, 'renderValidationJS')) {
                 $this->editor->setName($this->getName());
                 $this->editor->setCaption($this->getCaption());
-                $this->editor->_required = $this->isRequired();
+                $this->editor->_included = $this->isRequired();
                 $ret = $this->editor->renderValidationJS();
                 return $ret;
             } else {

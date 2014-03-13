@@ -112,7 +112,7 @@ class HTMLPurifier_ContentSets
             return $value;
         }
         switch ($def->content_model_type) {
-            case 'required':
+            case 'included':
                 return new HTMLPurifier_ChildDef_Required($value);
             case 'optional':
                 return new HTMLPurifier_ChildDef_Optional($value);

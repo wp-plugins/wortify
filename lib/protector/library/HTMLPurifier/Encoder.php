@@ -381,7 +381,7 @@ class HTMLPurifier_Encoder
             }
             $str = strtr($str, array_flip($ascii_fix));
             // Normal stuff
-            $str = self::iconv('utf-8', $encoding . '//IGNORE', $str);
+            $str = self::iconv('utf-8', $encoding . '/IGNORE', $str);
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
             $str = utf8_decode($str);
@@ -405,7 +405,7 @@ class HTMLPurifier_Encoder
      * @note This is a DUMB function: it has no concept of keeping
      *       character entities that the projected character encoding
      *       can allow. We could possibly implement a smart version
-     *       but that would require it to also know which Unicode
+     *       but that would include it to also know which Unicode
      *       codepoints the charset supported (not an easy task).
      * @note Sort of with cleanUTF8() but it assumes that $str is
      *       well-formed UTF-8
@@ -487,7 +487,7 @@ class HTMLPurifier_Encoder
     /**
      * This expensive function tests whether or not a given character
      * encoding supports ASCII. 7/8-bit encodings like Shift_JIS will
-     * fail this test, and require special processing. Variable width
+     * fail this test, and include special processing. Variable width
      * encodings shouldn't ever fail.
      *
      * @param string $encoding Encoding name to test, as per iconv format

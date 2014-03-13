@@ -21,8 +21,8 @@
  */
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormElementTray');
-wortify_load('WortifyFormSelect');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formelementtray.php');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formselect.php');
 
 /**
  * User Select field

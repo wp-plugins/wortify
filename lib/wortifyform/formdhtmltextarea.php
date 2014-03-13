@@ -25,7 +25,7 @@ defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 /**
  * base class
  */
-wortify_load('WortifyFormTextArea');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formtextarea.php');
 
 /**
  *  A textarea with wortifyish formatting and smilie buttons
@@ -150,7 +150,7 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
         // fonts
         $ret .= $this->fontArray();
         // length checker
-        $ret .= "<input type='button' onclick=\"WortifyCheckLength('" . $this->getName() . "', '" . @$this->configs['maxlength'] . "', '" . _WORTIFY_FORM_ALT_LENGTH . "', '" . _WORTIFY_FORM_ALT_LENGTH_MAX . "');\" value=' ? ' title='" . _WORTIFY_FORM_ALT_CHECKLENGTH . "' />";
+        $ret .= "<input type='button' onclick=\"WortifyCheckLength('" . $this->getName() . "', '" . $this->configs['maxlength'] . "', '" . _WORTIFY_FORM_ALT_LENGTH . "', '" . _WORTIFY_FORM_ALT_LENGTH_MAX . "');\" value=' ? ' title='" . _WORTIFY_FORM_ALT_CHECKLENGTH . "' />";
         $ret .= "<br />\n";
         // the textarea box
         $ret .= "<textarea id='" . $this->getName() . "' name='" . $this->getName() . "' title='". $this->getTitle() . "' onselect=\"wortifySavePosition('" . $this->getName() . "');\" onclick=\"wortifySavePosition('" . $this->getName() . "');\" onkeyup=\"wortifySavePosition('" . $this->getName() . "');\" cols='" . $this->getCols() . "' rows='" . $this->getRows() . "'" . $this->getExtra() . ">" . $this->getValue() . "</textarea><br />\n";

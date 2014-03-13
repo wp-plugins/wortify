@@ -206,7 +206,7 @@ class WortifyFileHandler
 
     {
 
-        WortifyLoad::load('WortifyFile');
+        include_once 'wortifyFile.php';
 
         $this->folder = WortifyFile::getHandler('folder', dirname($path), $create, $mode);
 

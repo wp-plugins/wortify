@@ -104,7 +104,7 @@ class WortifyAuth {
 	}	
 
 	/**
-	 * checks for variables require in siteinfo package in the auth library
+	 * checks for variables include in siteinfo package in the auth library
 	 * 
 	 * @param array $siteinfo 
 	 *

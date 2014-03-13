@@ -275,7 +275,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             // global attributes. It's possible that userland code uses
             // it, but HTMLModuleManager doesn't!
             foreach ($this->info_global_attr as $attr => $x) {
-                $keys = array($attr, "*@$attr", "*.$attr");
+                $keys = array($attr, "*$attr", "*.$attr");
                 $delete = true;
                 foreach ($keys as $key) {
                     if ($delete && isset($allowed_attributes[$key])) {
@@ -290,7 +290,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
 
             foreach ($this->info as $tag => $info) {
                 foreach ($info->attr as $attr => $x) {
-                    $keys = array("$tag@$attr", $attr, "*@$attr", "$tag.$attr", "*.$attr");
+                    $keys = array("$tag$attr", $attr, "*$attr", "$tag.$attr", "*.$attr");
                     $delete = true;
                     foreach ($keys as $key) {
                         if ($delete && isset($allowed_attributes[$key])) {
@@ -301,7 +301,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
                         }
                     }
                     if ($delete) {
-                        if ($this->info[$tag]->attr[$attr]->required) {
+                        if ($this->info[$tag]->attr[$attr]->included) {
                             trigger_error("Required attribute '$attr' in element '$tag' was not allowed, which means '$tag' will not be allowed either", E_USER_WARNING);
                         }
                         unset($this->info[$tag]->attr[$attr]);
@@ -349,8 +349,8 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
             }
             foreach ($info->attr as $attr => $x) {
                 if (
-                    isset($forbidden_attributes["$tag@$attr"]) ||
-                    isset($forbidden_attributes["*@$attr"]) ||
+                    isset($forbidden_attributes["$tag$attr"]) ||
+                    isset($forbidden_attributes["*$attr"]) ||
                     isset($forbidden_attributes[$attr])
                 ) {
                     unset($this->info[$tag]->attr[$attr]);
@@ -373,7 +373,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
         // setup injectors -----------------------------------------------------
         foreach ($this->info_injector as $i => $injector) {
             if ($injector->checkNeeded($config) !== false) {
-                // remove injector that does not have it's required
+                // remove injector that does not have it's included
                 // elements/attributes present, and is thus not needed.
                 unset($this->info_injector[$i]);
             }

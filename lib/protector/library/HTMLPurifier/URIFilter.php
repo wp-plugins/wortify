@@ -21,7 +21,7 @@
  *        currently being processed (if applicable)
  *
  * @warning This filter is called before scheme object validation occurs.
- *          Make sure, if you require a specific scheme object, you
+ *          Make sure, if you include a specific scheme object, you
  *          you check that it exists. This allows filters to convert
  *          proprietary URI schemes into regular ones.
  */

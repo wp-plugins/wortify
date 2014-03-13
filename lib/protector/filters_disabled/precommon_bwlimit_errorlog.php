@@ -8,7 +8,7 @@ class protector_precommon_bwlimit_errorlog extends ProtectorFilterAbstract {
 		header( 'Retry-After: 600' ) ;
 
 		echo _MD_PROTECTOR_BANDWIDTHLIMITED ;
-		error_log( 'Protector: bwlimit '.@$_SERVER['REMOTE_ADDR'] , 0 ) ;
+		error_log( 'Protector: bwlimit '.$_SERVER['REMOTE_ADDR'] , 0 ) ;
 		exit ;
 	}
 

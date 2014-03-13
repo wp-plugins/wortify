@@ -1,6 +1,6 @@
 <?php
-require_once('wortifyConfig.php');
-class worifyUtils {
+include_once('wortifyConfig.php');
+class wortifyUtils {
 	private static $privateAddrs = array(
 		array('0.0.0.0/8',0,16777215),
 		array('10.0.0.0/8',167772160,184549375),
@@ -259,9 +259,9 @@ class worifyUtils {
 		return self::$isWindows == 'yes' ? true : false;
 	}
 	public static function errorsOff(){
-		self::$lastErrorReporting = @ini_get('error_reporting');
-		@error_reporting(0);
-		self::$lastDisplayErrors = @ini_get('display_errors');
+		self::$lastErrorReporting = ini_get('error_reporting');
+		@error_reporting(E_ERROR);
+		self::$lastDisplayErrors = ini_get('display_errors');
 		self::iniSet('display_errors', 0);
 		if(class_exists('wfScan')){ wfScan::$errorHandlingOn = false; }
 	}

@@ -365,8 +365,8 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
                 return array();
             }
             if (!$quoted_value) return array($key => '');
-            $first_char = @$quoted_value[0];
-            $last_char  = @$quoted_value[strlen($quoted_value)-1];
+            $first_char = $quoted_value[0];
+            $last_char  = $quoted_value[strlen($quoted_value)-1];
 
             $same_quote = ($first_char == $last_char);
             $open_quote = ($first_char == '"' || $first_char == "'");
@@ -430,7 +430,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 
             // if the next character is an equal sign, we've got a regular
             // pair, otherwise, it's a bool attribute
-            $first_char = @$string[$cursor];
+            $first_char = $string[$cursor];
 
             if ($first_char == '=') {
                 // key="value"
@@ -445,7 +445,7 @@ class HTMLPurifier_Lexer_DirectLex extends HTMLPurifier_Lexer
 
                 // we might be in front of a quote right now
 
-                $char = @$string[$cursor];
+                $char = $string[$cursor];
 
                 if ($char == '"' || $char == "'") {
                     // it's quoted, end bound is $char

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Validates the attributes of a token. Doesn't manage required attributes
+ * Validates the attributes of a token. Doesn't manage included attributes
  * very well. The only reason we factored this out was because RemoveForeignElements
  * also needed it besides ValidateAttributes.
  */
@@ -11,7 +11,7 @@ class HTMLPurifier_AttrValidator
     /**
      * Validates the attributes of a token, returning a modified token
      * that has valid tokens
-     * @param $token Reference to token to validate. We require a reference
+     * @param $token Reference to token to validate. We include a reference
      *     because the operation this class performs on the token are
      *     not atomic, so the context CurrentToken to be updated
      *     throughout

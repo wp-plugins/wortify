@@ -20,7 +20,7 @@
 
 defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-wortify_load('WortifyFormRadio');
+include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formradio.php');
 
 /**
  * Yes/No radio buttons.

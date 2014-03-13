@@ -30,40 +30,6 @@
  * License:		GNU3
  * 
  */
-
-/**
- * xoops_getmodulehandler()
- *
- * @param mixed $name
- * @param mixed $module_dir
- * @param mixed $optional
- * @return
- */
-function &wortify_getmodulehandler($name = null, $module_dir = null, $optional = false)
-{
-	static $handlers = array();
-	$name = (!isset($name)) ? $module_dir : trim($name);
-	if (!isset($handlers[$module_dir][$name])) {
-		if (file_exists($hnd_file = WORTIFY_VAR_PATH . "/lib/{$module_dir}/class/{$name}.php")) {
-			include_once $hnd_file;
-		}
-		$class = ucfirst(strtolower($module_dir)) . ucfirst($name) . 'Handler';
-		if (class_exists($class)) {
-			$xoopsDB =& XoopsDatabaseFactory::getDatabaseConnection();
-			$handlers[$module_dir][$name] = new $class($xoopsDB);
-		}
-	}
-	if (!isset($handlers[$module_dir][$name])) {
-		trigger_error('Handler does not exist<br />Module: ' . $module_dir . '<br />Name: ' . $name,
-		$optional ? E_USER_WARNING : E_USER_ERROR);
-	}
-	if (isset($handlers[$module_dir][$name])) {
-		return $handlers[$module_dir][$name];
-	}
-	$inst = false;
-	return $inst;
-}
-
 if (!function_exists('checkWordLength')){
 	function checkWordLength($content) {
 		
@@ -101,7 +67,7 @@ if (!function_exists('checkWordLength')){
 					addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
 				}
 				
-				$GLOBALS['wortifyTpl']->assign('wortify_pagetitle', _XOR_WORDS_PAGETITLE);
+				$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _XOR_WORDS_PAGETITLE);
 				$GLOBALS['wortifyTpl']->assign('description', _XOR_WORDS_DESCRIPTION);
 				$GLOBALS['wortifyTpl']->assign('version', $GLOBALS['wortifyModule']->getVar('version')/100);
 				$GLOBALS['wortifyTpl']->assign('platform', WORTIFY_VERSION);
@@ -109,16 +75,16 @@ if (!function_exists('checkWordLength')){
 				$GLOBALS['wortifyTpl']->assign('spam', htmlspecialchars($data));
 				$GLOBALS['wortifyTpl']->assign('agent', $_SERVER['HTTP_USER_AGENT']);
 				$GLOBALS['wortifyTpl']->assign('words', count($parts));
-				$GLOBALS['wortifyTpl']->assign('required', $GLOBALS['wortify']['min_words']);
+				$GLOBALS['wortifyTpl']->assign('included', $GLOBALS['wortify']['min_words']);
 				
-				$GLOBALS['wortifyTpl']->assign('wortify_lblocks', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_rblocks', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_ccblocks', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_clblocks', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_crblocks', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_showlblock', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_showrblock', false);
-				$GLOBALS['wortifyTpl']->assign('wortify_showcblock', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_lblocks', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_rblocks', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_ccblocks', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_clblocks', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_crblocks', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_showlblock', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_showrblock', false);
+				$GLOBALS['wortifyTpl']->assign('xortify_showcblock', false);
 				include_once WORTIFY_ROOT_PATH.'/footer.php';
 				exit(0);
 			}
@@ -232,7 +198,10 @@ if (!function_exists("wortify_getIPData")) {
 	function wortify_getIPData($ip=false){
 		$ret = array();
 		if (get_current_user_id()<>0) {
-			$ret = get_user_by('id', get_current_user_id());
+			$rt = get_user_by('id', get_current_user_id());
+			$ret['uid'] = get_current_user_id();
+			$ret['uname'] = $rt->user_login;
+			$ret['email'] = $rt->user_email;
 		} else {
 			$ret['uid'] = 0;
 			$ret['uname'] = strtolower($_REQUEST['login_name']);
@@ -244,8 +213,8 @@ if (!function_exists("wortify_getIPData")) {
 				$ip = (string)wortify_getIP(); 
 				$ret['is_proxied'] = true;
 				$proxy_ip = $_SERVER["REMOTE_ADDR"]; 
-				$ret['network-addy'] = @gethostbyaddr($ip); 
-				$ret['long'] = @ip2long($ip);
+				$ret['network-addy'] = gethostbyaddr($ip); 
+				$ret['long'] = ip2long($ip);
 				if (is_ipv6($ip)) {
 					$ret['ip6'] = $ip;
 					$ret['proxy-ip6'] = $proxy_ip;
@@ -256,8 +225,8 @@ if (!function_exists("wortify_getIPData")) {
 			}else{ 
 				$ret['is_proxied'] = false;
 				$ip = (string)wortify_getIP(); 
-				$ret['network-addy'] = @gethostbyaddr($ip); 
-				$ret['long'] = @ip2long($ip);
+				$ret['network-addy'] = gethostbyaddr($ip); 
+				$ret['long'] = ip2long($ip);
 				if (is_ipv6($ip)) {
 					$ret['ip6'] = $ip;
 				} else {
@@ -266,8 +235,8 @@ if (!function_exists("wortify_getIPData")) {
 			} 
 		} else {
 			$ret['is_proxied'] = false;
-			$ret['network-addy'] = @gethostbyaddr($ip); 
-			$ret['long'] = @ip2long($ip);
+			$ret['network-addy'] = gethostbyaddr($ip); 
+			$ret['long'] = ip2long($ip);
 			if (is_ipv6($ip)) {
 				$ret['ip6'] = $ip;
 			} else {
