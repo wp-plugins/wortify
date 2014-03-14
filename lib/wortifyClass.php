@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyConfig.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyCriteria.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyObject.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyDatabase.php';
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'WortifyTextsanitizer.php';
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyTextsanitizer.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARATOR . 'wortifyFile.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortifyCache.php';
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . 'wortifyModel.php';

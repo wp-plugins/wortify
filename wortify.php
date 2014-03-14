@@ -4,7 +4,7 @@ Plugin Name: Wortify Security
 Plugin URI: https://xortify.com/
 Description: Wortify Security - Anti-virus, Firewall and real-time WordPress security Network
 Author: Simon Roberts
-Version: 4.0.6
+Version: 4.0.7
 Author URI: http://simonaroberts.com/
 */
 if(defined('WP_INSTALLING') && WP_INSTALLING){
