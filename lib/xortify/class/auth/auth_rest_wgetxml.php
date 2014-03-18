@@ -32,7 +32,7 @@
  */
  
 if (!defined('XORTIFY_REST_API'))
-	define('XORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_XORTIFY).'%s/xml/?%s');
+	define('XORTIFY_REST_API', WortifyConfig::get('xoops_urirest', WORTIFY_API_URL_XORTIFY).'%s/xml/?%s');
 include_once WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_rest_wgetxml_provisionning.php';
 include_once WORTIFY_ROOT_PATH . '/lib/xortify/include/functions.php';
 
@@ -60,9 +60,9 @@ class WortifyAuthRest_Wgetxml extends WortifyAuth {
 	function authenticate($uname, $pwd = null) {
 		$authenticated = false;
 		$rnd = rand(-100000, 100000000);		
-		$data = file_get_contents(sprintf(XORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
-		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xortify_authentication');
-		return $result['xortify_authentication']["RESULT"];		
+		$data = file_get_contents(sprintf(XORTIFY_REST_API, 'xoops_authentication', http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
+		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xoops_authentication');
+		return $result['xoops_authentication']["RESULT"];		
 	}
 	
 				  
@@ -78,10 +78,10 @@ class WortifyAuthRest_Wgetxml extends WortifyAuth {
 	 */		
 	function validate($uname, $email, $pass, $vpass){
 		$rnd = rand(-100000, 100000000);	
-		$data = file_get_contents(sprintf(XORTIFY_REST_API,'xortify_user_validate',http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)), 'xortify_user_validate')));
-		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xortify_user_validate');
-		if ($result['xortify_user_validate']['ERRNUM']==1){
-			return $result['xortify_user_validate']["RESULT"];
+		$data = file_get_contents(sprintf(XORTIFY_REST_API,'xoops_user_validate',http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)), 'xoops_user_validate')));
+		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xoops_user_validate');
+		if ($result['xoops_user_validate']['ERRNUM']==1){
+			return $result['xoops_user_validate']["RESULT"];
 		} else {
 			return false;
 		}
@@ -114,11 +114,11 @@ class WortifyAuthRest_Wgetxml extends WortifyAuth {
 	 */			
 	function network_disclaimer(){
 
-		$data = file_get_contents(sprintf(XORTIFY_REST_API,'xortify_network_disclaimer',http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password))));
-		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xortify_network_disclaimer');
+		$data = file_get_contents(sprintf(XORTIFY_REST_API,'xoops_network_disclaimer',http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password))));
+		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xoops_network_disclaimer');
 
-		if ($result['xortify_network_disclaimer']['ERRNUM']==1){
-			return $result['xortify_network_disclaimer']["RESULT"];
+		if ($result['xoops_network_disclaimer']['ERRNUM']==1){
+			return $result['xoops_network_disclaimer']["RESULT"];
 		} else {
 			return false;
 		}
@@ -144,10 +144,10 @@ class WortifyAuthRest_Wgetxml extends WortifyAuth {
 						 $pass, $timezone_offset, $user_mailok, $siteinfo){
 		$siteinfo = $this->check_siteinfo($siteinfo);
 		$rnd = rand(-100000, 100000000);
-		$data = file_get_contents(sprintf(XORTIFY_REST_API,'xortify_create_user',http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
-		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xortify_create_user');
-		if ($result['xortify_create_user']['ERRNUM']==1){
-			return $result['xortify_create_user']["RESULT"];
+		$data = file_get_contents(sprintf(XORTIFY_REST_API,'xoops_create_user',http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
+		$result = xortify_elekey2numeric(xortify_xml2array($data), 'xoops_create_user');
+		if ($result['xoops_create_user']['ERRNUM']==1){
+			return $result['xoops_create_user']["RESULT"];
 		} else {
 			return false;
 		}
