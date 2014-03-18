@@ -46,12 +46,12 @@
 		$form->addElement(new WortifyFormText(WORTIFY_FRM_URL, "url", 35, 128, (isset($_REQUEST['url'])?$_REQUEST['url']:'')));											
 		$form->addElement(new WortifyFormRadioYN(WORTIFY_FRM_VIEWEMAIL, "viewemail", (isset($_REQUEST['viewemail'])?$_REQUEST['viewemail']:false)));
 		$form->addElement(new WortifyFormSelectTimezone(WORTIFY_FRM_TIMEZONE, "timezone", (isset($_REQUEST['timezone'])?$_REQUEST['timezone']:'')));
-		$form->addElement(new WortifyFormLabel(WORTIFY_FRM_DISCLAIMER, $Wortifyts->nl2br($disclaimer)));	
+		$form->addElement(new WortifyFormLabel(WORTIFY_FRM_DISCLAIMER, str_replace("\n", "<br/>", $disclaimer)));	
 		$form->addElement(new WortifyFormRadioYN(WORTIFY_FRM_DISCLAIMER_AGREE, "agree", false));				
 		$form->addElement(new WortifyFormHidden('op', 'signup'));	
 		$form->addElement(new WortifyFormHidden('fct', 'save'));
 		if ($disclaimer != WORTIFY_FRM_NOSOAP_DISCLAIMER)
 			$form->addElement(new WortifyFormButton('', 'submit', WORTIFY_FRM_REGISTER, 'submit'));	
-		return $form->render();
+		echo $form->render();
 	}
 ?>

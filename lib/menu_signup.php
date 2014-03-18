@@ -1,8 +1,7 @@
 <?php
 	global $error;
-	
-	include_once dirname(__FILE__) . '/xortify/include/forms.wortify.php';
-	include_once dirname(__FILE__) . '/xortify/class/auth/authfactory.php';
+	require_once dirname(__FILE__) . '/xortify/include/forms.wortify.php';
+	require_once dirname(__FILE__) . '/xortify/class/auth/authfactory.php';
 
 	$op = isset($_REQUEST['op'])?$_REQUEST['op']:"signup";
 	$fct = isset($_REQUEST['fct'])?$_REQUEST['fct']:"";
