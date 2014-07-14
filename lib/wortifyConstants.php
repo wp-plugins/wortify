@@ -88,6 +88,7 @@ define('_NONE', 'None');
 define('WORTIFY_AM_NOCACHEMSG', '<div style="font-size: 1.99em; color:red; margin-top:45px;"><center>Absolutely no ban\'s current hosted on Cloud Service!</center></div>');
 define('WORTIFY_MI_PHP_DAYS', '%s day(s)');
 define('WORTIFY_MI_PHP_SEVERITY', '%s percent');
+define('WORTIFY_ADMIN_BANS', 'Network Bans!');
 define('WORTIFY_ADMIN_IPTYPE_IP4', 'IPv4');
 define('WORTIFY_ADMIN_IPTYPE_IP6', 'IPv6');
 define('WORTIFY_ADMIN_IPTYPE_EMPTY', 'No IP');
