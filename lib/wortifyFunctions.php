@@ -33,4 +33,5 @@ function &wortify_getmodulehandler($name = null, $module_dir = null, $optional =
 	$inst = false;
 	return $inst;
 }
+
 ?>
