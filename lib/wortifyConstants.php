@@ -1,5 +1,7 @@
 <?php
 include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'wortifyFunctions.php';
+define('DS', DIRECTORY_SEPARATOR);
+define('NWLINE', "\n");
 
 // Set constants
 define('WORTIFY_VAR_PATH', dirname(dirname(__FILE__)));
