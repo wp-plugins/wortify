@@ -2,7 +2,7 @@
 <div class="wrap">
 <?php 
 		include_once dirname(__FILE__).'/xortify/class/cache/wortifyCache.php';
-		include_once dirname(__FILE__).'/xortify/wortifyPageNav.php';
+		include_once dirname(__FILE__).'/wortifyPageNav.php';
 		
 		if (!$bans = WortifyCache::read('xortify_bans_cache')) {
 			include_once( dirname(__FILE__) . '/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
@@ -19,12 +19,12 @@
 		}
 		
 		if ($bans['bans']==0) {
-			echo WORTIFY_AM_NOCACHEMSG;	
+			echo WORTIFY_ADMIN_NOCACHEMSG;	
 		}	else {
 		
 			$limit = !empty($_REQUEST['limit'])?intval($_REQUEST['limit']):30;
 			$start = !empty($_REQUEST['start'])?intval($_REQUEST['start']):0;
-		
+
 			unset($_GET['start']);
 			unset($_GET['limit']);
 			$pagenav = new WortifyPageNav($bans['bans'], $limit, $start, 'start', 'limit='.$limit.'&'.http_build_query($_GET));
@@ -36,49 +36,49 @@
 					$num++;
 					if (strlen($data['ip4'])>0) {
 						$ipaddy = $data['ip4'];
-						$iptype = WORTIFY_IPTYPE_IP4;
+						$iptype = WORTIFY_ADMIN_IPTYPE_IP4;
 					} elseif (strlen($data['ip6'])>0) {
 						$ipaddy = $data['ip6'];
-						$iptype = WORTIFY_IPTYPE_IP6;
+						$iptype = WORTIFY_ADMIN_IPTYPE_IP6;
 					} else {
 						$ipaddy = '';
-						$iptype = WORTIFY_IPTYPE_EMPTY;				
+						$iptype = WORTIFY_ADMIN_IPTYPE_EMPTY;				
 					}
 
 					if (strlen($data['proxy-ip4'])>0) {
 						$proxyip = $data['proxy-ip4'];
-						$proxyiptype = WORTIFY_IPTYPE_IP4;
+						$proxyiptype = WORTIFY_ADMIN_IPTYPE_IP4;
 					} elseif (strlen($data['proxy-ip6'])>0) {
 						$proxyip = $data['proxy-ip6'];
-						$proxyiptype = WORTIFY_IPTYPE_IP6;
+						$proxyiptype = WORTIFY_ADMIN_IPTYPE_IP6;
 					} else {
 						$proxyip = '';
 						$proxyiptype = '';					
 					}
-				
 					$bans[] = array('netaddy'=>$data['network-addy']?$data['network-addy']:'&nbsp;',
 									 'macaddy'=>$data['mac-addy']?$data['mac-addy']:'&nbsp;',
 									 'iptype'=>$iptype, 'ipaddy'=>$ipaddy, 
 									 'proxyiptype'=>$proxyiptype,'ip'=>$proxyip,
 									 'long' => $data['long']?$data['long']:'&nbsp;', 
-									 'category' =>$data['category'],'comments'=>(isset($data['comments'])?$data['comments']:array()));
+									 'category' => $data['category']['category_name'] . " (" . $data['category']['category_type'] .")",'comments'=>(isset($data['comments'])?$data['comments']:array()));
 				}		
 			}
 			$hostname = 'xortify.com';
 			$cloudurl = 'https://'.$hostname;
 ?>
 			<div style="height:45px; clear:both;">
-				<div style="float:right; clear:both;"><?php echo $pagenav; ?></div>
+				<div style="float:left; clear:both;"><h1> <?php  echo WORTIFY_ADMIN_BANS; ?></h1></div>
+				<div style="float:right; clear:both;"><?php echo $pagenav->renderNav(); ?></div>
 			</div>
 			<table width="100%">
 			<tr class="head">
-				<td><?php echo WORTIFY_AM_IPTYPE; ?></td>
-			   	<td><?php echo WORTIFY_AM_IPADDRESS; ?></td>
-			   	<td><?php echo WORTIFY_AM_NETADDRESS; ?></td>
-			   	<td><?php echo WORTIFY_AM_PROXYIP; ?></td>
-			   	<td><?php echo WORTIFY_AM_MACADDRESS; ?></td>
-			   	<td><?php echo WORTIFY_AM_LONG; ?></td>
-			   	<td><?php echo WORTIFY_AM_CATEGORY; ?></td>    
+				<td><?php echo WORTIFY_ADMIN_IPTYPE; ?></td>
+			   	<td><?php echo WORTIFY_ADMIN_IPADDRESS; ?></td>
+			   	<td><?php echo WORTIFY_ADMIN_NETADDRESS; ?></td>
+			   	<td><?php echo WORTIFY_ADMIN_PROXYIP; ?></td>
+			   	<td><?php echo WORTIFY_ADMIN_MACADDRESS; ?></td>
+			   	<td><?php echo WORTIFY_ADMIN_LONG; ?></td>
+			   	<td><?php echo WORTIFY_ADMIN_CATEGORY; ?></td>    
 			</tr>
 			<?php foreach ($bans as $key => $ban) { ?>
 			<tr>
@@ -94,7 +94,7 @@
 			<?php if (!empty($comment['com_text'])) { ?>
 			<tr>
 				<td>&nbsp;</td>
-				<td><?php echo WORTIFY_AM_BANID; ?>&nbsp;<a href='<?php echo $cloudurl; ?>/ban/index.php?op=member&id=<?php echo $comment['com_itemid']; ?>'>#<?php echo $comment['com_itemid']; ?></a></td>
+				<td><?php echo WORTIFY_ADMIN_BANID; ?>&nbsp;<a href='<?php echo $cloudurl; ?>/ban/index.php?op=member&id=<?php echo $comment['com_itemid']; ?>'>#<?php echo $comment['com_itemid']; ?></a></td>
 			   	<td colspan='5'><?php echo $comment['com_text']; ?></td>
 			</tr>
 			<?php } ?>

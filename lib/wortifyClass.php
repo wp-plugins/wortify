@@ -107,12 +107,28 @@ class wortify {
 		}
 	}
 	
-	public static function isLockedOut($ip) 
-	{
-		return false;
+	public static function authActionNew($username, &$passwd){ //As of php 5.4 we must denote passing by ref in the function definition, not the function call (as WordPress core does, which is a bug in WordPress).
+		if(self::isLockedOut(wortifyUtils::getIP())){
+			require('wortifyLockedOut.php');
+		}
+		if(! $username){ return; } 
+		$userDat = get_user_by('login', $username);
+		$_POST['wortify_userDat'] = $userDat;
+		if(preg_match(self::$passwordCodePattern, $passwd, $matches)){ 
+			$_POST['wortify_authFactor'] = $matches[1];
+			$passwd = preg_replace('/^(.+)\s+(wortify[a-z0-9]+)$/i', '$1', $passwd);
+			$_POST['pwd'] = $passwd;
+		}
+		if($userDat){
+			require_once( ABSPATH . 'wp-includes/class-phpass.php');
+			$hasher = new PasswordHash(8, TRUE);
+			if(! $hasher->CheckPassword($_POST['pwd'], $userDat->user_pass)){
+				self::getLog()->logLogin('loginFailValidUsername', 1, $username); 
+			}
+		} else {
+			self::getLog()->logLogin('loginFailInvalidUsername', 1, $username); 
+		}
 	}
-	
-	public static function authActionNew($username, &$passwd){ 	}
 	
 	public static function wpAction() {
 		
@@ -202,7 +218,6 @@ class wortify {
 	
 	public static function admin_menus(){
 		$warningAdded = false;
-		
 		if (strlen(wortifyConfig::get('xortify_username'))==0 && strlen(wortifyConfig::get('xortify_password'))==0 ){
 			add_action('network_admin_notices', 'wortify::activation_warning');
 			$warningAdded = true;

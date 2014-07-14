@@ -5,6 +5,8 @@
 
 	$op = isset($_REQUEST['op'])?$_REQUEST['op']:"signup";
 	$fct = isset($_REQUEST['fct'])?$_REQUEST['fct']:"";
+	error_reporting(E_ERROR);
+	ini_set('display_errors', true);
 	
 	switch($op) {
 	case "signup":	
@@ -14,7 +16,7 @@
 		case "save":	
 
 			$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('xortify_protocol'));
-			$myts =& MyTextSanitizer::getInstance();
+			$myts =& WortifyTextSanitizer::getInstance();
 			$uname = isset($_POST['uname']) ? $myts->stripSlashesGPC(trim($_POST['uname'])) : '';
 			$email = isset($_POST['email']) ? $myts->stripSlashesGPC(trim($_POST['email'])) : '';
 			$url = isset($_POST['url']) ? $myts->stripSlashesGPC(trim($_POST['url'])) : '';
@@ -60,8 +62,8 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 				$wortifyAuth->create_user(	$_REQUEST['viewemail'], $uname, $email, $url, $actkey, 
 											$pass, $_REQUEST['timezone'], $_REQUEST['mailok'], $wortifyAuth->check_siteinfo(array()));
 				
-				@WortifyConfig::set('xortify_username', $pass);
-				@WortifyConfig::set('xortify_password', $pass);
+				WortifyConfig::set('xortify_username', $uname);
+				WortifyConfig::set('xortify_password', $pass);
 				header('Location: ' . site_url());
 				exit(0);
 			}
