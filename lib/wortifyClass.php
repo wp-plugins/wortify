@@ -119,48 +119,29 @@ class wortify {
 		}
 	}
 	
+	public static function logLogin()
+	{	return false;	}
+	
+	public static function getLog()
+	{	return false;	}
+	
+	public static function isLockedOut()
+	{	return false;	}
 	
 	public static function registrationFilter($errors, $santizedLogin, $userEmail){
-		if(wortifyConfig::get('loginSec_blockAdminReg') && $santizedLogin == 'admin'){
-			$errors->add('user_login_error', '<strong>ERROR</strong>: You can\'t register using that username');
-		}
-		return $errors;
 	}
 	
 	public static function logoutAction(){
-		$userID = get_current_user_id();
-		$userDat = get_user_by('id', $userID);
-		self::getLog()->logLogin('logout', 0, $userDat->user_login);
 	}
 	
 	public static function loginInitAction(){
-		if(self::isLockedOut(wortifyUtils::getIP())){
-			require('wortifyLockedOut.php');
-		}
+
 	}
 	
 	public static function authActionNew($username, &$passwd){ //As of php 5.4 we must denote passing by ref in the function definition, not the function call (as WordPress core does, which is a bug in WordPress).
-		if(self::isLockedOut(wortifyUtils::getIP())){
-			require('wortifyLockedOut.php');
-		}
-		if(! $username){ return; } 
-		$userDat = get_user_by('login', $username);
-		$_POST['wortify_userDat'] = $userDat;
-		if(preg_match(self::$passwordCodePattern, $passwd, $matches)){ 
-			$_POST['wortify_authFactor'] = $matches[1];
-			$passwd = preg_replace('/^(.+)\s+(wortify[a-z0-9]+)$/i', '$1', $passwd);
-			$_POST['pwd'] = $passwd;
-		}
-		if($userDat){
-			require_once( ABSPATH . 'wp-includes/class-phpass.php');
-			$hasher = new PasswordHash(8, TRUE);
-			if(! $hasher->CheckPassword($_POST['pwd'], $userDat->user_pass)){
-				self::getLog()->logLogin('loginFailValidUsername', 1, $username); 
-			}
-		} else {
-			self::getLog()->logLogin('loginFailInvalidUsername', 1, $username); 
-		}
+
 	}
+
 	
 	public static function wpAction() {
 		
