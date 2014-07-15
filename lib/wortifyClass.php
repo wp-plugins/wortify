@@ -78,6 +78,8 @@ class wortify {
 		add_action('wp_loaded', 'wortify::wpAction');
 		add_action('shutdown', 'wortify::wpShutdown');
 		
+		add_filter( 'pre_comment_approved' , 'wortify::xortify_spam_handler' , '99', 2 );
+		
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache'))
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache', 0777);
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify'))
@@ -88,31 +90,58 @@ class wortify {
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify' . DIRECTORY_SEPARATOR . 'configs', 0777);
 	}
 	
-	public static function registrationFilter($errors, $santizedLogin, $userEmail){
-		if(wortifyConfig::get('loginSec_blockAdminReg') && $santizedLogin == 'admin'){
-			$errors->add('user_login_error', '<strong>ERROR</strong>: You can\'t register using that username');
+	public static function xortify_spam_handler( $approved , $commentdata )
+	{
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
+		$apiExchange = new $func;
+		
+		switch ($approved)
+		{
+			case "spam":
+				$apiExchange->training($commentdata['comment_content'], false);
+				return $approved;
+				break;
+			default:
+				$result = $apiExchange->checkForSpam($commentdata['comment_content'],$commentdata['comment_author'],$commentdata['comment_author'],$commentdata['comment_author_email'],$commentdata['comment_author_IP']);
+				if (isset($result['spam']))
+					switch($result['spam'])
+					{
+						default;
+							return 'spam';
+							break;
+						case false:
+							return 1;
+							break;
+					}
+				return 0;
+				break;
 		}
-		return $errors;
+	}
+	
+	public static function logLogin()
+	{	return false;	}
+	
+	public static function getLog()
+	{	return false;	}
+	
+	public static function isLockedOut()
+	{	return false;	}
+	
+	public static function registrationFilter($errors, $santizedLogin, $userEmail){
 	}
 	
 	public static function logoutAction(){
-		$userID = get_current_user_id();
-		$userDat = get_user_by('id', $userID);
-		self::getLog()->logLogin('logout', 0, $userDat->user_login);
 	}
 	
 	public static function loginInitAction(){
-		if(self::isLockedOut(wortifyUtils::getIP())){
-			require('wortifyLockedOut.php');
-		}
+
 	}
 	
-	public static function isLockedOut($ip) 
-	{
-		return false;
+	public static function authActionNew($username, &$passwd){ //As of php 5.4 we must denote passing by ref in the function definition, not the function call (as WordPress core does, which is a bug in WordPress).
+
 	}
-	
-	public static function authActionNew($username, &$passwd){ 	}
+
 	
 	public static function wpAction() {
 		

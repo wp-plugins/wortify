@@ -92,11 +92,10 @@ class REST_WGETSERIALISEDWortifyExchange {
 	 * @param string $content
 	 * @return boolean
 	 */
-	 function checkForSpam($content) {
-		if (checkWordLength($content)==false&&is_group(user_groups(), $GLOBALS['wortify']['check_spams'])==true)
+	 function checkForSpam($content = '', $uname = '', $name = '', $email = '', $ip = '', $adult = true) {
+		if (checkWordLength($content)==false)
 			return array('spam'=>true);
-		if (is_group(user_groups(), $GLOBALS['wortify']['check_spams'])==false)
-			return array('spam'=>false);
+	 	
 		switch (WORTIFY_SERIAL_LIB){
 			default:
 			case "PHPSERIAL":
@@ -104,10 +103,11 @@ class REST_WGETSERIALISEDWortifyExchange {
 					$data = file_get_contents(sprintf(WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
 							"password"	=> 	$this->serial_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/',
 							'content' => $content,
-							'uname' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('uname'):''),
-							'name' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('name'):''),
-							'email' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('email'):''),
-							'ip' => (class_exists('WortifyUserUtility')?WortifyUserUtility::getIP(true):$_SERVER['REMOTE_ADDR']),
+							'uname' => $uname,
+							'name' => $name,
+							'email' => $email,
+							'ip' => $ip,
+							'adult' => $adult,
 							'session' => session_id()
 					))));
 					$result = (unserialize($data));
@@ -154,7 +154,7 @@ class REST_WGETSERIALISEDWortifyExchange {
 			try {
 				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'ban', http_build_query( array(      "username"	=> 	$this->serial_wortify_username, 
 								"password"	=> 	$this->serial_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/', 
-								'token' => $GLOBALS['wortifySecurity']->createToken(3600, 'poll_token'),
+								'token' => sha1(microtime(true)),
 								'agent' => $_SERVER['HTTP_USER_AGENT'],
 								'session' => session_id()
 						))));
