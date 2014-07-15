@@ -73,6 +73,7 @@ define("WORTIFT_AM_ADV_CHECKISOCOM","Isolated Comments");
 define("WORTIFT_AM_ADV_REGISTERGLOBALS2","and place in it the line below:");
 
 //Signup form
+define('WORTIFY_ADMIN_USER_CREATED_H1', 'The User "%s" ~ was successfully registered on the service node!');
 define('WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER', 'Network did not provide Disclaimer for signing up!');
 define('WORTIFY_ADMIN_SIGNUP_XORTIFY_H2', 'Sign-up to the Xortify.com cloud for full services!');
 define('WORTIFY_ADMIN_SIGNUP_XORTIFY_P', 'This form will allow you to sign-up to the Xortify cloud for full services from this software!');
@@ -88,7 +89,6 @@ define('_NONE', 'None');
 define('WORTIFY_AM_NOCACHEMSG', '<div style="font-size: 1.99em; color:red; margin-top:45px;"><center>Absolutely no ban\'s current hosted on Cloud Service!</center></div>');
 define('WORTIFY_MI_PHP_DAYS', '%s day(s)');
 define('WORTIFY_MI_PHP_SEVERITY', '%s percent');
-define('WORTIFY_ADMIN_BANS', 'Network Bans!');
 define('WORTIFY_ADMIN_IPTYPE_IP4', 'IPv4');
 define('WORTIFY_ADMIN_IPTYPE_IP6', 'IPv6');
 define('WORTIFY_ADMIN_IPTYPE_EMPTY', 'No IP');
@@ -118,6 +118,7 @@ define('WORTIFY_ADMIN_THEREARE_CLEANINGTOOK', 'Wortify File Cache Cleaning Took:
 define('WORTIFY_ADMIN_THEREARE_FILESDELETED', 'Wortify Cache Files Deleted: %s');
 define('WORTIFY_ADMIN_THEREARE_BYTESSAVED', 'Wortify Cache Cleaning Saved: %s bytes');
 define('WORTIFY_ADMIN_CATEGORY', 'Ban Category');
+define('WORTIFY_ADMIN_TYPE', 'Ban Type');
 define('WORTIFY_ADMIN_BANID', 'Ban Id:');
 
 //Ban Notices

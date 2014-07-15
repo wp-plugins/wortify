@@ -97,12 +97,10 @@ class REST_WGETXMLWortifyExchange {
 	 * @param string $content
 	 * @return boolean
 	 */
-	 function checkForSpam($content) {
-		if (checkWordLength($content)==false&&is_group(user_groups(), $GLOBALS['wortify']['check_spams'])==true)
+	 function checkForSpam($content = '', $uname = '', $name = '', $email = '', $ip = '', $adult = true) {
+		if (checkWordLength($content)==false)
 			return array('spam'=>true);
-		if (is_group(user_groups(), $GLOBALS['wortify']['check_spams'])==false)
-			return array('spam'=>false);
-		wortify_load('WortifyUserUtility');
+	 	
 		if (!empty($this->curl_client))
 			switch (WORTIFY_WGETXML_LIB){
 				case "PHPXML":
@@ -110,10 +108,11 @@ class REST_WGETXMLWortifyExchange {
 						$data = file_get_contents(sprintf(WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->xml_wortify_username,
 								"password"	=> 	$this->xml_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/',
 								'content' => $content,
-								'uname' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('uname'):''),
-								'name' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('name'):''),
-								'email' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('email'):''),
-								'ip' => (class_exists('WortifyUserUtility')?WortifyUserUtility::getIP(true):$_SERVER['REMOTE_ADDR']),
+								'uname' => $uname,
+								'name' => $name,
+								'email' => $email,
+								'ip' => $ip,
+								'adult' => $adult,
 								'session' => session_id()
 						))));
 						$result = wortify_elekey2numeric(wortify_xml2array($data), 'spamcheck');

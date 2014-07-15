@@ -78,6 +78,8 @@ class wortify {
 		add_action('wp_loaded', 'wortify::wpAction');
 		add_action('shutdown', 'wortify::wpShutdown');
 		
+		add_filter( 'pre_comment_approved' , 'wortify::xortify_spam_handler' , '99', 2 );
+		
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache'))
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache', 0777);
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify'))
@@ -87,6 +89,36 @@ class wortify {
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify' . DIRECTORY_SEPARATOR . 'configs'))
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify' . DIRECTORY_SEPARATOR . 'configs', 0777);
 	}
+	
+	public static function xortify_spam_handler( $approved , $commentdata )
+	{
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
+		$apiExchange = new $func;
+		
+		switch ($approved)
+		{
+			case "spam":
+				$apiExchange->training($commentdata['comment_content'], false);
+				return $approved;
+				break;
+			default:
+				$result = $apiExchange->checkForSpam($commentdata['comment_content'],$commentdata['comment_author'],$commentdata['comment_author'],$commentdata['comment_author_email'],$commentdata['comment_author_IP']);
+				if (isset($result['spam']))
+					switch($result['spam'])
+					{
+						default;
+							return 'spam';
+							break;
+						case false:
+							return 1;
+							break;
+					}
+				return 0;
+				break;
+		}
+	}
+	
 	
 	public static function registrationFilter($errors, $santizedLogin, $userEmail){
 		if(wortifyConfig::get('loginSec_blockAdminReg') && $santizedLogin == 'admin'){
@@ -218,6 +250,7 @@ class wortify {
 	
 	public static function admin_menus(){
 		$warningAdded = false;
+		
 		if (strlen(wortifyConfig::get('xortify_username'))==0 && strlen(wortifyConfig::get('xortify_password'))==0 ){
 			add_action('network_admin_notices', 'wortify::activation_warning');
 			$warningAdded = true;

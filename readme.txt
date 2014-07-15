@@ -3,10 +3,10 @@ Contributors: Simon Roberts (mynamesnot/wishcraft)
 Donate link: https://web.labs.coop/payment/index.html
 Tags: Honeypot, Spam, Human Rights, IP Sec, IP Ban
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 4.1.7
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tested up to: 3.9.1
+Stable tag: 4.1.11
+License: Chronolabs ~ General Software License
+License URI: https://web.labs.coop/public/legal/general-software-license/10,3.htm
 
 Wortify is a honeypot client that operates with https://xortify.com to prevent human rights abuse like captcha and signup sweat shops, as well as spam prevention and abuse of your site.
 

@@ -1,3 +1,4 @@
+<link rel='stylesheet' href='<?php echo plugins_url( '/css/style.css', __FILE__ ); ?>' type='text/css' media='all' />
 <?php
 	global $error;
 	require_once dirname(__FILE__) . '/xortify/include/forms.wortify.php';
@@ -5,8 +6,6 @@
 
 	$op = isset($_REQUEST['op'])?$_REQUEST['op']:"signup";
 	$fct = isset($_REQUEST['fct'])?$_REQUEST['fct']:"";
-	error_reporting(E_ERROR);
-	ini_set('display_errors', true);
 	
 	switch($op) {
 	case "signup":	
@@ -16,7 +15,7 @@
 		case "save":	
 
 			$wortifyAuth =& WortifyAuthFactory::getAuthConnection(false, WortifyConfig::get('xortify_protocol'));
-			$myts =& WortifyTextSanitizer::getInstance();
+			$myts =& wortifyTextSanitizer::getInstance();
 			$uname = isset($_POST['uname']) ? $myts->stripSlashesGPC(trim($_POST['uname'])) : '';
 			$email = isset($_POST['email']) ? $myts->stripSlashesGPC(trim($_POST['email'])) : '';
 			$url = isset($_POST['url']) ? $myts->stripSlashesGPC(trim($_POST['url'])) : '';
@@ -62,9 +61,13 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 				$wortifyAuth->create_user(	$_REQUEST['viewemail'], $uname, $email, $url, $actkey, 
 											$pass, $_REQUEST['timezone'], $_REQUEST['mailok'], $wortifyAuth->check_siteinfo(array()));
 				
-				WortifyConfig::set('xortify_username', $uname);
-				WortifyConfig::set('xortify_password', $pass);
-				header('Location: ' . site_url());
+				@WortifyConfig::set('xortify_username', $uname);
+				@WortifyConfig::set('xortify_password', $pass);
+?>
+<meta http-equiv="Refresh" content="0; url=<?php echo site_url(); ?>" />
+<meta http-equiv="refresh" content="0; url=<?php echo site_url(); ?>" />
+<h1 style="text-align: center;"><?php echo sprintf(WORTIFY_ADMIN_USER_CREATED_H1, $uname); ?></h1>
+<?php 
 				exit(0);
 			}
 			break;
