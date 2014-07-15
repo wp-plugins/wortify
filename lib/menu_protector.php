@@ -1,3 +1,4 @@
+<link rel='stylesheet' href='<?php echo plugins_url( '/css/style.css', __FILE__ ); ?>' type='text/css' media='all' />
 <?php
 require_once dirname(__FILE__).'/wortifyPageNav.php' ;
 require_once dirname(__FILE__).'/wortifyTextsanitizer.php' ;

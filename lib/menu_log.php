@@ -1,3 +1,4 @@
+<link rel='stylesheet' href='<?php echo plugins_url( '/css/style.css', __FILE__ ); ?>' type='text/css' media='all' />
 <?php 
 error_reporting(E_ERROR);
 ini_set('display_errors', true);

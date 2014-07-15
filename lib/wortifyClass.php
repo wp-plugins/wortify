@@ -78,6 +78,8 @@ class wortify {
 		add_action('wp_loaded', 'wortify::wpAction');
 		add_action('shutdown', 'wortify::wpShutdown');
 		
+		add_filter( 'pre_comment_approved' , 'wortify::xortify_spam_handler' , '99', 2 );
+		
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache'))
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache', 0777);
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify'))
@@ -87,6 +89,36 @@ class wortify {
 		if (!is_dir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify' . DIRECTORY_SEPARATOR . 'configs'))
 			mkdir(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'wortify' . DIRECTORY_SEPARATOR . 'configs', 0777);
 	}
+	
+	public static function xortify_spam_handler( $approved , $commentdata )
+	{
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
+		$apiExchange = new $func;
+		
+		switch ($approved)
+		{
+			case "spam":
+				$apiExchange->training($commentdata['comment_content'], false);
+				return $approved;
+				break;
+			default:
+				$result = $apiExchange->checkForSpam($commentdata['comment_content'],$commentdata['comment_author'],$commentdata['comment_author'],$commentdata['comment_author_email'],$commentdata['comment_author_IP']);
+				if (isset($result['spam']))
+					switch($result['spam'])
+					{
+						default;
+							return 'spam';
+							break;
+						case false:
+							return 1;
+							break;
+					}
+				return 0;
+				break;
+		}
+	}
+	
 	
 	public static function registrationFilter($errors, $santizedLogin, $userEmail){
 		if(wortifyConfig::get('loginSec_blockAdminReg') && $santizedLogin == 'admin'){
@@ -107,12 +139,28 @@ class wortify {
 		}
 	}
 	
-	public static function isLockedOut($ip) 
-	{
-		return false;
+	public static function authActionNew($username, &$passwd){ //As of php 5.4 we must denote passing by ref in the function definition, not the function call (as WordPress core does, which is a bug in WordPress).
+		if(self::isLockedOut(wortifyUtils::getIP())){
+			require('wortifyLockedOut.php');
+		}
+		if(! $username){ return; } 
+		$userDat = get_user_by('login', $username);
+		$_POST['wortify_userDat'] = $userDat;
+		if(preg_match(self::$passwordCodePattern, $passwd, $matches)){ 
+			$_POST['wortify_authFactor'] = $matches[1];
+			$passwd = preg_replace('/^(.+)\s+(wortify[a-z0-9]+)$/i', '$1', $passwd);
+			$_POST['pwd'] = $passwd;
+		}
+		if($userDat){
+			require_once( ABSPATH . 'wp-includes/class-phpass.php');
+			$hasher = new PasswordHash(8, TRUE);
+			if(! $hasher->CheckPassword($_POST['pwd'], $userDat->user_pass)){
+				self::getLog()->logLogin('loginFailValidUsername', 1, $username); 
+			}
+		} else {
+			self::getLog()->logLogin('loginFailInvalidUsername', 1, $username); 
+		}
 	}
-	
-	public static function authActionNew($username, &$passwd){ 	}
 	
 	public static function wpAction() {
 		

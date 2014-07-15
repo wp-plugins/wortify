@@ -1,3 +1,4 @@
+<link rel='stylesheet' href='<?php echo plugins_url( '/css/style.css', __FILE__ ); ?>' type='text/css' media='all' />
 <?php 
 	if (isset($_POST)&&count($_POST)>0) {
 		wortifyConfig::setArray($_POST);
