@@ -281,7 +281,7 @@ class wortifyConfig {
 										'formtype' => 'select',
 										'valuetype' => 'text',
 										'default' => 'rest_wgetserialised',
-										'options' => array(WORTIFY_PROTOCOL_WGETSERIAL=>'rest_wgetserialised', WORTIFY_PROTOCOL_WGETXML=>'rest_wgetxml', WORTIFY_PROTOCOL_CURLSERIAL=>'rest_curlserialised', WORTIFY_PROTOCOL_CURL=>'rest_curl', WORTIFY_PROTOCOL_JSON=>'rest_json', WORTIFY_PROTOCOL_CURLXML=>'rest_curlxml', ),
+										'options' => array(WORTIFY_PROTOCOL_MINIMUMCLOUD=>'minimisedcloud', WORTIFY_PROTOCOL_WGETSERIAL=>'rest_wgetserialised', WORTIFY_PROTOCOL_WGETXML=>'rest_wgetxml', WORTIFY_PROTOCOL_CURLSERIAL=>'rest_curlserialised', WORTIFY_PROTOCOL_CURL=>'rest_curl', WORTIFY_PROTOCOL_JSON=>'rest_json', WORTIFY_PROTOCOL_CURLXML=>'rest_curlxml'),
 										),
 					"xortify_useroption_name" => array('name' => 'xortify_username',
 							'title' => 'WORTIFY_USERNAME',

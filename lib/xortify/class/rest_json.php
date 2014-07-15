@@ -176,7 +176,7 @@ class REST_JSONWortifyExchange {
 			try {
 				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'servers', http_build_query( array(      "username"	=> 	$this->json_wortify_username, 
 								"password"	=> 	$this->json_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/', 
-								'token' => $GLOBALS['wortifySecurity']->createToken(3600, 'poll_token'),
+								'token' => sha1(microtime(true)),
 								'agent' => $_SERVER['HTTP_USER_AGENT'],
 								'session' => session_id()
 						))));

@@ -1,7 +1,8 @@
 <link rel='stylesheet' href='<?php echo plugins_url( '/css/style.css', __FILE__ ); ?>' type='text/css' media='all' />
 <?php
+	error_reporting(0);
 	global $error;
-	require_once dirname(__FILE__) . '/xortify/include/forms.wortify.php';
+	require_once dirname(__FILE__) . '/xortify/include/forms.xortify.php';
 	require_once dirname(__FILE__) . '/xortify/class/auth/authfactory.php';
 
 	$op = isset($_REQUEST['op'])?$_REQUEST['op']:"signup";
@@ -43,7 +44,7 @@
 ?><h2><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_H2; ?></h2>
 <p><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_P; ?></p><?php
 echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>"; 
-					WortifySignupForm($disclaimer);
+					echo WortifySignupForm($disclaimer);
 				} else {
 ?>
 <h2><?php echo WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
@@ -82,7 +83,7 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 			if ($disclaimer != WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER) {
 ?><h2><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_H2; ?></h2>
 <p><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_P; ?></p><?php 
-				WortifySignupForm($disclaimer);
+				echo WortifySignupForm($disclaimer);
 			} else {
 ?>
 <h2><?php echo WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
