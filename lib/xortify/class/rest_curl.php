@@ -134,12 +134,10 @@ class REST_CURLWortifyExchange {
 	 * @param string $content
 	 * @return boolean
 	 */
-	 function checkForSpam($content) {
-		if (checkWordLength($content)==false&&is_group(user_groups(), $GLOBALS['wortify']['check_spams'])==true)
+	 function checkForSpam($content = '', $uname = '', $name = '', $email = '', $ip = '', $adult = true) {
+		if (checkWordLength($content)==false)
 			return array('spam'=>true);
-		if (is_group(user_groups(), $GLOBALS['wortify']['check_spams'])==false)
-			return array('spam'=>false);
-	 	wortify_load('WortifyUserUtility');
+		
 		if (!empty($this->curl_client))
 			switch (WORTIFY_CURL_LIB){
 				case "PHPCURL":
@@ -148,11 +146,12 @@ class REST_CURLWortifyExchange {
 						curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
 									"password"	=> 	$this->curl_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/',
 									"poll" => WORTIFY_URL.'/lib/xortify/poll/',
+									'content' => $content,
+									'uname' => $uname,
+									'name' => $name,
+									'email' => $email,
+									'ip' => $ip,
 									'adult' => $adult,
-									'uname' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('uname'):'guest'),
-									'name' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('name'):'Anonymous'),
-									'email' => (is_object($GLOBALS['wortifyUser'])?$GLOBALS['wortifyUser']->getVar('email'):'noreply@'.$_SERVER['REMOTE_ADDR']),
-									'ip' => (class_exists('WortifyUserUtility')?WortifyUserUtility::getIP(true):$_SERVER['REMOTE_ADDR']),
 									'session' => session_id()
 						))));
 						curl_setopt($this->curl_client, CURLOPT_POST, true);
@@ -206,7 +205,7 @@ class REST_CURLWortifyExchange {
 					curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 					curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'servers', http_build_query(array(      "username"	=> 	$this->curl_wortify_username, 
 									"password"	=> 	$this->curl_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/', 
-									'token' => $GLOBALS['wortifySecurity']->createToken(3600, 'poll_token'),
+									'token' => sha1(microtime(true)),
 									'agent' => $_SERVER['HTTP_USER_AGENT'],
 									'session' => session_id()
 								))));
