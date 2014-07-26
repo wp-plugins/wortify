@@ -4,7 +4,7 @@ Donate link: https://web.labs.coop/payment/index.html
 Tags: Honeypot, Spam, Human Rights, IP Sec, IP Ban
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 4.2.99
+Stable tag: 4.3.99
 License: Chronolabs ~ General Software License
 License URI: https://web.labs.coop/public/legal/general-software-license/10,3.htm
 
