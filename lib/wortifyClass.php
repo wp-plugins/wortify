@@ -145,6 +145,9 @@ class wortify {
 	
 	public static function wpAction() {
 		
+		if (strpos(strtolower($_SERVER['HTTP_HOST']), strtolower($_SERVER['HTTP_REFERER'])))
+			return false;
+		
 		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'postcheck.inc.php';
 		
 		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.loader.mainfile.php';
@@ -157,13 +160,19 @@ class wortify {
 	
 	static function wpShutdown() {
 		
+		if (strpos(strtolower($_SERVER['HTTP_HOST']), strtolower($_SERVER['HTTP_REFERER'])))
+			return false;
+		
 		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.footer.end.php';
 		
 	}
 	
 	
 	public static function initAction(){	
-				global $wp;
+		if (strpos(strtolower($_SERVER['HTTP_HOST']), strtolower($_SERVER['HTTP_REFERER'])))
+			return false;
+		
+		global $wp;
 		if (!is_object($wp)) return; //Suggested fix for compatability with "Portable phpmyadmin"
 		$wp->add_query_var('_wortifysf');
 				//add_rewrite_rule('wortifyStaticFunc/([a-zA-Z0-9]+)/?$', 'index.php?wortifyStaticFunc=' . $matches[1], 'top');
