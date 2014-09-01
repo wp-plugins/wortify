@@ -248,7 +248,6 @@ class wortify {
 		
 
 		add_menu_page( 'Wortify', 'Wortify', 'manage_options', 'wortify-menu', 'wortify::menu_bans', site_url("/wp-content/plugins/wortify/images/wortify-logo-16x16.png") );
-		add_submenu_page( 'wortify-menu', "Bans", "Bans", 'manage_options', 'wortify-menu-bans', 'wortify::menu_bans');
 		add_submenu_page( 'wortify-menu', "Wortify Log", "Wortify Log", 'manage_options', 'wortify-menu-logs', 'wortify::menu_logs');
 		add_submenu_page( 'wortify-menu', "Protector", "Protector", 'manage_options', 'wortify-menu-protector', 'wortify::menu_protector');
 		add_submenu_page( 'wortify-menu', "Options", "Options", 'manage_options', 'wortify-menu-options', 'wortify::menu_options');
