@@ -78,9 +78,11 @@ class WortifyAuthRest_Curl extends WortifyAuth {
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, WortifyConfig::get('xortify_curl_connecttimeout'));
 		curl_setopt($ch, CURLOPT_TIMEOUT, WortifyConfig::get('xortify_curl_timeout'));
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookies); 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-		curl_setopt($ch, CURLOPT_USERAGENT, WORTIFY_USER_AGENT); 
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+		curl_setopt($ch, CURLOPT_VERBOSE, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_USERAGENT, WORTIFY_USER_AGENT); 
 		$this->curl_client =& $ch;
 	}
 

@@ -4,21 +4,17 @@
 <?php 		
 		include_once dirname(__FILE__).'/xortify/class/cache/wortifyCache.php';
 		include_once dirname(__FILE__).'/wortifyPageNav.php';
-		
-		if (!$bans = WortifyCache::read('xortify_bans_cache')) {
+
+		if (!($bans = WortifyCache::read('xortify_bans_cache')) || $bans['bans']==0) {
 			include_once( dirname(__FILE__) . '/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
 			$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
-			ob_start();
 			$soapExchg = new $func;
 			$bans = $soapExchg->retrieveBans();
-			ob_end_flush();
-			
 			WortifyCache::delete('xortify_bans_cache');
 			WortifyCache::delete('xortify_bans_cache_backup');			
 			WortifyCache::write('xortify_bans_cache', $bans, WortifyConfig::get('xortify_xortify_seconds'));
 			WortifyCache::write('xortify_bans_cache_backup', $bans, (WortifyConfig::get('xortify_xortify_seconds') * 1.45));					
 		}
-		
 		if ($bans['bans']==0) {
 			echo WORTIFY_ADMIN_NOCACHEMSG;	
 		}	else {

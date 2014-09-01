@@ -1,4 +1,15 @@
-<link rel='stylesheet' href='<?php echo plugins_url( '/css/style.css', __FILE__ ); ?>' type='text/css' media='all' />
+<style>
+	th, thead {background-color: #23AC5; margin-bottom : 12px; color: #0e45f6; font-size: 1.1356em; vertical-align : middle; padding: 5px;}
+	.outer {border: 3px solid #c0c0c0;-webkit-box-shadow: 4px 4px 6px 2px rgba(95, 95, 15, 0.78);	-moz-box-shadow:    4px 4px 6px 2px rgba(95, 95, 15, 0.78);	box-shadow:         4px 4px 6px 2px rgba(95, 95, 15, 0.78);	-webkit-border-radius: 14px;	-moz-border-radius: 14px;	border-radius: 14px;	text-shadow: 2px 2px 2px rgba(103, 87, 101, 0.82);}
+	.head {background-color: #c4ea66; padding: 5px; font-weight: bold;}
+	table {margin-top: 18px; }
+	.even {background-color: #d17fe7; padding: 5px; padding: 5px;font-size: 1.2123em;}
+	.odd {background-color: #a6f4e1; padding: 5px; padding: 5px; font-size: 1.2123em;}
+	.foot {background-color: #c2e7a1; padding: 5px; font-weight: bold;}
+	tr.even td {background-color: #d17fe7; padding: 5px; padding: 5px;font-size: 1.2123em;}
+	tr.odd td {background-color: #a6f4e1; padding: 5px; padding: 5px;font-size: 1.2123em;}
+	tr.foot td {background-color: #c2cdd6; padding: 5px; color:inherit; font-weight: bold;}
+</style>
 <?php 
 error_reporting(E_ERROR);
 ini_set('display_errors', true);
@@ -40,26 +51,26 @@ foreach($logs as $id => $log) {
 
 
 ?><div class="wortifyModeElem" id="wortifyMode_blockedIPs"></div>
-<div class="wrap">
-	<h1><?php echo WORTIFY_ADMIN_LOG_H1; ?></h1>
+<h1><?php echo WORTIFY_ADMIN_LOG_H1; ?></h1>
 <p><?php echo WORTIFY_ADMIN_LOG_P; ?></p>
 <div style="float:right;"><?php echo $fullnav; ?></div>
-<table width="100%">
-	<tr style="font-size: 1.45em; background-color: #3f3f3f;">
-		<th style="margin: 8px;"><?php echo $headers['action']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['provider']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['date']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['uname']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['email']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['ip4']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['ip6']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['proxy-ip4']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['proxy-ip6']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['network-addy']; ?></th>
-		<th style="margin: 8px;"><?php echo $headers['agent']; ?></th>
-	</tr>
+<div id="outer" class="outer">
+<table width="95%">
+	<thead class="head">
+		<th><?php echo $headers['action']; ?></th>
+		<th><?php echo $headers['provider']; ?></th>
+		<th><?php echo $headers['date']; ?></th>
+		<th><?php echo $headers['uname']; ?></th>
+		<th><?php echo $headers['email']; ?></th>
+		<th><?php echo $headers['ip4']; ?></th>
+		<th><?php echo $headers['ip6']; ?></th>
+		<th><?php echo $headers['proxy-ip4']; ?></th>
+		<th><?php echo $headers['proxy-ip6']; ?></th>
+		<th><?php echo $headers['network-addy']; ?></th>
+		<th><?php echo $headers['agent']; ?></th>
+	</thead>
 	<?php foreach ($data as $key => $item) { $cycle = ($cycle=='#d9d9d9'?'#fefefe':'#d9d9d9'); ?>
-	<tr  style="background-color: <?php echo $cycle; ?>; padding: 8px 8px 8px 8px; margin: 4px 4px 4px 4px;">
+	<tr>
 		<td align='center'><?php echo $item['action']; ?></td>
 		<td align='center'><?php echo $item['provider']; ?></td>
 		<td align='center'><?php echo $item['date_datetime']; ?></td>
@@ -74,7 +85,7 @@ foreach($logs as $id => $log) {
 	</tr>
 	<?php } ?>
 	<tr class="foot">
-		<td colspan="11">&nbsp;</td>
+		<td colspan="12">&nbsp;</td>
 	</tr>
 </table>
 </div>
