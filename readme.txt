@@ -4,7 +4,7 @@ Donate link: https://web.labs.coop/payment/index.html
 Tags: Honeypot, Spam, Human Rights, IP Sec, IP Ban
 Requires at least: 3.3
 Tested up to: 3.9.2
-Stable tag: 4.6.99
+Stable tag: 4.18.31
 License: Chronolabs ~ General Software License
 License URI: https://web.labs.coop/public/legal/general-software-license/10,3.htm
 
@@ -63,6 +63,7 @@ You can raise forum threads for Wortify on sourceforge at the following address:
 
 == Changelog ==
 
+* Reduced Amount of Cache Files Dramatically by finiting with prefix and suffix
 * Removed XOOPS Dependant Systems from protector
 * Removed XOOPS Dependant Systems from xortify client
 * Import Xortify Dependant Systems from protector

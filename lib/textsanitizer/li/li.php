@@ -18,7 +18,7 @@
  * @version         $Id: li.php 8066 2011-11-06 05:09:33Z beckmi $
  * @deprecated
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 class WortifytsLi extends WortifyTextSanitizerExtension
 {

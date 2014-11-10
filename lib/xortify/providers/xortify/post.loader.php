@@ -33,9 +33,9 @@
 	
 	$checkfields = array('uname', 'email', 'ip4', 'ip6', 'network-addy', 'login_name');
 	
-	include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+	include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 	
-	include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+	include_once( _WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 	$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 	$apiExchange = new $func;
 	$bans = $apiExchange->getBans();
@@ -65,15 +65,15 @@
 							$log->setVars($ipdata);
 							$log->setVar('provider', basename(dirname(__FILE__)));
 							$log->setVar('action', 'blocked');
-							$log->setVar('extra', _XOR_BAN_XORT_KEY.' '.$key.'<br/>'.
-												  _XOR_BAN_XORT_MATCH.' ('.$key.') '.$ban[$key].' == '.$ip.'<br/>'.
-												  _XOR_BAN_XORT_LENGTH.' '.strlen($ban[$key]).' == '.strlen($ip));
+							$log->setVar('extra', _WORTIFY_BANWORTIFYT_KEY.' '.$key.'<br/>'.
+												  _WORTIFY_BANWORTIFYT_MATCH.' ('.$key.') '.$ban[$key].' == '.$ip.'<br/>'.
+												  _WORTIFY_BANWORTIFYT_LENGTH.' '.strlen($ban[$key]).' == '.strlen($ip));
 							
 							$lid = $log_handler->insert($log, true);
 							wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), WortifyConfig::get('xortify_fault_delay'));
 							$GLOBALS['wortify']['lid'] = $lid;
 							setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
-							header('Location: '.WORTIFY_URL.'/banned.php');
+							header('Location: '._WORTIFY_URL.'/banned.php');
 							exit(0);
 						}
 					}
@@ -103,17 +103,17 @@
 								$log->setVars($ipdata);
 								$log->setVar('provider', basename(dirname(__FILE__)));
 								$log->setVar('action', 'blocked');
-								$log->setVar('extra', _XOR_BAN_XORT_KEY.' '.$key.'<br/>'.
-													  _XOR_BAN_XORT_MATCH.' '.$ban[$key].' == '.$ip.'<br/>'.
-													  _XOR_BAN_XORT_LENGTH.' '.strlen($ban[$key]).' == '.strlen($ip));
+								$log->setVar('extra', _WORTIFY_BANWORTIFYT_KEY.' '.$key.'<br/>'.
+													  _WORTIFY_BANWORTIFYT_MATCH.' '.$ban[$key].' == '.$ip.'<br/>'.
+													  _WORTIFY_BANWORTIFYT_LENGTH.' '.strlen($ban[$key]).' == '.strlen($ip));
 								
-								include_once WORTIFY_ROOT_PATH."/include/common.php";
+								include_once _WORTIFY_ROOT_PATH."/include/common.php";
 						
 								$lid = $log_handler->insert($log, true);
 								wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), WortifyConfig::get('xortify_fault_delay'));
 								$GLOBALS['wortify']['lid'] = $lid;
 								setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
-								header('Location: '.WORTIFY_URL.'/banned.php');
+								header('Location: '._WORTIFY_URL.'/banned.php');
 								exit(0);
 							
 							}		

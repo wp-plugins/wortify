@@ -17,10 +17,10 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: config.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 return $config = array(
-    'link' => WORTIFY_URL . "/lib/mediawiki/?title=%s",// The link to wiki module
+    'link' => _WORTIFY_URL . "/lib/mediawiki/?title=%s",// The link to wiki module
     'charset' => "UTF-8");// Charset of wiki module
 
 ?>

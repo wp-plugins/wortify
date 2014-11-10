@@ -17,7 +17,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: wortifyCache.php 10264 2012-11-21 04:52:11Z beckmi $
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 /**
  * Caching for CakePHP.
  *
@@ -192,7 +192,14 @@ class WortifyCache
      */
     function write($key, $value, $duration = null)
     {
-        $key = substr(md5(WORTIFY_URL), 0, 8) . '_' . $key;
+    	if (substr($key, strlen($key) - strlen(constant('_WORTIFY_CACHE_SUFFIX')), strlen(constant('_WORTIFY_CACHE_SUFFIX'))) == constant('_WORTIFY_CACHE_SUFFIX'))
+    	{
+    		$values = self::read($key, array('store' => true));
+    		$values[constant('_WORTIFY_CACHE_PREFIX')] = $value;
+    		$value = $values;
+    		unset($values);
+    	}
+        $key = substr(md5(_WORTIFY_URL), 0, 8) . '_' . $key;
         $_this =& WortifyCache::getInstance();
         $config = null;
         if (is_array($duration)) {
@@ -237,7 +244,7 @@ class WortifyCache
      */
     static function read($key, $config = null)
     {
-        $key = substr(md5(WORTIFY_URL), 0, 8) . '_' . $key;
+        $key = substr(md5(_WORTIFY_URL), 0, 8) . '_' . $key;
         $_this =& WortifyCache::getInstance();
         $config = $_this->config($config);
         if (!is_array($config)) {
@@ -252,6 +259,10 @@ class WortifyCache
         }
         $_this->engine[$engine]->init($settings);
         $success = $_this->engine[$engine]->read($key);
+        if (!isset($config['store']) && substr($key, strlen($key) - strlen(constant('_WORTIFY_CACHE_SUFFIX')), strlen(constant('_WORTIFY_CACHE_SUFFIX'))) == constant('_WORTIFY_CACHE_SUFFIX'))
+        {
+        	return $success[constant('_WORTIFY_CACHE_PREFIX')];
+        }
         return $success;
     }
     /**
@@ -264,7 +275,7 @@ class WortifyCache
      */
     function delete($key, $config = null)
     {
-        $key = substr(md5(WORTIFY_URL), 0, 8) . '_' . $key;
+        $key = substr(md5(_WORTIFY_URL), 0, 8) . '_' . $key;
         $_this =& WortifyCache::getInstance();
         $config = $_this->config($config);
         extract($config);

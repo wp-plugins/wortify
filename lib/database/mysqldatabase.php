@@ -17,7 +17,7 @@
  * @author          Kazumi Ono <onokazu@wortify.org>
  * @version         $Id: mysqldatabase.php 10264 2012-11-21 04:52:11Z beckmi $
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  *

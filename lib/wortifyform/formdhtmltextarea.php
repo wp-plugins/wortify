@@ -19,7 +19,7 @@
  * @author          Vinod <smartvinu@gmail.com>
  * @version         $Id: formdhtmltextarea.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 
 /**
@@ -41,14 +41,14 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
      * <ul>Developer and user guide:
      *                         <li><ul>For run-time settings per call
      *                                 <li>To use an editor pre-configured by {@link WortifyEditor}, e.g. 'fckeditor': <code>$options['editor'] = 'fckeditor';</code></li>
-     *                                 <li>To use a custom editor, e.g. 'MyEditor' class located in "/modules/myeditor/myeditor.php": <code>$options['editor'] = array('MyEditor', WORTIFY_ROOT_PATH . "/modules/myeditor/myeditor.php");</code></li>
+     *                                 <li>To use a custom editor, e.g. 'MyEditor' class located in "/modules/myeditor/myeditor.php": <code>$options['editor'] = array('MyEditor', _WORTIFY_ROOT_PATH . "/modules/myeditor/myeditor.php");</code></li>
      *                             </ul></li>
      *                         <li><ul>For pre-configured settings, which will force to use a editor if no specific editor is set for call
-     *                                 <li><ul>Set up custom configs: in WORTIFY_VAR_PATH . '/configs/wortifyconfig.php' set a editor as default, e.g.
+     *                                 <li><ul>Set up custom configs: in _WORTIFY_VAR_PATH . '/configs/wortifyconfig.php' set a editor as default, e.g.
      *                                         <li>a pre-configured editor 'fckeditor': <code>return array('editor' => 'fckeditor');</code></li>
-     *                                         <li>a custom editor 'MyEditor' class located in "/modules/myeditor/myeditor.php": <code>return array('editor' => array('MyEditor', WORTIFY_ROOT_PATH . "/modules/myeditor/myeditor.php");</code></li>
+     *                                         <li>a custom editor 'MyEditor' class located in "/modules/myeditor/myeditor.php": <code>return array('editor' => array('MyEditor', _WORTIFY_ROOT_PATH . "/modules/myeditor/myeditor.php");</code></li>
      *                                     </ul></li>
-     *                                 <li>To disable the default editor, in WORTIFY_VAR_PATH . '/configs/wortifyconfig.php': <code>return array();</code></li>
+     *                                 <li>To disable the default editor, in _WORTIFY_VAR_PATH . '/configs/wortifyconfig.php': <code>return array();</code></li>
      *                                 <li>To disable the default editor for a specific call: <code>$options['editor'] = 'dhtmltextarea';</code></li>
      *                             </ul></li>
      * </ul>
@@ -116,7 +116,7 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
                 }
             } else {
                 list ($class, $path) = $this->htmlEditor;
-                include_once WORTIFY_ROOT_PATH . $path;
+                include_once _WORTIFY_ROOT_PATH . $path;
                 if (class_exists($class)) {
                     $this->htmlEditor = new $class($options);
                 }
@@ -157,17 +157,17 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
 
         if (empty($this->skipPreview)) {
             if (empty($GLOBALS['xoTheme'])) {
-                $this->js .= implode("", file(WORTIFY_ROOT_PATH . "/class/textsanitizer/image/image.js"));
+                $this->js .= implode("", file(_WORTIFY_ROOT_PATH . "/class/textsanitizer/image/image.js"));
             } else {
                 $GLOBALS['xoTheme']->addScript('/class/textsanitizer/image/image.js', array('type' => 'text/javascript'));
             }
             $button = // "<br />" .
-"<input " . "   id='" . $this->getName() . "_preview_button'" . "   type='button' " . "   value='" . _PREVIEW . "' " . "   onclick=\"form_instantPreview('" . WORTIFY_URL . "', '" . $this->getName() . "','" . WORTIFY_URL . "/images', " . intval($this->doHtml) . ", '" . $GLOBALS['wortifySecurity']->createToken() . "')\"" . " />";
+"<input " . "   id='" . $this->getName() . "_preview_button'" . "   type='button' " . "   value='" . _PREVIEW . "' " . "   onclick=\"form_instantPreview('" . _WORTIFY_URL . "', '" . $this->getName() . "','" . _WORTIFY_URL . "/images', " . intval($this->doHtml) . ", '" . $GLOBALS['wortifySecurity']->createToken() . "')\"" . " />";
             $ret .= "<br />" . "<div id='" . $this->getName() . "_hidden' style='display: block;'> " . "   <fieldset>" . "       <legend>" . $button . "</legend>" . "       <div id='" . $this->getName() . "_hidden_data'>" . _WORTIFY_FORM_PREVIEW_CONTENT . "</div>" . "   </fieldset>" . "</div>";
         }
         // Load javascript
         if (empty($js_loaded)) {
-            $javascript = (($this->js) ? '<script language="JavaScript" type="text/javascript">' . $this->js . '</script>' : '') . '<script language="JavaScript" type="text/javascript" src="' . WORTIFY_URL . '/include/formdhtmltextarea.js"></script>';
+            $javascript = (($this->js) ? '<script language="JavaScript" type="text/javascript">' . $this->js . '</script>' : '') . '<script language="JavaScript" type="text/javascript" src="' . _WORTIFY_URL . '/include/formdhtmltextarea.js"></script>';
             $ret = $javascript . $ret;
             $js_loaded = true;
         }
@@ -182,7 +182,7 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
     function codeIcon()
     {
         $textarea_id = $this->getName();
-        $code = "<a name='moresmiley'></a>" . "<img src='" . WORTIFY_URL . "/images/url.gif' alt='" . _WORTIFY_FORM_ALT_URL . "' title='" . _WORTIFY_FORM_ALT_URL . "' onclick='wortifyCodeUrl(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERURL, ENT_QUOTES) . "\", \"" . htmlspecialchars(_ENTERWEBTITLE, ENT_QUOTES) . "\");' onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . WORTIFY_URL . "/images/email.gif' alt='" . _WORTIFY_FORM_ALT_EMAIL . "' title='" . _WORTIFY_FORM_ALT_EMAIL . "' onclick='wortifyCodeEmail(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTEREMAIL, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . WORTIFY_URL . "/images/imgsrc.gif' alt='" . _WORTIFY_FORM_ALT_IMG . "' title='" . _WORTIFY_FORM_ALT_IMG . "' onclick='wortifyCodeImg(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERIMGURL, ENT_QUOTES) . "\", \"" . htmlspecialchars(_ENTERIMGPOS, ENT_QUOTES) . "\", \"" . htmlspecialchars(_IMGPOSRORL, ENT_QUOTES) . "\", \"" . htmlspecialchars(_ERRORIMGPOS, ENT_QUOTES) . "\", \"" . htmlspecialchars(_WORTIFY_FORM_ALT_ENTERWIDTH, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . WORTIFY_URL . "/images/image.gif' alt='" . _WORTIFY_FORM_ALT_IMAGE . "' title='" . _WORTIFY_FORM_ALT_IMAGE . "' onclick='openWithSelfMain(\"" . WORTIFY_URL . "/imagemanager.php?target={$textarea_id}\",\"imgmanager\",400,430);'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . WORTIFY_URL . "/images/smiley.gif' alt='" . _WORTIFY_FORM_ALT_SMILEY . "' title='" . _WORTIFY_FORM_ALT_SMILEY . "' onclick='openWithSelfMain(\"" . WORTIFY_URL . "/misc.php?action=showpopups&amp;type=smilies&amp;target={$textarea_id}\",\"smilies\",300,475);'  onmouseover='style.cursor=\"hand\"'/>&nbsp;";
+        $code = "<a name='moresmiley'></a>" . "<img src='" . _WORTIFY_URL . "/images/url.gif' alt='" . _WORTIFY_FORM_ALT_URL . "' title='" . _WORTIFY_FORM_ALT_URL . "' onclick='wortifyCodeUrl(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERURL, ENT_QUOTES) . "\", \"" . htmlspecialchars(_ENTERWEBTITLE, ENT_QUOTES) . "\");' onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . _WORTIFY_URL . "/images/email.gif' alt='" . _WORTIFY_FORM_ALT_EMAIL . "' title='" . _WORTIFY_FORM_ALT_EMAIL . "' onclick='wortifyCodeEmail(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTEREMAIL, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . _WORTIFY_URL . "/images/imgsrc.gif' alt='" . _WORTIFY_FORM_ALT_IMG . "' title='" . _WORTIFY_FORM_ALT_IMG . "' onclick='wortifyCodeImg(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERIMGURL, ENT_QUOTES) . "\", \"" . htmlspecialchars(_ENTERIMGPOS, ENT_QUOTES) . "\", \"" . htmlspecialchars(_IMGPOSRORL, ENT_QUOTES) . "\", \"" . htmlspecialchars(_ERRORIMGPOS, ENT_QUOTES) . "\", \"" . htmlspecialchars(_WORTIFY_FORM_ALT_ENTERWIDTH, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . _WORTIFY_URL . "/images/image.gif' alt='" . _WORTIFY_FORM_ALT_IMAGE . "' title='" . _WORTIFY_FORM_ALT_IMAGE . "' onclick='openWithSelfMain(\"" . _WORTIFY_URL . "/imagemanager.php?target={$textarea_id}\",\"imgmanager\",400,430);'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . _WORTIFY_URL . "/images/smiley.gif' alt='" . _WORTIFY_FORM_ALT_SMILEY . "' title='" . _WORTIFY_FORM_ALT_SMILEY . "' onclick='openWithSelfMain(\"" . _WORTIFY_URL . "/misc.php?action=showpopups&amp;type=smilies&amp;target={$textarea_id}\",\"smilies\",300,475);'  onmouseover='style.cursor=\"hand\"'/>&nbsp;";
         $myts = &MyTextSanitizer::getInstance();
 
         $extensions = array_filter($myts->config['extensions']);
@@ -196,7 +196,7 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
                 $this->js .= $js;
             }
         }
-        $code .= "<img src='" . WORTIFY_URL . "/images/code.gif' alt='" . _WORTIFY_FORM_ALT_CODE . "' title='" . _WORTIFY_FORM_ALT_CODE . "' onclick='wortifyCodeCode(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERCODE, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . WORTIFY_URL . "/images/quote.gif' alt='" . _WORTIFY_FORM_ALT_QUOTE . "' title='" . _WORTIFY_FORM_ALT_QUOTE . "' onclick='wortifyCodeQuote(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERQUOTE, ENT_QUOTES) . "\");' onmouseover='style.cursor=\"hand\"'/>";
+        $code .= "<img src='" . _WORTIFY_URL . "/images/code.gif' alt='" . _WORTIFY_FORM_ALT_CODE . "' title='" . _WORTIFY_FORM_ALT_CODE . "' onclick='wortifyCodeCode(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERCODE, ENT_QUOTES) . "\");'  onmouseover='style.cursor=\"hand\"'/>&nbsp;" . "<img src='" . _WORTIFY_URL . "/images/quote.gif' alt='" . _WORTIFY_FORM_ALT_QUOTE . "' title='" . _WORTIFY_FORM_ALT_QUOTE . "' onclick='wortifyCodeQuote(\"{$textarea_id}\", \"" . htmlspecialchars(_ENTERQUOTE, ENT_QUOTES) . "\");' onmouseover='style.cursor=\"hand\"'/>";
 
         $wortifyPreload =& WortifyPreload::getInstance();
         $wortifyPreload->triggerEvent('core.class.wortifyform.formdhtmltextarea.codeicon', array(&$code));
@@ -239,14 +239,14 @@ class WortifyFormDhtmlTextArea extends WortifyFormTextArea
 
         $fontStr .= "document.write(_editor_dialog); </script>";
 
-        $styleStr = "<img src='" . WORTIFY_URL . "/images/bold.gif' alt='" . _WORTIFY_FORM_ALT_BOLD . "' title='" . _WORTIFY_FORM_ALT_BOLD . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeBold(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
-        $styleStr .= "<img src='" . WORTIFY_URL . "/images/italic.gif' alt='" . _WORTIFY_FORM_ALT_ITALIC . "' title='" . _WORTIFY_FORM_ALT_ITALIC . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeItalic(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
-        $styleStr .= "<img src='" . WORTIFY_URL . "/images/underline.gif' alt='" . _WORTIFY_FORM_ALT_UNDERLINE . "' title='" . _WORTIFY_FORM_ALT_UNDERLINE . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeUnderline(\"{$hiddentext}\", \"{$textarea_id}\");'/>&nbsp;";
-        $styleStr .= "<img src='" . WORTIFY_URL . "/images/linethrough.gif' alt='" . _WORTIFY_FORM_ALT_LINETHROUGH . "' title='" . _WORTIFY_FORM_ALT_LINETHROUGH . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeLineThrough(\"{$hiddentext}\", \"{$textarea_id}\");' /></a>&nbsp;";
+        $styleStr = "<img src='" . _WORTIFY_URL . "/images/bold.gif' alt='" . _WORTIFY_FORM_ALT_BOLD . "' title='" . _WORTIFY_FORM_ALT_BOLD . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeBold(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
+        $styleStr .= "<img src='" . _WORTIFY_URL . "/images/italic.gif' alt='" . _WORTIFY_FORM_ALT_ITALIC . "' title='" . _WORTIFY_FORM_ALT_ITALIC . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeItalic(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
+        $styleStr .= "<img src='" . _WORTIFY_URL . "/images/underline.gif' alt='" . _WORTIFY_FORM_ALT_UNDERLINE . "' title='" . _WORTIFY_FORM_ALT_UNDERLINE . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeUnderline(\"{$hiddentext}\", \"{$textarea_id}\");'/>&nbsp;";
+        $styleStr .= "<img src='" . _WORTIFY_URL . "/images/linethrough.gif' alt='" . _WORTIFY_FORM_ALT_LINETHROUGH . "' title='" . _WORTIFY_FORM_ALT_LINETHROUGH . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeLineThrough(\"{$hiddentext}\", \"{$textarea_id}\");' /></a>&nbsp;";
 
-        $alignStr = "<img src='" . WORTIFY_URL . "/images/alignleft.gif' alt='" . _WORTIFY_FORM_ALT_LEFT . "' title='" . _WORTIFY_FORM_ALT_LEFT . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeLeft(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
-        $alignStr .= "<img src='" . WORTIFY_URL . "/images/aligncenter.gif' alt='" . _WORTIFY_FORM_ALT_CENTER . "' title='" . _WORTIFY_FORM_ALT_CENTER . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeCenter(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
-        $alignStr .= "<img src='" . WORTIFY_URL . "/images/alignright.gif' alt='" . _WORTIFY_FORM_ALT_RIGHT . "' title='" . _WORTIFY_FORM_ALT_RIGHT . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeRight(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
+        $alignStr = "<img src='" . _WORTIFY_URL . "/images/alignleft.gif' alt='" . _WORTIFY_FORM_ALT_LEFT . "' title='" . _WORTIFY_FORM_ALT_LEFT . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeLeft(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
+        $alignStr .= "<img src='" . _WORTIFY_URL . "/images/aligncenter.gif' alt='" . _WORTIFY_FORM_ALT_CENTER . "' title='" . _WORTIFY_FORM_ALT_CENTER . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeCenter(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
+        $alignStr .= "<img src='" . _WORTIFY_URL . "/images/alignright.gif' alt='" . _WORTIFY_FORM_ALT_RIGHT . "' title='" . _WORTIFY_FORM_ALT_RIGHT . "' onmouseover='style.cursor=\"hand\"' onclick='wortifyMakeRight(\"{$hiddentext}\", \"{$textarea_id}\");' />&nbsp;";
         $fontStr = $fontStr . "<br />\n{$styleStr}&nbsp;{$alignStr}&nbsp;\n";
         return $fontStr;
     }

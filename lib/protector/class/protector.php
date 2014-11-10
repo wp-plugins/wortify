@@ -184,14 +184,14 @@ class Protector {
 			}
 	
 			// clear autologin cookie
-			$wortify_cookie_path = defined('WORTIFY_COOKIE_PATH') ? WORTIFY_COOKIE_PATH : preg_replace( '?http://[^/]+(/.*)$?' , "$1" , WORTIFY_URL ) ;
-			if( $wortify_cookie_path == WORTIFY_URL ) $wortify_cookie_path = '/' ;
+			$wortify_cookie_path = defined('_WORTIFY_COOKIE_PATH') ? _WORTIFY_COOKIE_PATH : preg_replace( '?http://[^/]+(/.*)$?' , "$1" , _WORTIFY_URL ) ;
+			if( $wortify_cookie_path == _WORTIFY_URL ) $wortify_cookie_path = '/' ;
 			setcookie('autologin_uname', '', time() - 3600, $wortify_cookie_path, '', 0);
 			setcookie('autologin_pass', '', time() - 3600, $wortify_cookie_path, '', 0);
 		}
 	
 		if( $redirect_to_top ) {
-			header( 'Location: '.WORTIFY_URL.'/' ) ;
+			header( 'Location: '._WORTIFY_URL.'/' ) ;
 			exit ;
 		} else {
 			$ret = $this->call_filter( 'prepurge_exit' ) ;
@@ -261,7 +261,7 @@ class Protector {
 	
 	static function get_filepath4bwlimit()
 	{
-		return WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/bwlimit' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
+		return _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/bwlimit' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
 	}
 	
 	
@@ -318,7 +318,7 @@ class Protector {
 	
 	static function get_filepath4badips()
 	{
-		return WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/badips' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
+		return _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/badips' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
 	}
 	
 	
@@ -338,13 +338,13 @@ class Protector {
 	
 	static function get_filepath4group1ips()
 	{
-		return WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/group1ips' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
+		return _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/group1ips' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
 	}
 	
 	
 	function get_filepath4confighcache()
 	{
-		return WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/configcache' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
+		return _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs/configcache' . substr( md5( $_SERVER['HTTP_HOST'] ) , 0 , 6 ) ;
 	}
 	
 	
@@ -431,8 +431,8 @@ class Protector {
 		if( empty( $ip ) ) return false ;
 		if( ! function_exists( 'file_get_contents' ) ) return false ;
 	
-		$target_htaccess = WORTIFY_ROOT_PATH.'/.htaccess' ;
-		$backup_htaccess = WORTIFY_ROOT_PATH.'/uploads/.htaccess.bak' ;
+		$target_htaccess = _WORTIFY_ROOT_PATH.'/.htaccess' ;
+		$backup_htaccess = _WORTIFY_ROOT_PATH.'/uploads/.htaccess.bak' ;
 	
 		$ht_body = file_get_contents( $target_htaccess ) ;
 	
@@ -741,7 +741,7 @@ class Protector {
 					$image_attributes = getimagesize( $_file['tmp_name'] ) ;
 					if( $image_attributes === false && is_uploaded_file( $_file['tmp_name'] ) ) {
 						// open_basedir restriction
-						$temp_file = WORTIFY_ROOT_PATH.'/uploads/protector_upload_temporary'.md5( time() ) ;
+						$temp_file = _WORTIFY_ROOT_PATH.'/uploads/protector_upload_temporary'.md5( time() ) ;
 						move_uploaded_file( $_file['tmp_name'] , $temp_file ) ;
 						$image_attributes = getimagesize( $temp_file ) ;
 						@unlink( $temp_file ) ;
@@ -1044,7 +1044,7 @@ class Protector {
 			}
 		} else {
 			// http_host
-			$path_array = parse_url( WORTIFY_URL ) ;
+			$path_array = parse_url( _WORTIFY_URL ) ;
 			$http_host = empty( $path_array['host'] ) ? 'www.wortify.org' : $path_array['host'] ;
 	
 			// count URI up
@@ -1142,11 +1142,11 @@ class Protector {
 		
 			// preview CSRF zx 2004/12/14 
 			// news submit.php
-			if( substr( $_SERVER['SCRIPT_NAME'] , -23 ) == 'modules/news/submit.php' && isset( $_POST['preview'] ) && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/news/submit.php' ) !== 0 ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -23 ) == 'modules/news/submit.php' && isset( $_POST['preview'] ) && strpos( $_SERVER['HTTP_REFERER'] , _WORTIFY_URL.'/lib/news/submit.php' ) !== 0 ) {
 				$HTTP_POST_VARS['nohtml'] = $_POST['nohtml'] = 1 ;
 			}
 			// news admin/index.php
-			if( substr( $_SERVER['SCRIPT_NAME'] , -28 ) == 'modules/news/admin/index.php' && ( $_POST['op'] == 'preview' || $_GET['op'] == 'preview' ) && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/news/admin/index.php' ) !== 0 ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -28 ) == 'modules/news/admin/index.php' && ( $_POST['op'] == 'preview' || $_GET['op'] == 'preview' ) && strpos( $_SERVER['HTTP_REFERER'] , _WORTIFY_URL.'/lib/news/admin/index.php' ) !== 0 ) {
 				$HTTP_POST_VARS['nohtml'] = $_POST['nohtml'] = 1 ;
 			}
 			// comment comment_post.php
@@ -1154,7 +1154,7 @@ class Protector {
 				$HTTP_POST_VARS['dohtml'] = $_POST['dohtml'] = 0 ;
 			}
 			// disable preview of system's blocksadmin
-			if( substr( $_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'blocksadmin' || $_POST['fct'] == 'blocksadmin') && isset( $_POST['previewblock'] ) /* && strpos( $_SERVER['HTTP_REFERER'] , WORTIFY_URL.'/lib/system/admin.php' ) !== 0 */ ) {
+			if( substr( $_SERVER['SCRIPT_NAME'] , -24 ) == 'modules/system/admin.php' && ( $_GET['fct'] == 'blocksadmin' || $_POST['fct'] == 'blocksadmin') && isset( $_POST['previewblock'] ) /* && strpos( $_SERVER['HTTP_REFERER'] , _WORTIFY_URL.'/lib/system/admin.php' ) !== 0 */ ) {
 				die( "Danger! don't use this preview. Use 'altsys module' instead.(by Protector)" ) ;
 			}
 			// tpl preview

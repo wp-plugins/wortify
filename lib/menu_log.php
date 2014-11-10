@@ -35,7 +35,7 @@ $fullnav = $pagenav->renderNav();
 
 foreach (array(	'action','provider','date','uname','email','ip4','ip6','proxy-ip4',
 		'proxy-ip6','network-addy','agent') as $id => $key) {
-		$headers[$key] = '<a style="color: #fffff;" href="'.$_SERVER['PHP_SELF'].'?start='.$start.'&limit='.$limit.'&sort='.str_replace('_','-',$key).'&order='.((str_replace('_','-',$key)==$sort)?($order=='DESC'?'ASC':'DESC'):$order).'&'.http_build_query($_GET).'">'.(defined('WORTIFY_ADMIN_TH_'.strtoupper(str_replace('-','_',$key)))?constant('WORTIFY_ADMIN_TH_'.strtoupper(str_replace('-','_',$key))):'WORTIFY_ADMIN_TH_'.strtoupper(str_replace('-','_',$key))).'</a>';
+		$headers[$key] = '<a style="color: #fffff;" href="'.$_SERVER['PHP_SELF'].'?start='.$start.'&limit='.$limit.'&sort='.str_replace('_','-',$key).'&order='.((str_replace('_','-',$key)==$sort)?($order=='DESC'?'ASC':'DESC'):$order).'&'.http_build_query($_GET).'">'.(defined('_WORTIFY_ADMIN_TH_'.strtoupper(str_replace('-','_',$key)))?constant('_WORTIFY_ADMIN_TH_'.strtoupper(str_replace('-','_',$key))):'_WORTIFY_ADMIN_TH_'.strtoupper(str_replace('-','_',$key))).'</a>';
 }
 
 $criteria = new Criteria('1','1');
@@ -51,8 +51,8 @@ foreach($logs as $id => $log) {
 
 
 ?><div class="wortifyModeElem" id="wortifyMode_blockedIPs"></div>
-<h1><?php echo WORTIFY_ADMIN_LOG_H1; ?></h1>
-<p><?php echo WORTIFY_ADMIN_LOG_P; ?></p>
+<h1><?php echo _WORTIFY_ADMIN_LOG_H1; ?></h1>
+<p><?php echo _WORTIFY_ADMIN_LOG_P; ?></p>
 <div style="float:right;"><?php echo $fullnav; ?></div>
 <div id="outer" class="outer">
 <table width="95%">

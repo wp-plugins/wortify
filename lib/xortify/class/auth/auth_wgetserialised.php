@@ -33,7 +33,7 @@
 
  
 if (!defined('XORTIFY_WGETSERIAL_API'))
-	define('XORTIFY_WGETSERIAL_API', $GLOBALS['xortify'][XORTIFY_INSTANCE_KEY][_MI_XOR_VERSION]['moduleConfig']['xortify_uriserial']);
+	define('XORTIFY_WGETSERIAL_API', $GLOBALS['xortify'][XORTIFY_INSTANCE_KEY][_MI_WORTIFY_VERSION]['moduleConfig']['xortify_uriserial']);
 include_once XOOPS_ROOT_PATH . '/modules/xortify/class/auth/auth_wgetserialised_provisionning.php';
 
 class XortifyAuthWgetserialised extends XortifyAuth {

@@ -17,7 +17,7 @@
  * @version         $Id: themeform.php 8066 2011-11-06 05:09:33Z beckmi $
  */
 
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'form.php');
 

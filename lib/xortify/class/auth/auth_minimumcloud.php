@@ -34,7 +34,7 @@
 if (!function_exists('minimumcloud_encode')){
 	function minimumcloud_encode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON') ) { include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
+		if (!class_exists('Services_JSON') ) { include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
 		$json = new Services_JSON();
 		return $json->encode($data);
 	}
@@ -43,7 +43,7 @@ if (!function_exists('minimumcloud_encode')){
 if (!function_exists('minimumcloud_decode')){
 	function minimumcloud_decode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON') ) { include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
+		if (!class_exists('Services_JSON') ) { include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
 		$json = new Services_JSON();
 		return $json->decode($data);
 	}
@@ -55,17 +55,17 @@ foreach (get_loaded_extensions() as $ext){
 }
 
 if ($nativecurl==true) {
-	if (!defined('WORTIFY_MINIMUMCLOUD_LIB'))
-		define('WORTIFY_MINIMUMCLOUD_LIB', 'PHPCURL');
-	if (!defined('WORTIFY_USER_AGENT'))
-		define('WORTIFY_USER_AGENT', sprintf(_MI_XOR_USER_AGENT, _MI_XOR_NAME, _MI_XOR_VERSION, _MI_XOR_RUNTIME, _MI_XOR_MODE));
+	if (!defined('_WORTIFY_MINIMUMCLOUD_LIB'))
+		define('_WORTIFY_MINIMUMCLOUD_LIB', 'PHPCURL');
+	if (!defined('_WORTIFY_USER_AGENT'))
+		define('_WORTIFY_USER_AGENT', sprintf(_MI_WORTIFY_USER_AGENT, _MI_WORTIFY_NAME, _MI_WORTIFY_VERSION, _MI_WORTIFY_RUNTIME, _MI_WORTIFY_MODE));
 }
-if (!defined('WORTIFY_MINIMUMCLOUD_LIB'))
-	define('WORTIFY_MINIMUMCLOUD_LIB', 'PHPWGET');
+if (!defined('_WORTIFY_MINIMUMCLOUD_LIB'))
+	define('_WORTIFY_MINIMUMCLOUD_LIB', 'PHPWGET');
 
-if (!defined('WORTIFY_REST_API'))
-	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
-include_once WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_minimumcloud_provisionning.php';
+if (!defined('_WORTIFY_REST_API'))
+	define('_WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', _WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
+include_once _WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_minimumcloud_provisionning.php';
 
 class WortifyAuthMinimumCloud extends WortifyAuth {
 	
@@ -78,18 +78,18 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 	 * Authentication Service constructor
 	 */
 	function WortifyAuthMinimumCloud (&$dao) {
-		if (WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
+		if (_WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
 			if (!$ch = curl_init()) {
-				trigger_error('Could not intialise CURL file: '.WORTIFY_REST_API);
+				trigger_error('Could not intialise CURL file: '._WORTIFY_REST_API);
 				return false;
 			}
-			$cookies = WORTIFY_VAR_PATH.'/cache/wortify_cache/authcurl_'.md5(WORTIFY_REST_API).'.cookie';
+			$cookies = _WORTIFY_VAR_PATH.'/cache/wortify_cache/authcurl_'.md5(_WORTIFY_REST_API).'.cookie';
 			
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, WortifyConfig::get('xortify_curl_connecttimeout'));
 			curl_setopt($ch, CURLOPT_TIMEOUT, WortifyConfig::get('xortify_curl_timeout'));
 			curl_setopt($ch, CURLOPT_COOKIEJAR, $cookies);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_USERAGENT, WORTIFY_USER_AGENT);
+			curl_setopt($ch, CURLOPT_USERAGENT, _WORTIFY_USER_AGENT);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			$this->curl_client =& $ch;
 		}
@@ -105,7 +105,7 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 	 * @return bool
 	 */	
 	function authenticate($uname, $pwd = null) {
-		if (WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
+		if (_WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
 			$authenticated = false;
 			$this->WortifyAuthMinimumCloud($GLOBALS['wortifyDB']);
 			if (!$this->curl_client) {
@@ -113,7 +113,7 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 				return $authenticated;
 			}
 			$rnd = rand(-100000, 100000000);
-			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
+			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
 			$data = curl_exec($this->curl_client);
 			curl_close($this->curl_client);
 			$result = $this->obj2array(minimumcloud_decode($data));
@@ -121,7 +121,7 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 		} else {
 			$authenticated = false;
 			$rnd = rand(-100000, 100000000);		
-			$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
+			$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
 				$result = $this->obj2array(minimumcloud_decode($data));	
 			return $result["RESULT"];
 		}		
@@ -139,10 +139,10 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 	 * @return string
 	 */		
 	function validate($uname, $email, $pass, $vpass){
-		if (WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
+		if (_WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
 			$this->WortifyAuthMinimumCloud($GLOBALS['wortifyDB']);
 			$rnd = rand(-100000, 100000000);
-			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
+			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
 			$data = curl_exec($this->curl_client);
 			curl_close($this->curl_client);
 			$result = $this->obj2array(minimumcloud_decode($data));
@@ -153,7 +153,7 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 			}
 		} else {
 			$rnd = rand(-100000, 100000000);	
-			$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
+			$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
 				$result = $this->obj2array(minimumcloud_decode($data));	
 			if ($result['ERRNUM']==1){
 				return $result["RESULT"];
@@ -188,9 +188,9 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 	 * @return string
 	 */			
 	function network_disclaimer(){
-		if (WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
+		if (_WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
 			$this->WortifyAuthMinimumCloud($GLOBALS['wortifyDB']);
-			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password))));
+			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password))));
 			$data = curl_exec($this->curl_client);
 			curl_close($this->curl_client);
 			
@@ -201,7 +201,7 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 				return false;
 			}
 		} else {
-			$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password))));
+			$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password))));
 				$result = $this->obj2array(minimumcloud_decode($data));	
 	
 			if ($result['ERRNUM']==1){
@@ -231,16 +231,16 @@ class WortifyAuthMinimumCloud extends WortifyAuth {
 						 $pass, $timezone_offset, $user_mailok, $siteinfo){
 						 
 		$siteinfo = $this->check_siteinfo($siteinfo);
-		if (WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
+		if (_WORTIFY_MINIMUMCLOUD_LIB=='PHPCURL') {
 			$rnd = rand(-100000, 100000000);
 			$this->WortifyAuthMinimumCloud($GLOBALS['wortifyDB']);
-			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'xortify_create_user', http_query_build(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
+			curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'xortify_create_user', http_query_build(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
 			$data = curl_exec($this->curl_client);
 			curl_close($this->curl_client);
 			$result = $this->obj2array(minimumcloud_decode($data));
 		} else {
 			$rnd = rand(-100000, 100000000);
-			$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_create_user', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
+			$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_create_user', http_build_query(array("username"=> $this->minimumcloud_wortify_username, "password"=> $this->minimumcloud_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
 				$result = $this->obj2array(minimumcloud_decode($data));	
 		}
 		if ($result['ERRNUM']==1){

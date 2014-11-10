@@ -37,21 +37,21 @@
 	function WortifySignupForm($disclaimer)
 	{
 		error_reporting(E_ALL);
-		$form = new WortifyThemeForm(WORTIFY_FRM_TITLE, "wortify_member", "", "post");
+		$form = new WortifyThemeForm(_WORTIFY_FRM_TITLE, "wortify_member", "", "post");
 		
-		$form->addElement(new WortifyFormText(WORTIFY_FRM_UNAME, "uname", 35, 128, (isset($_REQUEST['uname'])?$_REQUEST['uname']:'')));					
-		$form->addElement(new WortifyFormPassword(WORTIFY_FRM_PASS, "pass", 35, 128, (isset($_REQUEST['pass'])?$_REQUEST['pass']:'')), false);					
-		$form->addElement(new WortifyFormPassword(WORTIFY_FRM_VPASS, "vpass", 35, 128, (isset($_REQUEST['vpass'])?$_REQUEST['vpass']:'')), false);					
-		$form->addElement(new WortifyFormText(WORTIFY_FRM_EMAIL, "email", 35, 128, (isset($_REQUEST['email'])?$_REQUEST['email']:'')));											
-		$form->addElement(new WortifyFormText(WORTIFY_FRM_URL, "url", 35, 128, (isset($_REQUEST['url'])?$_REQUEST['url']:'')));											
-		$form->addElement(new WortifyFormRadioYN(WORTIFY_FRM_VIEWEMAIL, "viewemail", (isset($_REQUEST['viewemail'])?$_REQUEST['viewemail']:false)));
-		$form->addElement(new WortifyFormSelectTimezone(WORTIFY_FRM_TIMEZONE, "timezone", (isset($_REQUEST['timezone'])?$_REQUEST['timezone']:'')));
-		$form->addElement(new WortifyFormLabel(WORTIFY_FRM_DISCLAIMER, str_replace(array("\n", "\n\r"), "<br />", $disclaimer)));	
-		$form->addElement(new WortifyFormRadioYN(WORTIFY_FRM_DISCLAIMER_AGREE, "agree", false));				
+		$form->addElement(new WortifyFormText(_WORTIFY_FRM_UNAME, "uname", 35, 128, (isset($_REQUEST['uname'])?$_REQUEST['uname']:'')));					
+		$form->addElement(new WortifyFormPassword(_WORTIFY_FRM_PASS, "pass", 35, 128, (isset($_REQUEST['pass'])?$_REQUEST['pass']:'')), false);					
+		$form->addElement(new WortifyFormPassword(_WORTIFY_FRM_VPASS, "vpass", 35, 128, (isset($_REQUEST['vpass'])?$_REQUEST['vpass']:'')), false);					
+		$form->addElement(new WortifyFormText(_WORTIFY_FRM_EMAIL, "email", 35, 128, (isset($_REQUEST['email'])?$_REQUEST['email']:'')));											
+		$form->addElement(new WortifyFormText(_WORTIFY_FRM_URL, "url", 35, 128, (isset($_REQUEST['url'])?$_REQUEST['url']:'')));											
+		$form->addElement(new WortifyFormRadioYN(_WORTIFY_FRM_VIEWEMAIL, "viewemail", (isset($_REQUEST['viewemail'])?$_REQUEST['viewemail']:false)));
+		$form->addElement(new WortifyFormSelectTimezone(_WORTIFY_FRM_TIMEZONE, "timezone", (isset($_REQUEST['timezone'])?$_REQUEST['timezone']:'')));
+		$form->addElement(new WortifyFormLabel(_WORTIFY_FRM_DISCLAIMER, str_replace(array("\n", "\n\r"), "<br />", $disclaimer)));	
+		$form->addElement(new WortifyFormRadioYN(_WORTIFY_FRM_DISCLAIMER_AGREE, "agree", false));				
 		$form->addElement(new WortifyFormHidden('op', 'signup'));	
 		$form->addElement(new WortifyFormHidden('fct', 'save'));
-		if ($disclaimer != WORTIFY_FRM_NOSOAP_DISCLAIMER)
-			$form->addElement(new WortifyFormButton('', 'submit', WORTIFY_FRM_REGISTER, 'submit'));	
+		if ($disclaimer != _WORTIFY_FRM_NOSOAP_DISCLAIMER)
+			$form->addElement(new WortifyFormButton('', 'submit', _WORTIFY_FRM_REGISTER, 'submit'));	
 		return $form->render();
 	}
 ?>

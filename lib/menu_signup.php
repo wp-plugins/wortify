@@ -47,22 +47,22 @@
 				$disclaimer = $wortifyAuth->network_disclaimer();
 				if (strlen(trim($disclaimer))==0)
 				{
-					$disclaimer = WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER;
+					$disclaimer = _WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER;
 				}
-				if ($disclaimer != WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER) {
-?><h2><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_H2; ?></h2>
-<p><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_P; ?></p><?php
+				if ($disclaimer != _WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER) {
+?><h2><?php echo _WORTIFY_ADMIN_SIGNUPWORTIFYTIFY_H2; ?></h2>
+<p><?php echo _WORTIFY_ADMIN_SIGNUPWORTIFYTIFY_P; ?></p><?php
 echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>"; 
 					echo WortifySignupForm($disclaimer);
 				} else {
 ?>
-<h2><?php echo WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
+<h2><?php echo _WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
 <p><?php echo $GLOBALS['error']; ?></p>
 <br/><br/>
-<h3><?php echo WORTIFY_ADMIN_ERROR_URL; ?></h3>
+<h3><?php echo _WORTIFY_ADMIN_ERROR_URL; ?></h3>
 <pre><?php echo WortifyConfig::get('xortify_urirest'); ?></pre>
 <br/><br/>
-<h3><?php echo WORTIFY_ADMIN_ERROR_PROTOCOL; ?></h3>
+<h3><?php echo _WORTIFY_ADMIN_ERROR_PROTOCOL; ?></h3>
 <pre><?php echo WortifyConfig::get('xortify_protocol'); ?></pre>
 <?php 
 									}
@@ -76,7 +76,7 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 ?>
 <meta http-equiv="Refresh" content="0; url=<?php echo site_url(); ?>" />
 <meta http-equiv="refresh" content="0; url=<?php echo site_url(); ?>" />
-<h1 style="text-align: center;"><?php echo sprintf(WORTIFY_ADMIN_USER_CREATED_H1, $uname); ?></h1>
+<h1 style="text-align: center;"><?php echo sprintf(_WORTIFY_ADMIN_USER_CREATED_H1, $uname); ?></h1>
 <?php 
 				exit(0);
 			}
@@ -87,21 +87,21 @@ echo "<p align='center' style='font-size: 15px; color: #FF0000;'>$stop</p>";
 			$disclaimer = $wortifyAuth->network_disclaimer();
 			if (strlen(trim($disclaimer))==0)
 			{
-				$disclaimer = WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER;
+				$disclaimer = _WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER;
 			}
-			if ($disclaimer != WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER) {
-?><h2><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_H2; ?></h2>
-<p><?php echo WORTIFY_ADMIN_SIGNUP_XORTIFY_P; ?></p><?php 
+			if ($disclaimer != _WORTIFY_ADMIN_NONETWORKCOMM_DISCLAIMER) {
+?><h2><?php echo _WORTIFY_ADMIN_SIGNUPWORTIFYTIFY_H2; ?></h2>
+<p><?php echo _WORTIFY_ADMIN_SIGNUPWORTIFYTIFY_P; ?></p><?php 
 				echo WortifySignupForm($disclaimer);
 			} else {
 ?>
-<h2><?php echo WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
+<h2><?php echo _WORTIFY_ADMIN_ERROR_OCCURED; ?></h2>
 <p><?php echo $GLOBALS['error']; ?></p>
 <br/><br/>
-<h3><?php echo WORTIFY_ADMIN_ERROR_URL; ?></h3>
+<h3><?php echo _WORTIFY_ADMIN_ERROR_URL; ?></h3>
 <pre><?php echo WortifyConfig::get('xortify_urirest'); ?></pre>
 <br/><br/>
-<h3><?php echo WORTIFY_ADMIN_ERROR_PROTOCOL; ?></h3>
+<h3><?php echo _WORTIFY_ADMIN_ERROR_PROTOCOL; ?></h3>
 <pre><?php echo WortifyConfig::get('xortify_protocol'); ?></pre>
 <?php 
 			}

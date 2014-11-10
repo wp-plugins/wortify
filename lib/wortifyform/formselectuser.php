@@ -19,7 +19,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: formselectuser.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formelementtray.php');
 include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formselect.php');
@@ -98,7 +98,7 @@ class WortifyFormSelectUser extends WortifyFormElementTray
         $token = $GLOBALS['wortifySecurity']->createToken();
         $action_tray = new WortifyFormElementTray("", " | ");
         $action_tray->addElement(new WortifyFormLabel('', '<a href="#" onclick="var sel = wortifyGetElementById(\'' . $name . '\');for (var i = sel.options.length-1; i >= 0; i--) {if (!sel.options[i].selected) {sel.options[i] = null;}}; return false;">' . _MA_USER_REMOVE . "</a>"));
-        $action_tray->addElement(new WortifyFormLabel('', '<a href="#" onclick="openWithSelfMain(\'' . WORTIFY_URL . '/include/findusers.php?target=' . $name . '&amp;multiple=' . $multiple . '&amp;token=' . $token . '\', \'userselect\', 800, 600, null); return false;" >' . _MA_USER_MORE . "</a>" . $js_addusers));
+        $action_tray->addElement(new WortifyFormLabel('', '<a href="#" onclick="openWithSelfMain(\'' . _WORTIFY_URL . '/include/findusers.php?target=' . $name . '&amp;multiple=' . $multiple . '&amp;token=' . $token . '\', \'userselect\', 800, 600, null); return false;" >' . _MA_USER_MORE . "</a>" . $js_addusers));
         $this->WortifyFormElementTray($caption, '<br /><br />', $name);
         $this->addElement($select_element);
         $this->addElement($action_tray);

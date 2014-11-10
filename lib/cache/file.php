@@ -17,7 +17,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: file.php 10686 2013-01-06 19:07:24Z beckmi $
  */
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * File Storage engine for cache
@@ -104,12 +104,12 @@ class WortifyCacheFile extends WortifyCacheEngine
     function init($settings = array())
     {
         parent::init($settings);
-        if (!is_dir(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/'))
-        	mkdir(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/', 0777, true);
-        $defaults = array('path' => WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' , 'extension' => '.php' , 'prefix' => 'wortify_' , 'lock' => false , 'serialize' => false , 'duration' => 31556926);
+        if (!is_dir(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/'))
+        	mkdir(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/', 0777, true);
+        $defaults = array('path' => _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' , 'extension' => '.php' , 'prefix' => 'wortify_' , 'lock' => false , 'serialize' => false , 'duration' => 31556926);
         $this->settings = array_merge($defaults, $this->settings);
         if (!isset($this->file)) {
-            include_once WORTIFY_VAR_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARATOR . 'wortifyfile.php';
+            include_once _WORTIFY_VAR_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'file' . DIRECTORY_SEPARATOR . 'wortifyfile.php';
             $this->file = WortifyFile::getHandler('file', $this->settings['path'] . '/index.html', true);
         }
         $this->settings['path'] = $this->file->folder->cd($this->settings['path']);
