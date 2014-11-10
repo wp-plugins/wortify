@@ -48,9 +48,9 @@
 		$email = (isset($_REQUEST['login_name'])?$_REQUEST['login_name']:'');
 	}
 	
-	if (!$ipdata = wortifyCache::read('xortify_php_'.sha1($_SERVER['REMOTE_ADDR'].(isset($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:'').$uid.$uname.$email))) {
+	if (!$ipdata = wortifyCache::read('xortify_php_'.constant('_WORTIFY_CACHE_SUFFIX'))) {
 		$ipdata = wortify_getIPData(false);
-		wortifyCache::write('xortify_php_'.sha1($_SERVER['REMOTE_ADDR'].(isset($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:'').$uid.$uname.$email), $ipdata, WortifyConfig::get('xortify_ip_cache'));
+		wortifyCache::write('xortify_php_'.constant('_WORTIFY_CACHE_SUFFIX'), $ipdata, WortifyConfig::get('xortify_ip_cache'));
 	}
 	
 	if (is_array($bans['data'])&&count($bans['data'])>0) {

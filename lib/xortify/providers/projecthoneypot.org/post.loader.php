@@ -44,9 +44,9 @@
 
 	include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 	
-	if (!$ipdata = wortifyCache::read('xortify_php_'.sha1($_SERVER['REMOTE_ADDR'].(isset($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:'').$uid.$uname.$email))) {
+	if (!$ipdata = wortifyCache::read('xortify_php_'.constant('_WORTIFY_CACHE_SUFFIX'))) {
 		$ipdata = wortify_getIPData(false);
-		wortifyCache::write('xortify_php_'.sha1($_SERVER['REMOTE_ADDR'].(isset($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:'').$uid.$uname.$email), $ipdata, WortifyConfig::get('xortify_ip_cache'));
+		wortifyCache::write('xortify_php_'.constant('_WORTIFY_CACHE_SUFFIX'), $ipdata, WortifyConfig::get('xortify_ip_cache'));
 	}
 	
 	if (isset($ipdata['ip4']))

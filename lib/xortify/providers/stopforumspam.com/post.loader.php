@@ -37,7 +37,7 @@
 		
 	$ipdata = wortify_getIPData(false);
 
-	$checked = wortifyCache::read('xortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']));
+	$checked = wortifyCache::read('xortify_sfs_'.constant('_WORTIFY_CACHE_SUFFIX'));
 	
 	
 	if (!is_array($checked))
@@ -59,7 +59,7 @@
 						(strtotime($result['email']['lastseen'])>time()-wortifyConfig::get('xortify_email_lastseen')||strtotime($result['username']['lastseen'])>time()-wortifyConfig::get('xortify_uname_lastseen')||strtotime($result['ip']['lastseen'])>time()-wortifyConfig::get('xortify_ip_lastseen'))) {
 							
 							
-							wortifyCache::write('xortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));					
+							wortifyCache::write('xortify_sfs_'.constant('_WORTIFY_CACHE_SUFFIX'), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));					
 							
 														
 							$result = $apiExchange->sendBan(WORTIFY_BAN_SFS_TYPE."\n".
@@ -91,7 +91,7 @@
 							
 						}
 			unlinkOldCachefiles('xortify_',wortifyConfig::get('xortify_wortify_ip_cache'));
-			wortifyCache::write('xortify_sfs_'.sha1($ipdata['uname'].$ipdata['email'].(isset($ipdata['ip4'])?$ipdata['ip4']:"").(isset($ipdata['ip6'])?$ipdata['ip6']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip4']:"").(isset($ipdata['proxy-ip4'])?$ipdata['proxy-ip6']:"").$ipdata['network-addy']), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));
+			wortifyCache::write('xortify_sfs_'.constant('_WORTIFY_CACHE_SUFFIX'), array_merge($result, array('ipdata' => $ipdata)), wortifyConfig::get('xortify_wortify_ip_cache'));
 			$GLOBALS['wortify']['_pass'] = true;
 				
 		}	
