@@ -17,7 +17,7 @@
  * @author          Kazumi Ono (AKA onokazu) http://www.myweb.ne.jp/, http://jp.wortify.org/
  * @version         $Id: formdatetime.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * Date and time selection field

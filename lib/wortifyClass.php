@@ -24,11 +24,6 @@ class wortify {
 
 	public static function __constructor() {
 
-		if (!defined('_WORTIFY_CACHE_PREFIX'))
-			define('_WORTIFY_CACHE_PREFIX', substr($ipsha = sha1((string)wortify_getIP()), 2, strlen($ipsha)- 2));
-		if (!defined('_WORTIFY_CACHE_SUFFIX'))
-			define('_WORTIFY_CACHE_SUFFIX', substr(sha1((string)wortify_getIP()), 0, 2));
-		
 	}
 		
 	public static function installPlugin(){
@@ -60,7 +55,7 @@ class wortify {
 	}
 	
 	public static function runInstall(){
-		update_option('wortify_version', _WORTIFY_VERSION); 
+		update_option('wortify_version', WORTIFY_VERSION); 
 		$schema = new wortifySchema();
 		$schema->createAll(); //if not exists
 		wortifyConfig::setDefaults(); //If not set
@@ -97,7 +92,7 @@ class wortify {
 	
 	public static function xortify_spam_handler( $approved , $commentdata )
 	{
-		include_once( _WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		
@@ -323,7 +318,7 @@ class wortify {
 	}
 	
 	public static function wortify_hourly_cron() {
-		include _WORTIFY_VAR_PATH . '/lib/xortify/crons/serverup.php';
+		include WORTIFY_VAR_PATH . '/lib/xortify/crons/serverup.php';
 	}
 	public static function moreCronReccurences(){
 		return array(

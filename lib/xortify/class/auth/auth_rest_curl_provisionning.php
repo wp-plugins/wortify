@@ -50,11 +50,11 @@ class WortifyAuthRest_CurlProvisionning {
 	function WortifyAuthRest_CurlProvisionning (&$auth_instance) {
 		$this->_auth_instance = &$auth_instance;        
 		$config_handler =& wortify_gethandler('config');    
-		$config =& $config_handler->getConfigsByCat(_WORTIFY_CONF_AUTH);
+		$config =& $config_handler->getConfigsByCat(WORTIFY_CONF_AUTH);
 		foreach ($config as $key => $val) {
 			$this->$key = $val;
 		}
-		$config_gen =& $config_handler->getConfigsByCat(_WORTIFY_CONF);
+		$config_gen =& $config_handler->getConfigsByCat(WORTIFY_CONF);
 		$this->default_TZ = $config_gen['default_TZ'];
 		$this->theme_set = $config_gen['theme_set'];
 		$this->com_mode = $config_gen['com_mode'];
@@ -128,11 +128,11 @@ class WortifyAuthRest_CurlProvisionning {
 				$member_handler->addUserToGroup($groupid, $newuser->getVar('uid'));
 			$newuser->unsetNew();
 			return $newuser;
-		} else redirect_header(_WORTIFY_URL.'/user.php', 5, $newuser->getHtmlErrors());      
+		} else redirect_header(WORTIFY_URL.'/user.php', 5, $newuser->getHtmlErrors());      
 		
 		$newuser->unsetNew();
 		return $newuser;
-		//else redirect_header(_WORTIFY_URL.'/user.php', 5, $newuser->getHtmlErrors());         
+		//else redirect_header(WORTIFY_URL.'/user.php', 5, $newuser->getHtmlErrors());         
 		return $ret;	
 	}
 	
@@ -153,7 +153,7 @@ class WortifyAuthRest_CurlProvisionning {
 		}
 		if ($member_handler->insertUser($wortifyUser)) {
 			return $wortifyUser;
-		} else redirect_header(_WORTIFY_URL.'/user.php', 5, $wortifyUser->getHtmlErrors());         
+		} else redirect_header(WORTIFY_URL.'/user.php', 5, $wortifyUser->getHtmlErrors());         
 		return $ret;
 	}
 	
@@ -169,7 +169,7 @@ class WortifyAuthRest_CurlProvisionning {
 		}
 		if ($member_handler->insertUser($wortifyUser)) {
 			return $wortifyUser;
-		} else redirect_header(_WORTIFY_URL.'/user.php', 5, $wortifyUser->getHtmlErrors());         
+		} else redirect_header(WORTIFY_URL.'/user.php', 5, $wortifyUser->getHtmlErrors());         
 		return $ret;
 	}
 

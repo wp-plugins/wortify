@@ -32,7 +32,7 @@
  */
  
 if (!defined('XORTIFY_WGETXML_API'))
-	define('XORTIFY_WGETXML_API', $GLOBALS['xortify'][XORTIFY_INSTANCE_KEY][_MI_WORTIFY_VERSION]['moduleConfig']['xortify_urixml']);
+	define('XORTIFY_WGETXML_API', $GLOBALS['xortify'][XORTIFY_INSTANCE_KEY][_MI_XOR_VERSION]['moduleConfig']['xortify_urixml']);
 include_once XOOPS_ROOT_PATH . '/modules/xortify/class/auth/auth_wgetxml_provisionning.php';
 include_once XOOPS_ROOT_PATH . '/modules/xortify/include/functions.php';
 

@@ -17,7 +17,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: mp3.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 class WortifytsMp3 extends WortifyTextSanitizerExtension
 {
@@ -57,7 +57,7 @@ EOF;
 
     function decode($url)
     {
-        $rp = "<embed flashvars=\"playerID=1&amp;bg=0xf8f8f8&amp;leftbg=0x3786b3&amp;lefticon=0x78bee3&amp;rightbg=0x3786b3&amp;rightbghover=0x78bee3&amp;righticon=0x78bee3&amp;righticonhover=0x3786b3&amp;text=0x666666&amp;slider=0x3786b3&amp;track=0xcccccc&amp;border=0x666666&amp;loader=0x78bee3&amp;loop=no&amp;soundFile={$url}\" quality='high' menu='false' wmode='transparent' pluginspage='http://www.macromedia.com/go/getflashplayer' src='" . _WORTIFY_URL . "/images/form/player.swf'  width=290 height=24 type='application/x-shockwave-flash'></embed>";
+        $rp = "<embed flashvars=\"playerID=1&amp;bg=0xf8f8f8&amp;leftbg=0x3786b3&amp;lefticon=0x78bee3&amp;rightbg=0x3786b3&amp;rightbghover=0x78bee3&amp;righticon=0x78bee3&amp;righticonhover=0x3786b3&amp;text=0x666666&amp;slider=0x3786b3&amp;track=0xcccccc&amp;border=0x666666&amp;loader=0x78bee3&amp;loop=no&amp;soundFile={$url}\" quality='high' menu='false' wmode='transparent' pluginspage='http://www.macromedia.com/go/getflashplayer' src='" . WORTIFY_URL . "/images/form/player.swf'  width=290 height=24 type='application/x-shockwave-flash'></embed>";
         return $rp;
     }
 }

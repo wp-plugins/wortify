@@ -17,7 +17,7 @@
  * @author      Taiwen Jiang <phppp@users.sourceforge.net>
  * @version     $Id: wortifyfile.php 10264 2012-11-21 04:52:11Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * WortifyFile
@@ -72,7 +72,7 @@ class WortifyFile
                     if (file_exists($folder = dirname(__FILE__) . '/folder.php')) {
                         include $folder;
                     } else {
-                        trigger_error('Require Item : ' . str_replace(_WORTIFY_ROOT_PATH, '', $folder) . ' In File ' . __FILE__ . ' at Line ' . __LINE__, E_USER_WARNING);
+                        trigger_error('Require Item : ' . str_replace(WORTIFY_ROOT_PATH, '', $folder) . ' In File ' . __FILE__ . ' at Line ' . __LINE__, E_USER_WARNING);
                         return false;
                     }
                 }
@@ -83,7 +83,7 @@ class WortifyFile
                     if (file_exists($file = dirname(__FILE__) . '/file.php')) {
                         include $file;
                     } else {
-                        trigger_error('Require File : ' . str_replace(_WORTIFY_ROOT_PATH, '', $file) . ' In File ' . __FILE__ . ' at Line ' . __LINE__, E_USER_WARNING);
+                        trigger_error('Require File : ' . str_replace(WORTIFY_ROOT_PATH, '', $file) . ' In File ' . __FILE__ . ' at Line ' . __LINE__, E_USER_WARNING);
                         return false;
                     }
                 }

@@ -34,7 +34,7 @@
 	if (isset($GLOBALS['xoDoSoap']))
 	{
 		
-	include_once( _WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+	include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		$result = $apiExchange->retrieveBans();
@@ -42,7 +42,7 @@
 		if (is_array($result)) {
 		
 	
-			include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+			include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 		
 			unlinkOldCachefiles('xortify_',WortifyConfig::get('xortify_ip_cache'));
 			wortifyCache::delete('xortify_bans_cache');

@@ -34,7 +34,7 @@
 if (!function_exists('json_encode')){
 	function json_encode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON') ) { include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
+		if (!class_exists('Services_JSON') ) { include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
 		$json = new Services_JSON();
 		return $json->encode($data);
 	}
@@ -43,15 +43,15 @@ if (!function_exists('json_encode')){
 if (!function_exists('json_decode')){
 	function json_decode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON') ) { include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
+		if (!class_exists('Services_JSON') ) { include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
 		$json = new Services_JSON();
 		return $json->decode($data);
 	}
 }
 
-if (!defined('_WORTIFY_REST_API'))
-	define('_WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', _WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
-include_once _WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_rest_json_provisionning.php';
+if (!defined('WORTIFY_REST_API'))
+	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
+include_once WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_rest_json_provisionning.php';
 
 class WortifyAuthRest_Json extends WortifyAuth {
 	
@@ -79,7 +79,7 @@ class WortifyAuthRest_Json extends WortifyAuth {
 	function authenticate($uname, $pwd = null) {
 		$authenticated = false;
 		$rnd = rand(-100000, 100000000);		
-		$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
+		$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_authentication', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password, "auth" => array('username' => $uname, "password" => $pwd, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pwd), "rand"=>$rnd)))));
 			$result = $this->obj2array(json_decode($data));	
 		return $result["RESULT"];		
 	}
@@ -97,7 +97,7 @@ class WortifyAuthRest_Json extends WortifyAuth {
 	 */		
 	function validate($uname, $email, $pass, $vpass){
 		$rnd = rand(-100000, 100000000);	
-		$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
+		$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_user_validate', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password, "validate" => array('uname' => $uname, "pass" => $pass, "vpass" => $vpass, "email" => $email, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd)))));
 			$result = $this->obj2array(json_decode($data));	
 		if ($result['ERRNUM']==1){
 			return $result["RESULT"];
@@ -133,7 +133,7 @@ class WortifyAuthRest_Json extends WortifyAuth {
 	 */			
 	function network_disclaimer(){
 
-		$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password))));
+		$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_network_disclaimer', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password))));
 			$result = $this->obj2array(json_decode($data));	
 
 		if ($result['ERRNUM']==1){
@@ -165,7 +165,7 @@ class WortifyAuthRest_Json extends WortifyAuth {
 		$siteinfo = $this->check_siteinfo($siteinfo);
 
 		$rnd = rand(-100000, 100000000);
-		$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'xortify_create_user', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
+		$data = file_get_contents(sprintf(WORTIFY_REST_API, 'xortify_create_user', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password, "user" => array('user_viewemail' =>$user_viewemail, 'uname' => $uname, 'email' => $email, 'url' => $url, 'actkey' => $actkey, 'pass' => $pass, 'timezone_offset' => $timezone_offset, 'user_mailok' => $user_mailok, "time" => time(), "passhash" => sha1((time()-$rnd).$uname.$pass), "rand"=>$rnd), "siteinfo" => $siteinfo))));
 			$result = $this->obj2array(json_decode($data));	
 
 		if ($result['ERRNUM']==1){

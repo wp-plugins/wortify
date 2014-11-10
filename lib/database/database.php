@@ -18,16 +18,16 @@
  * @version         $Id: database.php 8066 2011-11-06 05:09:33Z beckmi $
  */
 
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * make sure this is only included once!
  */
-if (defined('_WORTIFY_C_DATABASE_INCLUDED')) {
+if (defined('WORTIFY_C_DATABASE_INCLUDED')) {
     return;
 }
 
-define('_WORTIFY_C_DATABASE_INCLUDED', 1);
+define('WORTIFY_C_DATABASE_INCLUDED', 1);
 
 /**
  * Abstract base class for Database access classes

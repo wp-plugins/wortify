@@ -17,9 +17,9 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: image.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 global $wortifyConfig;
-include_once _WORTIFY_VAR_PATH . ('language/' . $wortifyConfig['language'] . '/misc.php');
+include_once WORTIFY_VAR_PATH . ('language/' . $wortifyConfig['language'] . '/misc.php');
 
 class WortifytsImage extends WortifyTextSanitizerExtension
 {
@@ -42,8 +42,8 @@ class WortifytsImage extends WortifyTextSanitizerExtension
             $ts->replacements[] = '<a href="\\3" rel="external">\\3</a>';
             $ts->replacements[] = '<a href="\\1" rel="external">\\1</a>';
 
-            $ts->replacements[] = '<a href="' . _WORTIFY_URL . '/image.php?id=\\4" rel="external" title="\\5">\\5</a>';
-            $ts->replacements[] = '<a href="' . _WORTIFY_URL . '/image.php?id=\\2" rel="external" title="\\3">\\3</a>';
+            $ts->replacements[] = '<a href="' . WORTIFY_URL . '/image.php?id=\\4" rel="external" title="\\5">\\5</a>';
+            $ts->replacements[] = '<a href="' . WORTIFY_URL . '/image.php?id=\\2" rel="external" title="\\3">\\3</a>';
 
         } else {            
                if (!empty($config['resize']) && empty($config['clickable']) && !empty($config['max_width']) && !empty($GLOBALS['xoTheme'])) {
@@ -76,8 +76,8 @@ class WortifytsImage extends WortifyTextSanitizerExtension
                 $ts->replacements[] = "<img src='\\3' border='0' alt='"._MSC_ORIGINAL_IMAGE ."' onload=\"JavaScript:if(this.width>\\2) this.width=\\2\" />";
                 $ts->replacements[] = "<img src='\\1' border='0' alt='"._MSC_ORIGINAL_IMAGE ."' " . ($config['resize'] ? " onload=\"javascript:imageResize(this, " . $config['max_width'] . ")\"" : "") . "/>";
             }            
-            $ts->replacements[] = '<img src="' . _WORTIFY_URL . '/image.php?id=\\4" class="\\2" title="\\5" />';
-            $ts->replacements[] = '<img src="' . _WORTIFY_URL . '/image.php?id=\\2" title="\\3" />';
+            $ts->replacements[] = '<img src="' . WORTIFY_URL . '/image.php?id=\\4" class="\\2" title="\\5" />';
+            $ts->replacements[] = '<img src="' . WORTIFY_URL . '/image.php?id=\\2" title="\\3" />';
         }
         return true;
     }

@@ -40,7 +40,7 @@ class WortifyTextSanitizerExtension
     function __construct(&$ts)
     {
         $this->ts = $ts;
-        $this->image_path = _WORTIFY_URL . '/images/form';
+        $this->image_path = WORTIFY_URL . '/images/form';
     }
 
     /**
@@ -282,7 +282,7 @@ class WortifyTextSanitizer
     {
         $smileys = $this->getSmileys();
         foreach($smileys as $smile) {
-            $message = str_replace($smile['code'], '<img class="imgsmile" src="' . _WORTIFY_UPLOAD_URL . '/' . htmlspecialchars($smile['smile_url']) . '" alt="" />', $message);
+            $message = str_replace($smile['code'], '<img class="imgsmile" src="' . WORTIFY_UPLOAD_URL . '/' . htmlspecialchars($smile['smile_url']) . '" alt="" />', $message);
         }
         return $message;
     }
@@ -346,7 +346,7 @@ class WortifyTextSanitizer
         $patterns = array();
         $replacements = array();
         $patterns[] = "/\[siteurl=(['\"]?)([^\"'<>]*)\\1](.*)\[\/siteurl\]/sU";
-        $replacements[] = '<a href="' . _WORTIFY_URL . '/\\2" title="">\\3</a>';
+        $replacements[] = '<a href="' . WORTIFY_URL . '/\\2" title="">\\3</a>';
         $patterns[] = "/\[url=(['\"]?)(http[s]?:\/\/[^\"'<>]*)\\1](.*)\[\/url\]/sU";
         $replacements[] = '<a href="\\2" rel="external" title="">\\3</a>';
         $patterns[] = "/\[url=(['\"]?)(ftp?:\/\/[^\"'<>]*)\\1](.*)\[\/url\]/sU";

@@ -15,7 +15,7 @@
  * @subpackage      database
  * @version         $Id: databasefactory.php 10981 2013-02-04 19:37:48Z trabis $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * WortifyDatabaseFactory

@@ -49,7 +49,7 @@ if (!function_exists('checkWordLength')){
 				$log->setVars($ipdata);
 				$log->setVar('provider', basename(dirname(__FILE__)));
 				$log->setVar('action', 'blocked');
-				$log->setVar('extra', _WORTIFY_WORDS . ' :: [' . $_REQUEST[$field] . '] words('.count($parts).')');
+				$log->setVar('extra', _XOR_WORDS . ' :: [' . $_REQUEST[$field] . '] words('.count($parts).')');
 				if (isset($GLOBALS['wortifyUser'])) {
 					$log->setVar('email', $GLOBALS['wortifyUser']->getVar('email'));
 					$log->setVar('uname', $GLOBALS['wortifyUser']->getVar('uname'));
@@ -60,17 +60,17 @@ if (!function_exists('checkWordLength')){
 				$GLOBALS['wortifyModule'] = $module_handler->getByDirname('wortify');
 				
 				$wortifyOption['template_main'] = 'wortify_words_notice.html';
-				include_once _WORTIFY_ROOT_PATH.'/header.php';
+				include_once WORTIFY_ROOT_PATH.'/header.php';
 					
-				addmeta_googleanalytics(_WORTIFY_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
-				if (defined('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS')&&strlen(constant('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS'))>=13) {
-					addmeta_googleanalytics(_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
+				addmeta_googleanalytics(_XOR_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
+				if (defined('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS')&&strlen(constant('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS'))>=13) {
+					addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
 				}
 				
-				$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _WORTIFY_WORDS_PAGETITLE);
-				$GLOBALS['wortifyTpl']->assign('description', _WORTIFY_WORDS_DESCRIPTION);
+				$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _XOR_WORDS_PAGETITLE);
+				$GLOBALS['wortifyTpl']->assign('description', _XOR_WORDS_DESCRIPTION);
 				$GLOBALS['wortifyTpl']->assign('version', $GLOBALS['wortifyModule']->getVar('version')/100);
-				$GLOBALS['wortifyTpl']->assign('platform', _WORTIFY_VERSION);
+				$GLOBALS['wortifyTpl']->assign('platform', WORTIFY_VERSION);
 				$GLOBALS['wortifyTpl']->assign('provider', basename(dirname(__FILE__)));
 				$GLOBALS['wortifyTpl']->assign('spam', htmlspecialchars($data));
 				$GLOBALS['wortifyTpl']->assign('agent', $_SERVER['HTTP_USER_AGENT']);
@@ -85,7 +85,7 @@ if (!function_exists('checkWordLength')){
 				$GLOBALS['wortifyTpl']->assign('xortify_showlblock', false);
 				$GLOBALS['wortifyTpl']->assign('xortify_showrblock', false);
 				$GLOBALS['wortifyTpl']->assign('xortify_showcblock', false);
-				include_once _WORTIFY_ROOT_PATH.'/footer.php';
+				include_once WORTIFY_ROOT_PATH.'/footer.php';
 				exit(0);
 			}
 		}
@@ -120,18 +120,18 @@ if (!function_exists('user_groups')){
 }
 
 if (!function_exists('unlinkOldCachefiles')){
-	include_once _WORTIFY_VAR_PATH.'/lib/cache/wortifyCache.php';
-	include_once _WORTIFY_VAR_PATH.'/lib/wortifyLists.php';
+	include_once WORTIFY_VAR_PATH.'/lib/cache/wortifyCache.php';
+	include_once WORTIFY_VAR_PATH.'/lib/wortifyLists.php';
 	
 	function unlinkOldCachefiles($prefix, $howold=0) {
-		$files = WortifyLists::getFileListAsArray(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache', $prefix);
+		$files = WortifyLists::getFileListAsArray(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache', $prefix);
 		foreach($files as $file) {
-			if (file_exists(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' . $file)) {
-				$contents = file_get_contents(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' . $file);
+			if (file_exists(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' . $file)) {
+				$contents = file_get_contents(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' . $file);
 				$content = explode('/n', $contents);
 				$lock = (int)$content[0];
 				if ($lock<time()-$howold) {
-					unlink(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' . $file);
+					unlink(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/cache/' . $file);
 				}
 			}
 		}
@@ -142,7 +142,7 @@ if (!function_exists('unlinkOldCachefiles')){
 if (!function_exists('json_encode')){
 	function json_encode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON')) include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php');
+		if (!class_exists('Services_JSON')) include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php');
 		$json = new Services_JSON();
 		return $json->encode($data);
 	}
@@ -151,7 +151,7 @@ if (!function_exists('json_encode')){
 if (!function_exists('json_decode')){
 	function json_decode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON')) include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php');
+		if (!class_exists('Services_JSON')) include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php');
 		$json = new Services_JSON();
 		return $json->decode($data);
 	}
@@ -243,7 +243,6 @@ if (!function_exists("wortify_getIPData")) {
 				$ret['ip4'] = $ip;
 			}
 		}
-
 		$ret['made'] = time();				
 		return $ret;
 	}
@@ -276,26 +275,26 @@ if (!function_exists("wortify_apimethod")) {
 			else
 				return "rest_wgetserialised";
 		} else {
-			$ret = array(_WORTIFY_MI_PROTOCOL_MINIMUMCLOUD => 'minimumcloud');
+			$ret = array(_XOR_MI_PROTOCOL_MINIMUMCLOUD => 'minimumcloud');
 			foreach (get_loaded_extensions() as $ext){
 				if ($ext=="curl") {
 					if (function_exists('json_decode')) {
-						$ret[_WORTIFY_MI_PROTOCOL_CURL] = 'rest_curl';
+						$ret[_XOR_MI_PROTOCOL_CURL] = 'rest_curl';
 					}
-					$ret[_WORTIFY_MI_PROTOCOL_CURLSERIAL] = 'rest_curlserialised';
+					$ret[_XOR_MI_PROTOCOL_CURLSERIAL] = 'rest_curlserialised';
 				}
 				if (function_exists('xml_parser_create')) {
 					if (in_array('curl', get_loaded_extensions())) {
-						$ret[_WORTIFY_MI_PROTOCOL_CURLXML] = 'rest_curlxml';
+						$ret[_XOR_MI_PROTOCOL_CURLXML] = 'rest_curlxml';
 					}
 					$xmlparser=true;
 				}
  			}
  			if ($xmlparser=true) {
- 				$ret[_WORTIFY_MI_PROTOCOL_WGETXML] = 'rest_wgetxml';
+ 				$ret[_XOR_MI_PROTOCOL_WGETXML] = 'rest_wgetxml';
  			}
  			if (function_exists('json_decode')) {
-				$ret[_WORTIFY_MI_PROTOCOL_JSON] = 'rest_json';
+				$ret[_XOR_MI_PROTOCOL_JSON] = 'rest_json';
  			}
 			return $ret;
 		}

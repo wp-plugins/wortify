@@ -18,7 +18,7 @@
  * @version         $Id: formselectmatchoption.php 8066 2011-11-06 05:09:33Z beckmi $
  */
 
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formselect.php');
 
@@ -33,17 +33,17 @@ class WortifyFormSelectMatchOption extends WortifyFormSelect
      * @param string $caption
      * @param string $name
      * @param mixed $value Pre-selected value (or array of them).
-     * 							Legal values are {@link _WORTIFY_MATCH_START}, {@link _WORTIFY_MATCH_END},
-     * 							{@link _WORTIFY_MATCH_EQUAL}, and {@link _WORTIFY_MATCH_CONTAIN}
+     * 							Legal values are {@link WORTIFY_MATCH_START}, {@link WORTIFY_MATCH_END},
+     * 							{@link WORTIFY_MATCH_EQUAL}, and {@link WORTIFY_MATCH_CONTAIN}
      * @param int $size Number of rows. "1" makes a drop-down-list
      */
     function WortifyFormSelectMatchOption($caption, $name, $value = null, $size = 1)
     {
         $this->WortifyFormSelect($caption, $name, $value, $size, false);
-        $this->addOption(_WORTIFY_MATCH_START, _STARTSWITH);
-        $this->addOption(_WORTIFY_MATCH_END, _ENDSWITH);
-        $this->addOption(_WORTIFY_MATCH_EQUAL, _MATCHES);
-        $this->addOption(_WORTIFY_MATCH_CONTAIN, _CONTAINS);
+        $this->addOption(WORTIFY_MATCH_START, _STARTSWITH);
+        $this->addOption(WORTIFY_MATCH_END, _ENDSWITH);
+        $this->addOption(WORTIFY_MATCH_EQUAL, _MATCHES);
+        $this->addOption(WORTIFY_MATCH_CONTAIN, _CONTAINS);
     }
 }
 

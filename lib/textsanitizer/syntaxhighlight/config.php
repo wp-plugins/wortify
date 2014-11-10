@@ -17,7 +17,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: config.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 return $config = array(
     'highlight' => 'php',// Source code highlight: '' - disable; 'php' - php highlight; 'geshi' - geshi highlight

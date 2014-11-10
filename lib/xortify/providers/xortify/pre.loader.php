@@ -32,9 +32,9 @@
  */
 
 
-	include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+	include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 	if (!$servers = wortifyCache::read('server_list_wortify')) {
-		include_once( _WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' );
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		$poll = $apiExchange->getServers();

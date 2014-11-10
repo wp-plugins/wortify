@@ -40,13 +40,13 @@ foreach (get_loaded_extensions() as $ext){
 }
 
 if ($nativecurl==true&&$nativexml==true) {
-	define('_WORTIFY_CURLXML_LIB', 'PHPCURLXML');
-	if (!defined('_WORTIFY_USER_AGENT'))
-		define('_WORTIFY_USER_AGENT', 'Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) WORTIFY/20100101 WortifyAuth/1.xx (php)');
+	define('WORTIFY_CURLXML_LIB', 'PHPCURLXML');
+	if (!defined('WORTIFY_USER_AGENT'))
+		define('WORTIFY_USER_AGENT', 'Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) WORTIFY/20100101 WortifyAuth/1.xx (php)');
 }
 
-if (!defined('_WORTIFY_REST_API'))
-	define('_WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', _WORTIFY_API_URL_WORTIFY).'%s/xml/?%s');
+if (!defined('WORTIFY_REST_API'))
+	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/xml/?%s');
 
 include_once(dirname(dirname(__FILE__)) . '/include/functions.php');
 
@@ -69,10 +69,10 @@ class REST_CURLXMLWortifyExchange {
 		$this->refresh = WortifyConfig::get('xortify_records');
 
 		if (!$this->curl_client = curl_init($url)) {
-			trigger_error('Could not intialise CURL file: '._WORTIFY_REST_API);
+			trigger_error('Could not intialise CURL file: '.WORTIFY_REST_API);
 			return false;
 		}
-		$cookies = _WORTIFY_VAR_PATH.'/cache/wortify_cache/authcurl_'.md5(_WORTIFY_REST_API).'.cookie'; 
+		$cookies = WORTIFY_VAR_PATH.'/cache/wortify_cache/authcurl_'.md5(WORTIFY_REST_API).'.cookie'; 
 
 		curl_setopt($this->curl_client, CURLOPT_CONNECTTIMEOUT, WortifyConfig::get('xortify_curl_connecttimeout'));
 		curl_setopt($this->curl_client, CURLOPT_TIMEOUT, WortifyConfig::get('xortify_curl_timeout'));
@@ -81,7 +81,7 @@ class REST_CURLXMLWortifyExchange {
 		curl_setopt($this->curl_client, CURLOPT_VERBOSE, false);
 		curl_setopt($this->curl_client, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($this->curl_client, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($this->curl_client, CURLOPT_USERAGENT, _WORTIFY_USER_AGENT);
+		curl_setopt($this->curl_client, CURLOPT_USERAGENT, WORTIFY_USER_AGENT);
 		curl_setopt($this->curl_client, CURLOPT_SSL_VERIFYPEER, false);
 	
 	}
@@ -98,7 +98,7 @@ class REST_CURLXMLWortifyExchange {
 		{
 			try {
 				curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'training', http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'training', http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
 				"password"	=> 	$this->curl_wortify_password,
 				'op' => ($ham==true?'ham':'spam'),
 				'content' => $content
@@ -126,9 +126,9 @@ class REST_CURLXMLWortifyExchange {
 		{
 			try {
 				curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->xml_wortify_username,
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->xml_wortify_username,
 							"password"	=> 	$this->xml_wortify_password,
-							"poll" => _WORTIFY_URL.'/lib/xortify/poll/',
+							"poll" => WORTIFY_URL.'/lib/xortify/poll/',
 							'content' => $content,
 							'uname' => $uname,
 							'name' => $name,
@@ -162,7 +162,7 @@ class REST_CURLXMLWortifyExchange {
 				wortify_load('WortifyUserUtility');
 				$uu = new WortifyUserUtility();
 				curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'spoof'.$type, http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'spoof'.$type, http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
 				"password"	=> 	$this->curl_wortify_password, "uri" => (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 				'ip' => $uu->getIP(true),
 				'language' => $GLOBALS['wortifyConfig']['language'],
@@ -183,8 +183,8 @@ class REST_CURLXMLWortifyExchange {
 		{
 			try {
 				curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'servers', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
-								"password"	=> 	$this->xml_wortify_password, "poll" => _WORTIFY_URL.'/lib/xortify/poll/', 
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'servers', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
+								"password"	=> 	$this->xml_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/', 
 								'token' => sha1(microtime(true)),
 								'agent' => $_SERVER['HTTP_USER_AGENT'],
 								'session' => session_id()
@@ -203,7 +203,7 @@ class REST_CURLXMLWortifyExchange {
 		if (!empty($this->curl_client))
 		{
 			try {
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'ban', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'ban', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
 								"password"	=> 	$this->xml_wortify_password, 
 								"bans" 		=> 	array(	0 	=> 	array_merge(
 																			$ipData, 
@@ -227,7 +227,7 @@ class REST_CURLXMLWortifyExchange {
 		if (!empty($this->curl_client))
 		{
 			try {
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'checksfsbans', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'checksfsbans', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
 								"password"	=> 	$this->xml_wortify_password, 
 								"ipdata" 	=> 	$ipdata
 							))));
@@ -244,7 +244,7 @@ class REST_CURLXMLWortifyExchange {
 		if (!empty($this->curl_client))
 		{
 			try {
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'checkphpbans', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'checkphpbans', http_build_query(array(      "username"	=> 	$this->xml_wortify_username, 
 								"password"	=> 	$this->xml_wortify_password, 
 								"ipdata" 	=> 	$ipdata
 							))));
@@ -257,7 +257,7 @@ class REST_CURLXMLWortifyExchange {
 		return $result['checkphpbans'];	
 	}
 	function getBans() {
-		include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
         if (! $bans = wortifyCache::read('xortify_bans_cache')) {
 				$bans = wortifyCache::read('xortify_bans_cache_backup');
 				$GLOBALS['xoDoSoap'] = true;
@@ -269,7 +269,7 @@ class REST_CURLXMLWortifyExchange {
 		if (!empty($this->curl_client))
 		{
 			try {
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'bans', http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password,  "records"=> $this->refresh))));
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'bans', http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password,  "records"=> $this->refresh))));
 				$data = curl_exec($this->curl_client);
 				curl_close($this->curl_client);				
 				$result = wortify_elekey2numeric(wortify_xml2array($data),'bans');
@@ -283,7 +283,7 @@ class REST_CURLXMLWortifyExchange {
 		if (!empty($this->curl_client))
 		{
 			try {
-				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'banned', http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password,  "ipdata"=> $ipdata))));
+				curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'banned', http_build_query(array("username"=> $this->xml_wortify_username, "password"=> $this->xml_wortify_password,  "ipdata"=> $ipdata))));
 				$data = curl_exec($this->curl_client);
 				curl_close($this->curl_client);				
 				$result = wortify_elekey2numeric(wortify_xml2array($data),'banned');

@@ -34,7 +34,7 @@
 if (!function_exists('json_encode')){
 	function json_encode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON') ) { include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
+		if (!class_exists('Services_JSON') ) { include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
 		$json = new Services_JSON();
 		return $json->encode($data);
 	}
@@ -43,20 +43,20 @@ if (!function_exists('json_encode')){
 if (!function_exists('json_decode')){
 	function json_decode($data) {
 		static $json = NULL;
-		if (!class_exists('Services_JSON') ) { include_once _WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
+		if (!class_exists('Services_JSON') ) { include_once WORTIFY_VAR_PATH . ('/lib/xortify/include/JSON.php'); }
 		$json = new Services_JSON();
 		return $json->decode($data);
 	}
 }
 
 
-if (!defined('_WORTIFY_REST_API'))
-	define('_WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', _WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
+if (!defined('WORTIFY_REST_API'))
+	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/json/?%s');
 
 include_once(dirname(dirname(__FILE__)) . '/include/functions.php');
 
 
-define('_WORTIFY_JSON_LIB', 'PHPJSON');
+define('WORTIFY_JSON_LIB', 'PHPJSON');
 
 class REST_JSONWortifyExchange {
 
@@ -86,11 +86,11 @@ class REST_JSONWortifyExchange {
 	 */
 	 function training($content, $ham = false) {
 		if (!empty($this->curl_client))
-			switch (_WORTIFY_JSON_LIB){
+			switch (WORTIFY_JSON_LIB){
 				case "PHPJSON":
 					try {
 						curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-						curl_setopt($this->curl_client, CURLOPT_URL, sprintf(_WORTIFY_REST_API, 'training', http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
+						curl_setopt($this->curl_client, CURLOPT_URL, sprintf(WORTIFY_REST_API, 'training', http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
 						"password"	=> 	$this->curl_wortify_password,
 						'op' => ($ham==true?'ham':'spam'),
 						'content' => $content
@@ -115,13 +115,13 @@ class REST_JSONWortifyExchange {
 		if (checkWordLength($content)==false)
 			return array('spam'=>true);
 	 	
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-						$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->json_wortify_username,
-								"password"	=> 	$this->json_wortify_password, "poll" => _WORTIFY_URL.'/lib/xortify/poll/',
-								"poll" => _WORTIFY_URL.'/lib/xortify/poll/',
+						$data = file_get_contents(sprintf(WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->json_wortify_username,
+								"password"	=> 	$this->json_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/',
+								"poll" => WORTIFY_URL.'/lib/xortify/poll/',
 								'content' => $content,
 								'uname' => $uname,
 								'name' => $name,
@@ -148,13 +148,13 @@ class REST_JSONWortifyExchange {
 	 * @return array
 	 */
 	 function getSpoof($type = 'comment') {
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
 				wortify_load('WortifyUserUtility');
 				$uu = new WortifyUserUtility();
-					$data = file_get_contents( sprintf(_WORTIFY_REST_API, 'spoof'.$type, http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
+					$data = file_get_contents( sprintf(WORTIFY_REST_API, 'spoof'.$type, http_build_query(array(      "username"	=> 	$this->curl_wortify_username,
 				"password"	=> 	$this->curl_wortify_password, "uri" => (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
 				'ip' => $uu->getIP(true),
 				'language' => $GLOBALS['wortifyConfig']['language'],
@@ -170,12 +170,12 @@ class REST_JSONWortifyExchange {
 	
 	
 	function getServers() {
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-				$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'servers', http_build_query( array(      "username"	=> 	$this->json_wortify_username, 
-								"password"	=> 	$this->json_wortify_password, "poll" => _WORTIFY_URL.'/lib/xortify/poll/', 
+				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'servers', http_build_query( array(      "username"	=> 	$this->json_wortify_username, 
+								"password"	=> 	$this->json_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/', 
 								'token' => sha1(microtime(true)),
 								'agent' => $_SERVER['HTTP_USER_AGENT'],
 								'session' => session_id()
@@ -192,11 +192,11 @@ class REST_JSONWortifyExchange {
 
 		$ipData = wortify_getIPData($ip);
 		
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-				$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'ban', http_build_query( array(      "username"	=> 	$this->json_wortify_username, 
+				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'ban', http_build_query( array(      "username"	=> 	$this->json_wortify_username, 
 								"password"	=> 	$this->json_wortify_password, 
 								"bans" 		=> 	array(	0 	=> 	array_merge(
 																			$ipData, 
@@ -218,11 +218,11 @@ class REST_JSONWortifyExchange {
 
 	function checkSFSBans($ipdata) {
 		
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-				$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'checksfsbans', http_build_query( 
+				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'checksfsbans', http_build_query( 
 						array(  "username"	=> 	$this->json_wortify_username, 
 								"password"	=> 	$this->json_wortify_password, 
 								"ipdata" 	=> 	$ipdata
@@ -237,11 +237,11 @@ class REST_JSONWortifyExchange {
 
 	function checkPHPBans($ipdata) {
 		
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-				$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'checkphpbans', http_build_query( 
+				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'checkphpbans', http_build_query( 
 						array(  "username"	=> 	$this->json_wortify_username, 
 								"password"	=> 	$this->json_wortify_password, 
 								"ipdata" 	=> 	$ipdata
@@ -255,7 +255,7 @@ class REST_JSONWortifyExchange {
 	}
 	
 	function getBans() {
-		include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
         if (! $bans = wortifyCache::read('xortify_bans_cache')) {
 				$bans = wortifyCache::read('xortify_bans_cache_backup');
 				$GLOBALS['xoDoSoap'] = true;
@@ -264,11 +264,11 @@ class REST_JSONWortifyExchange {
 	}	
 	
 	function retrieveBans() {
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-				$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'bans', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password,  "records"=> $this->refresh))));
+				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'bans', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password,  "records"=> $this->refresh))));
 				$result = wortify_obj2array(json_decode($data));
 			}
 			catch (Exception $e) { trigger_error($e); }
@@ -278,11 +278,11 @@ class REST_JSONWortifyExchange {
 	}
 
 	function checkBanned($ipdata) {
-		switch (_WORTIFY_JSON_LIB){
+		switch (WORTIFY_JSON_LIB){
 		default:
 		case "PHPJSON":
 			try {
-				$data = file_get_contents(sprintf(_WORTIFY_REST_API, 'banned', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password,  "ipdata"=> $ipdata))));
+				$data = file_get_contents(sprintf(WORTIFY_REST_API, 'banned', http_build_query(array("username"=> $this->json_wortify_username, "password"=> $this->json_wortify_password,  "ipdata"=> $ipdata))));
 				$result = wortify_obj2array(json_decode($data));
 			}
 			catch (Exception $e) { trigger_error($e); }

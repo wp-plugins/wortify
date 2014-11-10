@@ -33,7 +33,7 @@
 	
 	if (class_exists('Protector')) {
 		error_reporting(0);
-		include_once _WORTIFY_VAR_PATH.'/lib/cache/wortifyCache.php';
+		include_once WORTIFY_VAR_PATH.'/lib/cache/wortifyCache.php';
 		$condoms = new Protector();
 		$bad_ips = $condoms->get_bad_ips(false);
 		$cacher = new wortifyCache();
@@ -41,7 +41,7 @@
 		if (empty($cache_bad_ips))
 			$cache_bad_ips = array();
 	
-		include_once( _WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
+		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		

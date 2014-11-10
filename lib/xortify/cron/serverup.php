@@ -44,14 +44,14 @@
 							trigger_error('Could not intialise CURL file: '.$url);
 							return false;
 						}
-						$cookies = _WORTIFY_VAR_PATH.'/cache/wortify_cache/croncurl_'.md5($URI).'.cookie'; 
+						$cookies = WORTIFY_VAR_PATH.'/cache/wortify_cache/croncurl_'.md5($URI).'.cookie'; 
 				
 						curl_setopt($ch, CURLOPT_HEADER, 0);
 						curl_setopt($ch, CURLOPT_COOKIEJAR, $cookies);
 						curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, wortifyConfig::get('xortify_curl_connecttimeout'));
 						curl_setopt($ch, CURLOPT_TIMEOUT, wortifyConfig::get('xortify_curl_timeout'));
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-						curl_setopt($ch, CURLOPT_USERAGENT, _WORTIFY_USER_AGENT);
+						curl_setopt($ch, CURLOPT_USERAGENT, WORTIFY_USER_AGENT);
 						$ret = curl_exec($ch);
 						curl_close($ch);
 						break;
@@ -92,8 +92,8 @@
 	
 	include_once $wortify->path('class/cache/wortifyCache.php');
 	
-	if (!defined('_WORTIFY_USER_AGENT'))
-		define('_WORTIFY_USER_AGENT', 'Mozilla/5.0 ('._WORTIFY_VERSION.'; PHP '.PHP_VERSION.') Wortify ' . ($GLOBALS['wortify']['module']->getVar('version')/100));
+	if (!defined('WORTIFY_USER_AGENT'))
+		define('WORTIFY_USER_AGENT', 'Mozilla/5.0 ('.WORTIFY_VERSION.'; PHP '.PHP_VERSION.') Wortify ' . ($GLOBALS['wortify']['module']->getVar('version')/100));
 	
 	$serverup=false;
 	if ($servers = wortifyCache::read('server_list_wortify')) {

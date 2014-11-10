@@ -60,7 +60,7 @@ if (!class_exists('WortifyAuthFactory')) {
 						break;
 	
 				}
-				$auth_instance = new $class($GLOBALS['wortifyDB'], _WORTIFY_URL);
+				$auth_instance = new $class($GLOBALS['wortifyDB'], WORTIFY_URL);
 			}
 			return $auth_instance;
 		}

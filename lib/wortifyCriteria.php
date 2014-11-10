@@ -22,7 +22,7 @@
  * @version         $Id: criteria.php 10318 2012-12-04 20:08:57Z dugris $
  */
 
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * A criteria (grammar?) for a database query.

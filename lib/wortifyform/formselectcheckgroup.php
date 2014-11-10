@@ -21,7 +21,7 @@
  * @author          John Neill <catzwolf@wortify.org>
  * @version         $Id: formselectcheckgroup.php 9320 2012-04-14 16:32:46Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formcheckbox.php');
 /**

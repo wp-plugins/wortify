@@ -17,7 +17,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: config.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 return $config = array(
     "extensions" => array(
@@ -28,7 +28,7 @@ return $config = array(
         "mp3" => 1,
         "wmp" => 0,
         // If other module is used, please modify the following detection and 'link' in /wiki/config.php
-        "wiki" => is_dir(_WORTIFY_ROOT_PATH . '/lib/mediawiki/'),
+        "wiki" => is_dir(WORTIFY_ROOT_PATH . '/lib/mediawiki/'),
         "mms" => 0,
         "rtsp" => 0,
         "ul" => 1,

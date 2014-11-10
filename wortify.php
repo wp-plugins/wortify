@@ -2,16 +2,16 @@
 /*
 Plugin Name: Wortify Sentry & Security
 Plugin URI: https://xortify.com/
-Description: Wortify Sentry & Security - Anti-virus, Firewall and real-time WordPress security Network
+Description: Wortify Sentry & Security - Anti-virus, Firewall and real-time WordPress sentry & security Network (Open Subscription ~ Currently at no charge will remain that we hope)
 Author: Simon Roberts
-Version: 4.6.99
-Author URI: http://simonaroberts.com/
+Version: 4.18.31
+Author URI: http://cipher.labs.coop/
 */
 if(defined('WP_INSTALLING') && WP_INSTALLING){
 	return;
 }
-define('_WORTIFY_VERSION', '4.0.6');
-if(! defined('_WORTIFY_VERSIONONLY_MODE')){
+define('WORTIFY_VERSION', '4.0.6');
+if(! defined('WORTIFY_VERSIONONLY_MODE')){
 	if((int) ini_get('memory_limit') < 128){
 		if(strpos(ini_get('disable_functions'), 'ini_set') === false){
 			ini_set('memory_limit', '128M'); //Some hosts have ini set at as little as 32 megs. 64 is the min sane amount of memory.

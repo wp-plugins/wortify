@@ -31,11 +31,11 @@
  * 
  */
 
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
-include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-include_once _WORTIFY_ROOT_PATH.'/modules/xortify/include/functions.php';
-include_once _WORTIFY_ROOT_PATH.'/modules/xortify/include/instance.php';
+include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+include_once WORTIFY_ROOT_PATH.'/modules/xortify/include/functions.php';
+include_once WORTIFY_ROOT_PATH.'/modules/xortify/include/instance.php';
 
 class WortifyCorePreload extends WortifyPreloadItem
 {
@@ -48,7 +48,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 		// Detect if it is an internal refereer.
 		$ip = wortify_getIP();
 		if (isset($_SERVER['HTTP_REFERER'])&&$result = wortifyCache::read('xortify_'.strtolower(__FUNCTION__).'_'.md5($ip))) {
-			if (strtolower(_WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(_WORTIFY_URL)))&&$result['time']<microtime(true)) {
+			if (strtolower(WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(WORTIFY_URL)))&&$result['time']<microtime(true)) {
 				wortifyCache::write('xortify_'.strtolower(__FUNCTION__).'_'.md5($ip), array('time'=>microtime(true)+1800), 1800);
 				return false;
 			}
@@ -58,7 +58,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 		$result = wortifyCache::read('xortify_core_include_common_start');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
 			wortifyCache::write('xortify_core_include_common_start', array('time'=>microtime(true)+600), 600);
-			include_once _WORTIFY_ROOT_PATH . ( '/modules/xortify/include/pre.loader.mainfile.php' );
+			include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/pre.loader.mainfile.php' );
 			wortifyCache::write('xortify_core_include_common_start', array('time'=>microtime(true)), -1);
 		}
 	}
@@ -79,12 +79,12 @@ class WortifyCorePreload extends WortifyPreloadItem
 			$result['when'] = microtime(true);
 			$result['files'] = 0;
 			$result['size'] = 0;
-			foreach(WortifyCorePreload::getFileListAsArray(_WORTIFY_VAR_PATH.'/caches/wortify_cache/', 'wortify') as $id => $file) {
-				if (file_exists(_WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file)&&!empty($file)) {
-					if (@filectime(_WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file)<time()-$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache']) {
+			foreach(WortifyCorePreload::getFileListAsArray(WORTIFY_VAR_PATH.'/caches/wortify_cache/', 'wortify') as $id => $file) {
+				if (file_exists(WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file)&&!empty($file)) {
+					if (@filectime(WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file)<time()-$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache']) {
 						$result['files']++;
-						$result['size'] = $result['size'] + filesize(_WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file);
-						@unlink(_WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file);
+						$result['size'] = $result['size'] + filesize(WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file);
+						@unlink(WORTIFY_VAR_PATH.'/caches/wortify_data/'.$file);
 					}
 				}
 			}
@@ -105,13 +105,13 @@ class WortifyCorePreload extends WortifyPreloadItem
 		}
 		
 		if ((isset($_COOKIE['wortify_lid'])&&$_COOKIE['wortify_lid']!=0)||(isset($GLOBALS['wortify']['lid'])&&$GLOBALS['wortify']['lid']!=0)&&!strpos($_SERVER["PHP_SELF"], '/banned.php')) {
-			header('Location: '._WORTIFY_URL.'/banned.php');
+			header('Location: '.WORTIFY_URL.'/banned.php');
 			exit;
 		} 
 
 		// Detect if it is an internal refereer.
 		if (isset($_SERVER['HTTP_REFERER'])&&(isset($GLOBALS['wortify'][__FUNCTION__]))) {
-			if (strtolower(_WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(_WORTIFY_URL)))&&$GLOBALS['wortify'][__FUNCTION__]<microtime(true)) {
+			if (strtolower(WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(WORTIFY_URL)))&&$GLOBALS['wortify'][__FUNCTION__]<microtime(true)) {
 				$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 				return false;
 			}
@@ -123,7 +123,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 	    if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
 			wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) {
-				include_once _WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.loader.mainfile.php' );
+				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.loader.mainfile.php' );
 			}
 			wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 		}
@@ -136,19 +136,19 @@ class WortifyCorePreload extends WortifyPreloadItem
 		
 		// Detect if it is an internal refereer.
 		if (isset($_SERVER['HTTP_REFERER'])&&(isset($GLOBALS['wortify'][__FUNCTION__]))) {
-			if (strtolower(_WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(_WORTIFY_URL)))&&$GLOBALS['wortify'][__FUNCTION__]<microtime(true)) {
+			if (strtolower(WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(WORTIFY_URL)))&&$GLOBALS['wortify'][__FUNCTION__]<microtime(true)) {
 				$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 				return false;
 			}
 		}
 		$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 		// Runs Security Preloader
-		include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 		$result = wortifyCache::read('xortify_core_header_cache_end');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
 			wortifyCache::write('xortify_core_header_cache_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) { 		
-				include_once _WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.header.endcache.php' );
+				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.header.endcache.php' );
 			}
 			wortifyCache::write('xortify_core_header_cache_end', array('time'=>microtime(true)), -1);
 		}
@@ -159,19 +159,19 @@ class WortifyCorePreload extends WortifyPreloadItem
 	{
 			// Detect if it is an internal refereer.
 		if (isset($_SERVER['HTTP_REFERER'])&&(isset($GLOBALS['wortify'][__FUNCTION__]))) {
-			if (strtolower(_WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(_WORTIFY_URL)))&&$GLOBALS['wortify'][__FUNCTION__]<microtime(true)) {
+			if (strtolower(WORTIFY_URL)==strtolower(substr($_SERVER['HTTP_REFERER'], 0, strlen(WORTIFY_URL)))&&$GLOBALS['wortify'][__FUNCTION__]<microtime(true)) {
 				$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 				return false;
 			}
 		}
 		$GLOBALS['wortify'][__FUNCTION__] = microtime(true)+$GLOBALS['wortify']['moduleConfig']['wortify_ip_cache'];
 		// Runs Security Preloader
-		include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 		$result = wortifyCache::read('xortify_core_footer_end');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
 			wortifyCache::write('xortify_core_footer_end', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) { 		
-				include_once _WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.footer.end.php' );
+				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.footer.end.php' );
 			}
 			wortifyCache::write('xortify_core_footer_end', array('time'=>microtime(true)), -1);
 		}
@@ -184,20 +184,20 @@ class WortifyCorePreload extends WortifyPreloadItem
 		/*
 		if (isset($GLOBALS['wortify']['_pass'])) {
 			if ($GLOBALS['wortify']['_pass'] == true) {
-				include_once _WORTIFY_ROOT_PATH.'/modules/xortify/include/functions.php';
-				addmeta_googleanalytics(_WORTIFY_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED, $_SERVER['HTTP_HOST']);
-				if (defined('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED')&&strlen(constant('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED'))>=13) { 
-					addmeta_googleanalytics(_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED, $_SERVER['HTTP_HOST']);
+				include_once WORTIFY_ROOT_PATH.'/modules/xortify/include/functions.php';
+				addmeta_googleanalytics(_XOR_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED, $_SERVER['HTTP_HOST']);
+				if (defined('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED')&&strlen(constant('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED'))>=13) { 
+					addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_USERPASSED, $_SERVER['HTTP_HOST']);
 				}	
 			}
 		}*/
 		
-		include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
 		$result = wortifyCache::read('xortify_core_header_add_meta');
 		if ((isset($result['time'])?(float)$result['time']:0)<=microtime(true)) {
 			wortifyCache::write('xortify_core_header_add_meta', array('time'=>microtime(true)+$GLOBALS['wortify']['moduleConfig']['fault_delay']), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 			if (WortifyCorePreload::hasAPIUserPass()) {	
-				include_once _WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.header.addmeta.php' );
+				include_once WORTIFY_ROOT_PATH . ( '/modules/xortify/include/post.header.addmeta.php' );
 			}
 			wortifyCache::write('xortify_core_header_add_meta', array('time'=>microtime(true)), -1);
 		}
@@ -241,7 +241,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 	
 	static public function doSpamCheck( $_from = array(), $source = 'wortify_check') {
 		if (isset($_from[$source])&&count($_from[$source])>0) {
-			include_once( _WORTIFY_ROOT_PATH.'/modules/xortify/class/'.$GLOBALS['wortify']['moduleConfig']['protocol'].'.php' );
+			include_once( WORTIFY_ROOT_PATH.'/modules/xortify/class/'.$GLOBALS['wortify']['moduleConfig']['protocol'].'.php' );
 			$func = strtoupper($GLOBALS['wortify']['moduleConfig']['protocol']).'WortifyExchange';
 			$apiExchange = new $func;
 			foreach ($_from[$source] as $id => $field) {
@@ -258,14 +258,14 @@ class WortifyCorePreload extends WortifyPreloadItem
 							setcookie('wortify', serialise(array_merge($wortifycookie,array('spams' => $GLOBALS['wortify']['spams']))), time()+3600*24*7*4*3);
 														if ($GLOBALS['wortify']['spams']>=$GLOBALS['wortify']['moduleConfig']['spams_allowed']) {
 									
-								$results[] = $apiExchange->sendBan(array('comment'=>_WORTIFY_SPAM . ' :: [' . $data . '] len('.strlen($data).')'), 2, wortify_getIPData());
+								$results[] = $apiExchange->sendBan(array('comment'=>_XOR_SPAM . ' :: [' . $data . '] len('.strlen($data).')'), 2, wortify_getIPData());
 									
 								$log_handler = wortify_getmodulehandler('log', 'wortify');
 								$log = $log_handler->create();
 								$log->setVars(wortify_getIPData($ip));
 								$log->setVar('provider', basename(dirname(__FILE__)));
 								$log->setVar('action', 'banned');
-								$log->setVar('extra', _WORTIFY_SPAM . ' :: [' . $data . '] len('.strlen($data).')');
+								$log->setVar('extra', _XOR_SPAM . ' :: [' . $data . '] len('.strlen($data).')');
 								$log->setVar('agent', $_SERVER['HTTP_USER_AGENT']);
 								if (isset($GLOBALS['wortifyUser'])) {
 									$log->setVar('email', $GLOBALS['wortifyUser']->getVar('email'));
@@ -276,7 +276,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 								wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 								$GLOBALS['wortify']['lid'] = $lid;
 								setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
-								header('Location: '._WORTIFY_URL.'/banned.php');
+								header('Location: '.WORTIFY_URL.'/banned.php');
 								exit(0);
 							} else {
 								$log_handler = wortify_getmodulehandler('log', 'wortify');
@@ -284,7 +284,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 								$log->setVars($ipdata);
 								$log->setVar('provider', basename(dirname(__FILE__)));
 								$log->setVar('action', 'blocked');
-								$log->setVar('extra', _WORTIFY_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')');
+								$log->setVar('extra', _XOR_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')');
 								if (isset($GLOBALS['wortifyUser'])) {
 									$log->setVar('email', $GLOBALS['wortifyUser']->getVar('email'));
 									$log->setVar('uname', $GLOBALS['wortifyUser']->getVar('uname'));
@@ -297,17 +297,17 @@ class WortifyCorePreload extends WortifyPreloadItem
 								$GLOBALS['wortifyModule'] = $module_handler->getByDirname('wortify');
 		
 								$wortifyOption['template_main'] = 'wortify_spamming_notice.html';
-								include_once _WORTIFY_ROOT_PATH.'/header.php';
+								include_once WORTIFY_ROOT_PATH.'/header.php';
 									
-								addmeta_googleanalytics(_WORTIFY_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
-								if (defined('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS')&&strlen(constant('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS'))>=13) {
-									addmeta_googleanalytics(_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
+								addmeta_googleanalytics(_XOR_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
+								if (defined('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS')&&strlen(constant('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS'))>=13) {
+									addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
 								}
 		
-								$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _WORTIFY_SPAM_PAGETITLE);
-								$GLOBALS['wortifyTpl']->assign('description', _WORTIFY_SPAM_DESCRIPTION);
+								$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _XOR_SPAM_PAGETITLE);
+								$GLOBALS['wortifyTpl']->assign('description', _XOR_SPAM_DESCRIPTION);
 								$GLOBALS['wortifyTpl']->assign('version', $GLOBALS['wortifyModule']->getVar('version')/100);
-								$GLOBALS['wortifyTpl']->assign('platform', _WORTIFY_VERSION);
+								$GLOBALS['wortifyTpl']->assign('platform', WORTIFY_VERSION);
 								$GLOBALS['wortifyTpl']->assign('provider', basename(dirname(__FILE__)));
 								$GLOBALS['wortifyTpl']->assign('spam', htmlspecialchars($data));
 								$GLOBALS['wortifyTpl']->assign('agent', $_SERVER['HTTP_USER_AGENT']);
@@ -321,7 +321,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 								$GLOBALS['wortifyTpl']->assign('xortify_showrblock', false);
 								$GLOBALS['wortifyTpl']->assign('xortify_showcblock', false);
 		
-								include_once _WORTIFY_ROOT_PATH.'/footer.php';
+								include_once WORTIFY_ROOT_PATH.'/footer.php';
 							}
 							exit(0);
 						}
@@ -343,14 +343,14 @@ class WortifyCorePreload extends WortifyPreloadItem
 													
 						if ($GLOBALS['wortify']['spams']>=$GLOBALS['wortify']['moduleConfig']['spams_allowed']) {
 								
-							$results[] = $apiExchange->sendBan(array('comment'=>_WORTIFY_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')'), 2, wortify_getIPData());
+							$results[] = $apiExchange->sendBan(array('comment'=>_XOR_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')'), 2, wortify_getIPData());
 								
 							$log_handler = wortify_getmodulehandler('log', 'wortify');
 							$log = $log_handler->create();
 							$log->setVars(wortify_getIPData($ip));
 							$log->setVar('provider', basename(dirname(__FILE__)));
 							$log->setVar('action', 'banned');
-							$log->setVar('extra', _WORTIFY_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')');
+							$log->setVar('extra', _XOR_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')');
 							$log->setVar('agent', $_SERVER['HTTP_USER_AGENT']);
 							if (isset($GLOBALS['wortifyUser'])) {
 								$log->setVar('email', $GLOBALS['wortifyUser']->getVar('email'));
@@ -361,7 +361,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 							wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), $GLOBALS['wortify']['moduleConfig']['fault_delay']);
 							$GLOBALS['wortify']['lid'] = $lid;
 							setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
-							header('Location: '._WORTIFY_URL.'/banned.php');
+							header('Location: '.WORTIFY_URL.'/banned.php');
 							exit(0);
 		
 						} else {
@@ -370,7 +370,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 							$log->setVars($ipdata);
 							$log->setVar('provider', basename(dirname(__FILE__)));
 							$log->setVar('action', 'blocked');
-							$log->setVar('extra', _WORTIFY_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')');
+							$log->setVar('extra', _XOR_SPAM . ' :: [' . $_REQUEST[$field] . '] len('.strlen($_REQUEST[$field]).')');
 							if (isset($GLOBALS['wortifyUser'])) {
 								$log->setVar('email', $GLOBALS['wortifyUser']->getVar('email'));
 								$log->setVar('uname', $GLOBALS['wortifyUser']->getVar('uname'));
@@ -381,17 +381,17 @@ class WortifyCorePreload extends WortifyPreloadItem
 							$GLOBALS['wortifyModule'] = $module_handler->getByDirname('wortify');
 		
 							$wortifyOption['template_main'] = 'wortify_spamming_notice.html';
-							include_once _WORTIFY_ROOT_PATH.'/header.php';
+							include_once WORTIFY_ROOT_PATH.'/header.php';
 		
-							addmeta_googleanalytics(_WORTIFY_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
-							if (defined('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS')&&strlen(constant('_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS'))>=13) {
-								addmeta_googleanalytics(_WORTIFY_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
+							addmeta_googleanalytics(_XOR_MI_WORTIFY_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
+							if (defined('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS')&&strlen(constant('_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS'))>=13) {
+								addmeta_googleanalytics(_XOR_MI_CLIENT_GOOGLE_ANALYTICS_ACCOUNTID_FAILEDTOPASS, $_SERVER['HTTP_HOST']);
 							}
 		
-							$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _WORTIFY_SPAM_PAGETITLE);
-							$GLOBALS['wortifyTpl']->assign('description', _WORTIFY_SPAM_DESCRIPTION);
+							$GLOBALS['wortifyTpl']->assign('xortify_pagetitle', _XOR_SPAM_PAGETITLE);
+							$GLOBALS['wortifyTpl']->assign('description', _XOR_SPAM_DESCRIPTION);
 							$GLOBALS['wortifyTpl']->assign('version', $GLOBALS['wortifyModule']->getVar('version')/100);
-							$GLOBALS['wortifyTpl']->assign('platform', _WORTIFY_VERSION);
+							$GLOBALS['wortifyTpl']->assign('platform', WORTIFY_VERSION);
 							$GLOBALS['wortifyTpl']->assign('provider', basename(dirname(__FILE__)));
 							$GLOBALS['wortifyTpl']->assign('spam', htmlspecialchars($_REQUEST[$field]));
 							$GLOBALS['wortifyTpl']->assign('agent', $_SERVER['HTTP_USER_AGENT']);
@@ -405,7 +405,7 @@ class WortifyCorePreload extends WortifyPreloadItem
 							$GLOBALS['wortifyTpl']->assign('xortify_showrblock', false);
 							$GLOBALS['wortifyTpl']->assign('xortify_showcblock', false);
 		
-							include_once _WORTIFY_ROOT_PATH.'/footer.php';
+							include_once WORTIFY_ROOT_PATH.'/footer.php';
 						}
 						exit(0);
 					}

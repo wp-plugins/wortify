@@ -17,7 +17,7 @@
  * @author          Taiwen Jiang <phppp@users.sourceforge.net>
  * @version         $Id: censor.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * Replaces banned words in a string with their replacements or terminate current request
@@ -33,7 +33,7 @@ class WortifytsCensor extends WortifyTextSanitizerExtension
         static $censorConf;
         if (!isset($censorConf)) {
             $config_handler = & wortify_gethandler('config');
-            $censorConf = $config_handler->getConfigsByCat(_WORTIFY_CONF_CENSOR);
+            $censorConf = $config_handler->getConfigsByCat(WORTIFY_CONF_CENSOR);
             $config = parent::loadConfig(dirname(__FILE__));
             //merge and allow config override
             $censorConf = array_merge($censorConf, $config);

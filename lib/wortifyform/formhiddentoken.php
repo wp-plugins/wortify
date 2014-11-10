@@ -18,7 +18,7 @@
  * @version         $Id: formhiddentoken.php 8066 2011-11-06 05:09:33Z beckmi $
  */
  
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * A hidden token field
@@ -30,7 +30,7 @@ class WortifyFormHiddenToken extends WortifyFormHidden
      *
      * @param string $name "name" attribute
      */
-    function WortifyFormHiddenToken($name = '_WORTIFY_TOKEN', $timeout = 0)
+    function WortifyFormHiddenToken($name = 'WORTIFY_TOKEN', $timeout = 0)
     {
         $this->WortifyFormHidden($name . '_REQUEST', $GLOBALS['wortifySecurity']->createToken($timeout, $name));
     }

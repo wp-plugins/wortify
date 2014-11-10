@@ -32,9 +32,9 @@
  */
  
 if (!defined('XORTIFY_REST_API'))
-	define('XORTIFY_REST_API', WortifyConfig::get('xortify_urirest', _WORTIFY_API_URLWORTIFYTIFY).'%s/xml/?%s');
-include_once _WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_rest_wgetxml_provisionning.php';
-include_once _WORTIFY_ROOT_PATH . '/lib/xortify/include/functions.php';
+	define('XORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_XORTIFY).'%s/xml/?%s');
+include_once WORTIFY_ROOT_PATH . '/lib/xortify/class/auth/auth_rest_wgetxml_provisionning.php';
+include_once WORTIFY_ROOT_PATH . '/lib/xortify/include/functions.php';
 
 class WortifyAuthRest_Wgetxml extends WortifyAuth {
 	

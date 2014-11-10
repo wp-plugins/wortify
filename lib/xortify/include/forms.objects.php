@@ -32,7 +32,7 @@
  */
 
 
-	include_once _WORTIFY_VAR_PATH . '/lib/wortifyFormLoader.php';
+	include_once WORTIFY_VAR_PATH . '/lib/wortifyFormLoader.php';
 	include_once ('functions.php');
 	
 ?>

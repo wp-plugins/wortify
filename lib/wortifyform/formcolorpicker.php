@@ -17,7 +17,7 @@
  * @author          Zoullou <webmaster@zoullou.org>
  * @version         $Id: formcolorpicker.php 8066 2011-11-06 05:09:33Z beckmi $
  */
-defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * Color Selection Field
@@ -53,10 +53,10 @@ class WortifyFormColorPicker extends WortifyFormText
         if (isset($GLOBALS['xoTheme'])) {
             $GLOBALS['xoTheme']->addScript('include/color-picker.js');
         } else {
-            echo '<script type="text/javascript" src="' . _WORTIFY_URL . '/include/color-picker.js"></script>';
+            echo '<script type="text/javascript" src="' . WORTIFY_URL . '/include/color-picker.js"></script>';
         }
         $this->setExtra(' style="background-color:' . $this->getValue() . ';"');
-        return parent::render()  . "<input type='reset' value=' ... ' onclick=\"return TCP.popup('" . _WORTIFY_URL . "/include/',document.getElementById('" . $this->getName() . "'));\">" ;
+        return parent::render()  . "<input type='reset' value=' ... ' onclick=\"return TCP.popup('" . WORTIFY_URL . "/include/',document.getElementById('" . $this->getName() . "'));\">" ;
     }
     
     /**
