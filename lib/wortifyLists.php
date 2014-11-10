@@ -17,10 +17,10 @@
  */
 
 
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
-if (!defined('WORTIFY_LISTS_INCLUDED')) {
-    define('WORTIFY_LISTS_INCLUDED', 1);
+if (!defined('_WORTIFY_LISTS_INCLUDED')) {
+    define('_WORTIFY_LISTS_INCLUDED', 1);
 
     /**
      * WortifyLists

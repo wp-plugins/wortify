@@ -17,7 +17,7 @@
  * @version     $Id: pagenav.php 9291 2012-04-09 18:06:29Z beckmi $
  */
 
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 class WortifyPageNav
 {
@@ -153,9 +153,9 @@ class WortifyPageNav
             $ret = '<table><tr>';
             $prev = $this->current - $this->perpage;
             if ($prev >= 0) {
-                $ret .= '<td class="pagneutral"><a href="' . $this->url . $prev . $this->extra . '">&lt;</a></td><td><img src="' . WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td>';
+                $ret .= '<td class="pagneutral"><a href="' . $this->url . $prev . $this->extra . '">&lt;</a></td><td><img src="' . _WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td>';
             } else {
-                $ret .= '<td class="pagno"></a></td><td><img src="' . WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td>';
+                $ret .= '<td class="pagno"></a></td><td><img src="' . _WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td>';
             }
             $counter = 1;
             $current_page = intval(floor(($this->current + $this->perpage) / $this->perpage));
@@ -175,9 +175,9 @@ class WortifyPageNav
             }
             $next = $this->current + $this->perpage;
             if ($this->total > $next) {
-                $ret .= '<td><img src="' . WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td><td class="pagneutral"><a href="' . $this->url . $next . $this->extra . '">&gt;</a></td>';
+                $ret .= '<td><img src="' . _WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td><td class="pagneutral"><a href="' . $this->url . $next . $this->extra . '">&gt;</a></td>';
             } else {
-                $ret .= '<td><img src="' . WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td><td class="pagno"></td>';
+                $ret .= '<td><img src="' . _WORTIFY_URL . '/images/blank.gif" width="6" alt="" /></td><td class="pagno"></td>';
             }
             $ret .= '</tr></table>';
         }

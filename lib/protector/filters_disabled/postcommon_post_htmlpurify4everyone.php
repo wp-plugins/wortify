@@ -11,7 +11,7 @@ class protector_postcommon_post_htmlpurify4everyone extends ProtectorFilterAbstr
 			die( 'Turn postcommon_post_htmlpurify4everyone.php off because this filter cannot run with PHP4' ) ;
 		}
 
-		if( file_exists( WORTIFY_VAR_PATH.'/lib/xortify/class/icms.htmlpurifier.php' ) ) {
+		if( file_exists( _WORTIFY_VAR_PATH.'/lib/xortify/class/icms.htmlpurifier.php' ) ) {
 			// use HTMLPurifier inside ImpressCMS
 			if( ! class_exists( 'icms_HTMLPurifier' ) ) {
 				include_once ICMS_ROOT_PATH.'/class/icms.htmlpurifier.php' ;
@@ -25,7 +25,7 @@ class protector_postcommon_post_htmlpurify4everyone extends ProtectorFilterAbstr
 			// use HTMLPurifier inside Protector
 			include_once dirname(dirname(__FILE__)).'/library/HTMLPurifier.auto.php' ;
 			$config = HTMLPurifier_Config::createDefault();
-			$config->set('Cache', 'SerializerPath', WORTIFY_TRUST_PATH.'/lib/protector/configs');
+			$config->set('Cache', 'SerializerPath', _WORTIFY_TRUST_PATH.'/lib/protector/configs');
 			$config->set('Core', 'Encoding', _CHARSET);
 			//$config->set('HTML', 'Doctype', 'HTML 4.01 Transitional');
 			$this->purifier = new HTMLPurifier($config);

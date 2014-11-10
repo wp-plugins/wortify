@@ -32,7 +32,7 @@
 */
 error_reporting(E_ERROR);
 
-if (!defined('WORTIFY_VAR_PATH')) {
+if (!defined('_WORTIFY_VAR_PATH')) {
 	exit();
 }
 /**

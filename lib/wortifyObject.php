@@ -18,7 +18,7 @@
  * @version         $Id: object.php 10908 2013-01-26 17:08:43Z beckmi $
  */
 
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 /**
  * YOU SHOULD NOT USE ANY OF THE UNICODE TYPES, THEY WILL BE REMOVED
  */
@@ -877,7 +877,7 @@ class WortifyObject
             WortifyCache::write('system_modules_active', $modules_active);
         }
         foreach ($modules_active as $dirname) {
-            if (file_exists($file = WORTIFY_ROOT_PATH . '/lib/' . $dirname . '/filter/' . $class . '.' . $method . '.php')) {
+            if (file_exists($file = _WORTIFY_ROOT_PATH . '/lib/' . $dirname . '/filter/' . $class . '.' . $method . '.php')) {
                 include_once $file;
                 if (function_exists($class . '_' . $method)) {
                     call_user_func_array($dirname . '_' . $class . '_' . $method, array(&$this));

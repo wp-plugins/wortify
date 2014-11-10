@@ -18,7 +18,7 @@
  * @version         $Id: formtextdateselect.php 9342 2012-04-16 01:17:28Z beckmi $
  */
 
-defined('WORTIFY_ROOT_PATH') or die("WORTIFY root path not defined");
+defined('_WORTIFY_ROOT_PATH') or die("WORTIFY root path not defined");
 
 /**
  * A text field with calendar popup
@@ -37,7 +37,7 @@ class WortifyFormTextDateSelect extends WortifyFormText
     function render()
     {
         static $included = false;
-        include_once WORTIFY_ROOT_PATH . '/language/' . $GLOBALS['wortifyConfig']['language'] . '/calendar.php';
+        include_once _WORTIFY_ROOT_PATH . '/language/' . $GLOBALS['wortifyConfig']['language'] . '/calendar.php';
 
         $ele_name = $this->getName();
         $ele_value = $this->getValue(false);

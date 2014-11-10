@@ -118,8 +118,8 @@ class WortifyAuth {
 			$siteinfo = array();
 			$siteinfo['sitename'] = $wortifyConfig['sitename'];
 			$siteinfo['adminmail'] = $wortifyConfig['adminmail'];
-			$siteinfo['systemkey'] = WORTIFY_LICENSE_KEY;
-			$siteinfo['wortify_url'] = WORTIFY_URL;
+			$siteinfo['systemkey'] = _WORTIFY_LICENSE_KEY;
+			$siteinfo['wortify_url'] = _WORTIFY_URL;
 		}
 		
 		if (!isset($siteinfo['sitename'])||empty($siteinfo['sitename']))
@@ -129,7 +129,7 @@ class WortifyAuth {
 			$siteinfo['adminmail'] = $wortifyConfig['adminmail'];
 		
 		if (!isset($siteinfo['wortify_url'])||empty($siteinfo['wortify_url']))
-			$siteinfo['wortify_url'] = WORTIFY_URL;
+			$siteinfo['wortify_url'] = _WORTIFY_URL;
 
 		if (!isset($siteinfo['systemkey'])||empty($siteinfo['systemkey']))
 			$siteinfo['systemkey'] = $wortifyConfig['systemkey'];

@@ -37,14 +37,14 @@ foreach (get_loaded_extensions() as $ext){
 }
 
 if ($nativecurl==true) {
-	if (!defined('WORTIFY_CURLSERIAL_LIB'))
-		define('WORTIFY_CURLSERIAL_LIB', 'PHPCURLSERIAL');
-	if (!defined('WORTIFY_USER_AGENT'))
-		define('WORTIFY_USER_AGENT', 'Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) WORTIFY/20100101 WortifyAuth/1.xx (php)');
+	if (!defined('_WORTIFY_CURLSERIAL_LIB'))
+		define('_WORTIFY_CURLSERIAL_LIB', 'PHPCURLSERIAL');
+	if (!defined('_WORTIFY_USER_AGENT'))
+		define('_WORTIFY_USER_AGENT', 'Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) WORTIFY/20100101 WortifyAuth/1.xx (php)');
 }
 
-if (!defined('WORTIFY_REST_API'))
-	define('WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', WORTIFY_API_URL_WORTIFY).'%s/serial/?%s');
+if (!defined('_WORTIFY_REST_API'))
+	define('_WORTIFY_REST_API', WortifyConfig::get('xortify_urirest', _WORTIFY_API_URL_WORTIFY).'%s/serial/?%s');
 
 include_once(dirname(dirname(__FILE__)) . '/include/functions.php');
 
@@ -69,19 +69,21 @@ class REST_CURLSERIALISEDWortifyExchange {
 
 
 		if (!$ch = curl_init($url)) {
-			trigger_error('Could not intialise CURLSERIAL file: '.$url);
+			die('Could not intialise CURLSERIAL file: '.$url);
 			return false;
 		}
-		$cookies = WORTIFY_VAR_PATH.'/cache/wortify_cache/authcurl_'.md5($url).'.cookie'; 
+		$cookies = _WORTIFY_VAR_PATH.'/cache/wortify_cache/authcurl_'.md5($url).'.cookie'; 
 
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, WortifyConfig::get('xortify_curl_connecttimeout'));
 		curl_setopt($ch, CURLOPT_TIMEOUT, WortifyConfig::get('xortify_curl_timeout'));
 		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookies); 
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+		curl_setopt($ch, CURLOPT_VERBOSE, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_POST, !empty($post));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-		curl_setopt($ch, CURLOPT_USERAGENT, WORTIFY_USER_AGENT);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_USERAGENT, _WORTIFY_USER_AGENT);
 
 		$data = curl_exec($ch);
 		curl_close($ch);
@@ -97,20 +99,16 @@ class REST_CURLSERIALISEDWortifyExchange {
 	 * @return boolean
 	 */
 	 function training($content, $ham = false) {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-				default:
-					try {
-						$data = $this->cURL(sprintf(WORTIFY_REST_API, 'training', http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
-						"password"	=> 	$this->serial_wortify_password,
-						'op' => ($ham==true?'ham':'spam'),
-						'content' => $content
-						))));
-						$result = (unserialize($data));
-					}
-					catch (Exception $e) { trigger_error($e); }
-					break;
+		$result = array();
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'training', http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
+			"password"	=> 	$this->serial_wortify_password,
+			'op' => ($ham==true?'ham':'spam'),
+			'content' => $content
+			))));
+			$result = (unserialize($data));
 		}
+		catch (Exception $e) { trigger_error($e); };
 		return $result;
 	}
 	
@@ -121,23 +119,19 @@ class REST_CURLSERIALISEDWortifyExchange {
 	* @return array
 	*/
 	function getSpoof($type = 'comment') {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-				default:
-					try {
-						wortify_load('WortifyUserUtility');
-						$uu = new WortifyUserUtility();
-						$data = $this->cURL(sprintf(WORTIFY_REST_API, 'spoof'.$type, http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
-						"password"	=> 	$this->serial_wortify_password, "uri" => (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
-						'ip' => $uu->getIP(true),
-						'language' => $GLOBALS['wortifyConfig']['language'],
-						'subject' => ''
-								))));
-						$result = (unserialize($data));
-					}
-					catch (Exception $e) { trigger_error($e); }
-					break;
+		$result = array();
+		try {
+			wortify_load('WortifyUserUtility');
+			$uu = new WortifyUserUtility();
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'spoof'.$type, http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
+			"password"	=> 	$this->serial_wortify_password, "uri" => (isset($_SERVER['HTTPS'])?'https://':'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+			'ip' => $uu->getIP(true),
+			'language' => $GLOBALS['wortifyConfig']['language'],
+			'subject' => ''
+					))));
+			$result = (unserialize($data));
 		}
+		catch (Exception $e) { trigger_error($e); }
 		return $result;
 	}
 	
@@ -147,146 +141,125 @@ class REST_CURLSERIALISEDWortifyExchange {
 	 * @param string $content
 	 * @return boolean
 	 */
-	function checkForSpam($content = '', $uname = '', $name = '', $email = '', $ip = '', $adult = true) {
+	function checkForSpam($content = '', $uname = '', $name = '', $email = '', $ip = '', $adult = true) 
+	{
 		if (checkWordLength($content)==false)
 			return array('spam'=>true);
-		
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-				default:
-					try {
-						$data = $this->cURL(sprintf(WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
-									"password"	=> 	$this->serial_wortify_password, 
-									"poll" => WORTIFY_URL.'/lib/xortify/poll/',
-									'content' => $content,
-									'uname' => $uname,
-									'name' => $name,
-									'email' => $email,
-									'ip' => $ip,
-									'adult' => $adult,
-									'session' => session_id()
-						))), 'content='.$content);
-						$result = (unserialize($data));
-					}
-					catch (Exception $e) { trigger_error($e); }
-					break;
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'spamcheck', http_build_query(array(      "username"	=> 	$this->serial_wortify_username,
+						"password"	=> 	$this->serial_wortify_password, 
+						"poll" => _WORTIFY_URL.'/lib/xortify/poll/',
+						'content' => $content,
+						'uname' => $uname,
+						'name' => $name,
+						'email' => $email,
+						'ip' => $ip,
+						'adult' => $adult,
+						'session' => session_id()
+			))), 'content='.$content);
+			$result = (unserialize($data));
 		}
+		catch (Exception $e) { trigger_error($e); 	}
 		return $result;
 	}
 	
-	function getServers() {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-			default:
-				try {
-					curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-					$data = $this->cURL(sprintf(WORTIFY_REST_API, 'servers', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
-									"password"	=> 	$this->serial_wortify_password, "poll" => WORTIFY_URL.'/lib/xortify/poll/', 
-									'token' => sha1(microtime(true)),
-									'agent' => $_SERVER['HTTP_USER_AGENT'],
-									'session' => session_id()
-								))));
-					$result = (unserialize($data));
-				}
-				catch (Exception $e) { trigger_error($e); }				
-				break;
-			}
+	function getServers() 
+	{
+		$result = array();
+		try {
+			curl_setopt($this->curl_client, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'servers', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
+							"password"	=> 	$this->serial_wortify_password, "poll" => _WORTIFY_URL.'/lib/xortify/poll/', 
+							'token' => sha1(microtime(true)),
+							'agent' => $_SERVER['HTTP_USER_AGENT'],
+							'session' => session_id()
+						))));
+			$result = (unserialize($data));
+		}
+		catch (Exception $e) { trigger_error($e); }				
 		return $result;	
 	}
 	
 
-	function sendBan($comment, $category_id = 2, $ip=false) {
+	function sendBan($comment, $category_id = 2, $ip=false) 
+	{
 		$ipData = wortify_getIPData($ip);
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-			default:
-				try {
-					$data = $this->cURL(sprintf(WORTIFY_REST_API, 'ban', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
-									"password"	=> 	$this->serial_wortify_password, 
-									"bans" 		=> 	array(	0 	=> 	array_merge(
-																				$ipData, 
-																				array('category_id' => $category_id)
-																				)
-													),
-									"comments" 	=> 	array(	0	=>	array(	'uname'		=>		$this->serial_wortify_username, 
-																			"comment" 	=> 		$comment
-																	)
-													 ) ))));
-					$result = (unserialize($data));
-				}
-				catch (Exception $e) { trigger_error($e); }				
-				break;
-			}
+		$result = array();	
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'ban', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
+							"password"	=> 	$this->serial_wortify_password, 
+							"bans" 		=> 	array(	0 	=> 	array_merge(
+																		$ipData, 
+																		array('category_id' => $category_id)
+																		)
+											),
+							"comments" 	=> 	array(	0	=>	array(	'uname'		=>		$this->serial_wortify_username, 
+																	"comment" 	=> 		$comment
+															)
+											 ) ))));
+			$result = (unserialize($data));
+		}
+		catch (Exception $e) { trigger_error($e); }	
 		return $result;	
 	}
 
-	function checkSFSBans($ipdata) {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-			default:
-				try {
-					$data = $this->cURL(sprintf(WORTIFY_REST_API, 'checksfsbans', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
-									"password"	=> 	$this->serial_wortify_password, 
-									"ipdata" 	=> 	$ipdata
-								))));
-					$result = (unserialize($data));
-				}
-				catch (Exception $e) { trigger_error($e); }				
-				break;
-			}
+	function checkSFSBans($ipdata) 
+	{
+		$result = array();		
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'checksfsbans', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
+							"password"	=> 	$this->serial_wortify_password, 
+							"ipdata" 	=> 	$ipdata
+						))));
+			$result = (unserialize($data));
+		}
+		catch (Exception $e) { trigger_error($e); }				
 		return $result;	
 	}
 
-	function checkPHPBans($ipdata) {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-			default:
-				try {
-					$data = $this->cURL(sprintf(WORTIFY_REST_API, 'checkphpbans', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
-									"password"	=> 	$this->serial_wortify_password, 
-									"ipdata" 	=> 	$ipdata
-								))));
-					$result = (unserialize($data));
-				}
-				catch (Exception $e) { trigger_error($e); }		
-				break;
-			}
+	function checkPHPBans($ipdata) 
+	{
+		$result = array();
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'checkphpbans', http_build_query(array(      "username"	=> 	$this->serial_wortify_username, 
+							"password"	=> 	$this->serial_wortify_password, 
+							"ipdata" 	=> 	$ipdata
+						))));
+			$result = (unserialize($data));
+		}
+		catch (Exception $e) { trigger_error($e); }		
 		return $result;	
 	}
 	
-	function getBans() {
-		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
+	function getBans() 
+	{
+		include_once _WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
         if (! $bans = wortifyCache::read('xortify_bans_cache')) {
-				$bans = wortifyCache::read('xortify_bans_cache_backup');
-				$GLOBALS['xoDoSoap'] = true;
+			$bans = wortifyCache::read('xortify_bans_cache_backup');
+			$GLOBALS['xoDoSoap'] = true;
         }
 		return $bans;
 	}	
 	
-	function retrieveBans() {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-			default:
-				try {
-					$data = $this->cURL(sprintf(WORTIFY_REST_API, 'bans', http_build_query(array("username"=> $this->serial_wortify_username, "password"=> $this->serial_wortify_password,  "records"=> $this->refresh))	 ) );
-					$result = (unserialize($data));
-				}
-				catch (Exception $e) { trigger_error($e); }		
-			}
+	function retrieveBans() 
+	{
+		$result = array();
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'bans', http_build_query(array("username"=> $this->serial_wortify_username, "password"=> $this->serial_wortify_password,  "records"=> $this->refresh))	 ) );
+			$result = (unserialize($data));
+		}
+		catch (Exception $e) { trigger_error($e); }		
 		return $result;
 	}
 
-	function checkBanned($ipdata) {
-		if (is_object($this->curl_client))
-			switch (WORTIFY_CURLSERIAL_LIB){
-			default:
-				try {
-					$data = $this->cURL(sprintf(WORTIFY_REST_API, 'banned', http_build_query(array("username"=> $this->serial_wortify_username, "password"=> $this->serial_wortify_password,  "ipdata"=> $ipdata)	 ) ));		
-					$result = (unserialize($data));
-				}
-				catch (Exception $e) { trigger_error($e); }				
-			break;
-		}		
+	function checkBanned($ipdata) 
+	{
+		$result = array();
+		try {
+			$data = $this->cURL(sprintf(_WORTIFY_REST_API, 'banned', http_build_query(array("username"=> $this->serial_wortify_username, "password"=> $this->serial_wortify_password,  "ipdata"=> $ipdata)	 ) ));		
+			$result = (unserialize($data));
+		}
+		catch (Exception $e) { trigger_error($e); }				
 		return $result;
 	}
 	

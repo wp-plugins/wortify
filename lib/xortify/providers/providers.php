@@ -31,7 +31,7 @@
  * 
  */
 
-if (!defined('WORTIFY_ROOT_PATH')) die ('Restricted Access');
+if (!defined('_WORTIFY_ROOT_PATH')) die ('Restricted Access');
 
 
 include_once( dirname(dirname(__FILE__)) . '/include/functions.php' );

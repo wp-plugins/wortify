@@ -18,7 +18,7 @@
  * @version         $Id: formelementtray.php 9339 2012-04-16 00:15:04Z beckmi $
  */
  
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 /**
  * A group of form elements

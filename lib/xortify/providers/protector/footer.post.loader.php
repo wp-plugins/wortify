@@ -32,15 +32,16 @@
  */
 	
 	if (class_exists('Protector')) {
-		
-		include_once WORTIFY_VAR_PATH.'/lib/xortify/class/cache/wortifyCache.php';
-		
-		$bad_ips = Protector::get_bad_ips(false);
-		$cache_bad_ips = wortifyCache::read('xortify_bans_protector');
+		error_reporting(0);
+		include_once _WORTIFY_VAR_PATH.'/lib/cache/wortifyCache.php';
+		$condoms = new Protector();
+		$bad_ips = $condoms->get_bad_ips(false);
+		$cacher = new wortifyCache();
+		$cache_bad_ips = $cacher->read('xortify_bans_protector');
 		if (empty($cache_bad_ips))
 			$cache_bad_ips = array();
 	
-		include_once( WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
+		include_once( _WORTIFY_VAR_PATH . '/lib/xortify/class/'.WortifyConfig::get('xortify_protocol').'.php' ); 	
 		$func = strtoupper(WortifyConfig::get('xortify_protocol')).'WortifyExchange';
 		$apiExchange = new $func;
 		
@@ -73,7 +74,7 @@
 			}
 		}		
 		unlinkOldCachefiles('xortify_',WortifyConfig::get('xortify_ip_cache'));
-		wortifyCache::delete('xortify_bans_protector');
-		wortifyCache::write('xortify_bans_protector', $bad_ips);			
+		$cacher->delete('xortify_bans_protector');
+		$cacher->write('xortify_bans_protector', $bad_ips);			
 	}
 ?>

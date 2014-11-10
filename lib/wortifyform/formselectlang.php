@@ -18,7 +18,7 @@
  * @version         $Id: formselectlang.php 8066 2011-11-06 05:09:33Z beckmi $
  */
 
-defined('WORTIFY_ROOT_PATH') or die('Restricted access');
+defined('_WORTIFY_ROOT_PATH') or die('Restricted access');
 
 include_once (dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR .'wortifyLists.php');
 include_once (dirname(__FILE__). DIRECTORY_SEPARATOR .'formselect.php');
@@ -34,7 +34,7 @@ class WortifyFormSelectLang extends WortifyFormSelect
      * @param string $caption
      * @param string $name
      * @param mixed $value Pre-selected value (or array of them).
-     * 							Legal is any name of a WORTIFY_ROOT_PATH."/language/" subdirectory.
+     * 							Legal is any name of a _WORTIFY_ROOT_PATH."/language/" subdirectory.
      * @param int $size Number of rows. "1" makes a drop-down-list.
      */
     function WortifyFormSelectLang($caption, $name, $value = null, $size = 1)

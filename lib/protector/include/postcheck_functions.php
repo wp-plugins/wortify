@@ -3,11 +3,11 @@
 function protector_postcommon()
 {
 	// configs writable check
-	if (!is_dir(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs'))
-		mkdir(WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs', 0777, true);
+	if (!is_dir(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs'))
+		mkdir(_WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs', 0777, true);
 	
-	if( $_SERVER['REQUEST_URI'] == '/wp-admin.php' && ! is_writable( WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs' ) ) {
-		trigger_error( 'You should turn the directory ' . WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs writable' , E_USER_WARNING ) ;
+	if( $_SERVER['REQUEST_URI'] == '/wp-admin.php' && ! is_writable( _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs' ) ) {
+		trigger_error( 'You should turn the directory ' . _WORTIFY_ROOT_PATH . '/wp-content/cache/wortify/configs writable' , E_USER_WARNING ) ;
 	}
 
 	// Protector object
@@ -129,7 +129,7 @@ function protector_postcommon()
 	}
 
 	// register.php Protection
-	if( $_SERVER['SCRIPT_FILENAME'] == WORTIFY_ROOT_PATH.'/register.php' ) {
+	if( $_SERVER['SCRIPT_FILENAME'] == _WORTIFY_ROOT_PATH.'/register.php' ) {
 		$protector->call_filter( 'postcommon_register' ) ;
 	}
 

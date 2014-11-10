@@ -3,8 +3,8 @@ Contributors: Simon Roberts (mynamesnot/wishcraft)
 Donate link: https://web.labs.coop/payment/index.html
 Tags: Honeypot, Spam, Human Rights, IP Sec, IP Ban
 Requires at least: 3.3
-Tested up to: 3.9.1
-Stable tag: 4.3.99
+Tested up to: 3.9.2
+Stable tag: 4.18.31
 License: Chronolabs ~ General Software License
 License URI: https://web.labs.coop/public/legal/general-software-license/10,3.htm
 
@@ -13,6 +13,7 @@ Wortify is a honeypot client that operates with https://xortify.com to prevent h
 It also prevent SQL Injection Attackes, Build-me-ups and other forms of exploits common to wordpress and will ban users that do this!
 
 == Description ==
+Xortify was developed in response to attacks on websites from rouge malicious bots, spam and captcha sweatshop, spam slavery as well as other forms of abuse of our clients systems. We have been able to stop close to 99% of spam and captcha attacks with the Xortify client. Believe it or not Xoritfy is also in response to human rights abuse on the web, such as captcha and spam sweat shops where individuals are paid less than 1 USD a day to set up accounts for bots to spam website by typing past captcha puzzles as well as sometimes they are even slaves.
 
 Wortify is a honeypot client that operates with https://xortify.com to prevent human rights abuse like captcha and signup sweat shops, as well as spam prevention and abuse of your site.
 
@@ -62,6 +63,7 @@ You can raise forum threads for Wortify on sourceforge at the following address:
 
 == Changelog ==
 
+* Reduced Amount of Cache Files Dramatically by finiting with prefix and suffix
 * Removed XOOPS Dependant Systems from protector
 * Removed XOOPS Dependant Systems from xortify client
 * Import Xortify Dependant Systems from protector

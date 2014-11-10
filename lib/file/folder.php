@@ -119,7 +119,7 @@ class WortifyFolderHandler
     function __construct($path = false, $create = true, $mode = false)
     {
         if (empty($path)) {
-            $path = WORTIFY_VAR_PATH . '/caches/wortify_cache';
+            $path = _WORTIFY_VAR_PATH . '/caches/wortify_cache';
         }
         if ($mode) {
             $this->mode = intval($mode, 8);
@@ -369,7 +369,7 @@ class WortifyFolderHandler
      */
     function inWortifyPath($path = '')
     {
-        $dir = substr($this->slashTerm(WORTIFY_ROOT_PATH), 0, - 1);
+        $dir = substr($this->slashTerm(_WORTIFY_ROOT_PATH), 0, - 1);
         $newdir = $dir . $path;
         return $this->inPath($newdir);
     }
