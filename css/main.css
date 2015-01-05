@@ -169,6 +169,10 @@ img.wortifyFlag { vertical-align: middle; margin: -3px 4px 0 0; }
 .wortifyAvatar img { vertical-align: middle; }
 .wortifyActEvent { border-bottom: 1px solid #CCC; margin: 0 0 10px 0; padding: 0 0 10px 0; }
 .wortifyTimeAgo { font-family: Georgia, times; color: #999; font-weight: bold; font-style: italic; }
+table tr .head, table tr #head
+{
+	min-width: 198px;
+}
 table.wortifyConfigForm th {
 	font-weight: normal;
 	text-align: left;

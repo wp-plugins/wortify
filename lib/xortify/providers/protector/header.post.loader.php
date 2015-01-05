@@ -66,9 +66,12 @@
 						$log->setVar('agent', implode("\n", array_unique($agent)));
 						$log->setVar('email', '');
 						$log->setVar('uname', '');
-						$log_handler->insert($log, true);
+						if ($log_handler->insert($log, true)) 
+						{
+							$sql = 'DELETE FROM '.$GLOBALS['wpdb']->base_prefix . ('xortify_protector_log').' WHERE ip = "'.$ip.'"';
+							$result = $GLOBALS['wortifyDB']->queryF($sql);
+						}
 						
-					
 				}
 			}
 		}		

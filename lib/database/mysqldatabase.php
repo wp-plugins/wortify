@@ -44,6 +44,8 @@ include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'database.php';
 class WortifyMySQLDatabase extends WortifyDatabase
 {
 
+	var $conn = NULL;
+	
 	/**
 	 * connect to the database
 	 *
@@ -68,17 +70,17 @@ class WortifyMySQLDatabase extends WortifyDatabase
 	function connect($selectdb = TRUE)
 	{
 		if (!$this->conn) {
-			if (!extension_loaded('mysql')) {
-				trigger_error('notrace:mysql extension not loaded', E_USER_ERROR);
+			if (!extension_loaded('mysqli')) {
+				trigger_error('notrace:mysqli extension not loaded', E_USER_ERROR);
 				return FALSE;
 			}
 			$this->allowWebChanges = ($_SERVER['REQUEST_METHOD'] != 'GET');
-			$this->conn = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
+			$this->conn = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD);
 			if (!$this->conn) {
 				return FALSE;
 			}
 			if ($selectdb != FALSE) {
-				if (!mysql_select_db(DB_NAME)) {
+				if (!mysqli_select_db($this->conn, DB_NAME)) {
 					return FALSE;
 				}
 			}
@@ -113,7 +115,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function fetchRow($result)
     {
-        return @mysql_fetch_row($result);
+        return @mysqli_fetch_row($result);
     }
 
     /**
@@ -123,7 +125,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function fetchArray($result)
     {
-        return @mysql_fetch_assoc($result);
+        return @mysqli_fetch_assoc($result);
     }
 
     /**
@@ -133,7 +135,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function fetchBoth($result)
     {
-        return @mysql_fetch_array($result, MYSQL_BOTH);
+        return @mysqli_fetch_array($result, mysqli_BOTH);
     }
 
     /**
@@ -144,7 +146,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function fetchObject($result)
     {
-        return @mysql_fetch_object($result);
+        return @mysqli_fetch_object($result);
     }
 
     /**
@@ -154,7 +156,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function getInsertId()
     {
-        return mysql_insert_id($this->conn);
+        return mysqli_insert_id($this->conn);
     }
 
     /**
@@ -165,7 +167,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function getRowsNum($result)
     {
-        return @mysql_num_rows($result);
+        return @mysqli_num_rows($result);
     }
 
     /**
@@ -175,7 +177,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function getAffectedRows()
     {
-        return mysql_affected_rows($this->conn);
+        return mysqli_affected_rows($this->conn);
     }
 
     /**
@@ -183,7 +185,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function close()
     {
-        mysql_close($this->conn);
+        mysqli_close($this->conn);
     }
 
     /**
@@ -194,7 +196,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function freeRecordSet($result)
     {
-        return mysql_free_result($result);
+        return mysqli_free_result($result);
     }
 
     /**
@@ -204,7 +206,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function error()
     {
-        return @mysql_error();
+        return @mysqli_error($this->conn);
     }
 
     /**
@@ -214,7 +216,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function errno()
     {
-        return @mysql_errno();
+        return @mysqli_errno($this->conn);
     }
 
     /**
@@ -233,7 +235,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function quote($string)
     {
-        return "'" . str_replace("\\\"", '"', str_replace("\\&quot;", '&quot;', mysql_real_escape_string($string, $this->conn))) . "'";
+        return "'" . str_replace("\\\"", '"', str_replace("\\&quot;", '&quot;', mysqli_real_escape_string($string))) . "'";
     }
 
     /**
@@ -255,7 +257,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
             }
             $sql = $sql . ' LIMIT ' . (int) $start . ', ' . (int) $limit;
         }
-        $result = mysql_query($sql, $this->conn);
+        $result = mysqli_query($this->conn, $sql);
         if ($result) {
             return $result;
         } else {
@@ -315,7 +317,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function getFieldName($result, $offset)
     {
-        return mysql_field_name($result, $offset);
+        return mysqli_field_name($result, $offset);
     }
 
     /**
@@ -327,7 +329,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function getFieldType($result, $offset)
     {
-        return mysql_field_type($result, $offset);
+        return mysqli_field_type($result, $offset);
     }
 
     /**
@@ -338,7 +340,7 @@ class WortifyMySQLDatabase extends WortifyDatabase
      */
     function getFieldsNum($result)
     {
-        return mysql_num_fields($result);
+        return mysqli_num_fields($result);
     }
 }
 

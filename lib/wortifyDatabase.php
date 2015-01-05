@@ -11,12 +11,6 @@
 
 include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'databasefactory.php';
 
-
-/*
- * Database Type
- */
-define('DB_TYPE', 'mysql');
-
 /*
  * Database Intialisation
 */

@@ -8,6 +8,9 @@
 	tr.even td {background-color: #d17fe7; padding: 5px; padding: 5px;font-size: 1.2123em;}
 	tr.odd td {background-color: #a6f4e1; padding: 5px; padding: 5px;font-size: 1.2123em;}
 	tr.foot td {background-color: #c2cdd6; padding: 5px; color:inherit; font-weight: bold;}
+	tr .head { min-width: 189px; }
+	.caption-marker, #caption-marker { color: rgb(250,0,0);	float: right; font-size: 134%; font-weight: bold; }
+	button, input, select, radio, checkbox, options, textarea {-webkit-box-shadow: 4px 4px 6px 2px rgba(95, 95, 15, 0.78); -moz-box-shadow: 4px 4px 6px 2px rgba(95, 95, 15, 0.78);	box-shadow: 4px 4px 6px 2px rgba(95, 95, 15, 0.78);	-webkit-border-radius: 5px;	-moz-border-radius: 5px; border-radius: 5px; text-shadow: 2px 2px 1px rgba(103, 87, 101, 0.82);}
 </style>
 <?php 
 	if (isset($_POST)&&count($_POST)>0) {

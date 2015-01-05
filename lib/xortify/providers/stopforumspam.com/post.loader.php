@@ -86,8 +86,7 @@
 							wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), wortifyConfig::get('xortify_fault_delay'));
 							$GLOBALS['wortify']['lid'] = $lid;
 							setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
-							header('Location: '.WORTIFY_URL.'/banned.php');
-							exit(0);
+							wortifyClass::__displayBan(WORTIFY_BANNED_DESCRIPTION);
 							
 						}
 			unlinkOldCachefiles('xortify_',wortifyConfig::get('xortify_wortify_ip_cache'));
@@ -115,8 +114,7 @@
 				wortifyCache::write('xortify_core_include_common_end', array('time'=>microtime(true)), wortifyConfig::get('xortify_fault_delay'));
 				$GLOBALS['wortify']['lid'] = $lid;
 				setcookie('xortify_lid', $lid, time()+3600*24*7*4*3);
-				header('Location: '.WORTIFY_URL.'/banned.php');
-				exit(0);
+				wortifyClass::__displayBan(WORTIFY_BANNED_DESCRIPTION);
 				
 				
 		}

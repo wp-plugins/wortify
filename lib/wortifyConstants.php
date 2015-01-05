@@ -13,7 +13,6 @@ define('WORTIFY_API_URL_IPINFODB', 'https://lookups.labs.coop/');
 define('WORTIFY_API_URL_PLACES', 'https://places.labs.coop/');
 define('WORTIFY_API_URL_WHOIS', 'https://whois.labs.coop/');
 define('DB_TYPE', 'mysql');
-define('WORTIFY_VERSION', '4.01');
 
 // Protector Admin
 // index.php
@@ -141,8 +140,9 @@ define('WORTIFY_WORDS', 'Minimum Word Criteria');
 define('WORTIFY_SPAM', 'Spam Heuristics');
 define('WORTIFY_WORDS_PAGETITLE', 'Minimum Word Criteria not met!');
 define('WORTIFY_SPAM_PAGETITLE', 'Spam Heuristics Flagged!');
-define('WORTIFY_WORDS_DESCRIPTION', '<p align="center"><img align="middle" src="'.XOOPS_URL.'/modules/xortify/images/accessdenied.png"></p><p align="center" style="font-size:18px">You have been blocked from our site by Xortify, this is because you didn\'t meet the minimum word includements for a submissions; you cannot be banned for this you will have to press the back button and try again!</p>');
-define('WORTIFY_SPAM_DESCRIPTION', '<p align="center"><img align="middle" src="'.XOOPS_URL.'/modules/xortify/images/accessdenied.png"></p><p align="center" style="font-size:18px">You have been blocked for submitted spam by our spam heuristic checking system Xortify, this is possibly done by one of our third parties like Stop Forum Spam or Project Honeypot, you will have to check the provider of the ban!</p><div style="clear:both; height: 25px;">&nbsp;</div><p align="center" style="font-size:14px">You can occur an IP Bans in a certain number of these; that is a ban that is based on the provider "Xortify" are with your IP Can be removed by going to <a href="http://wortify.com/modules/unban/">XORTIFY DOT COM</a><br/><br/>This ban is not permenant and will drop in 3 months!</p>');
+define('WORTIFY_BANNED_DESCRIPTION', 'You have been banned from our site by Xortify, this is because you didn\'t meet the usage requirements; you can be banned on this site or a remote site our third parties like Stop Forum Spam or Project Honeypot, you will have to check the provider of the ban!<br/><br/>You can occur an IP Bans in a certain number of these; that is a ban that is based on the provider "Xortify" are with your IP Can be removed by going to <a href="http://xortify.com/modules/unban/">XORTIFY DOT COM</a><br/><br/>This ban is not permenant and will drop in 3 months!');
+define('WORTIFY_WORDS_DESCRIPTION', 'You have been blocked from our site by Xortify, this is because you didn\'t meet the minimum word includements for a submissions; you cannot be banned for this you will have to press the back button and try again!');
+define('WORTIFY_SPAM_DESCRIPTION', 'You have been blocked for submitted spam by our spam heuristic checking system Xortify, this is possibly done by one of our third parties like Stop Forum Spam or Project Honeypot, you will have to check the provider of the ban!<br/><br/>You can occur an IP Bans in a certain number of these; that is a ban that is based on the provider "Xortify" are with your IP Can be removed by going to <a href="http://xortify.com/modules/unban/">XORTIFY DOT COM</a><br/><br/>This ban is not permenant and will drop in 3 months!');
 
 // Sets Language Constants for Configuration
 define('WORTIFY_GLOBAL_DISBL','Temporary disabled');
@@ -226,7 +226,7 @@ define('WORTIFY_SECONDS', 'Seconds to base Cache List on!');
 define('WORTIFY_SECONDS_DESC', 'Period of time for ban list to be invocated!');
 define('WORTIFY_PROVIDERS', 'Provider Plug-ins');
 define('WORTIFY_PROVIDERS_DESC', 'Provider\'s that are supported by Wortify');
-define('WORTIFY_FRM_TITLE', 'Sign-up to Wortify.com - Fortify your WORTIFY');
+define('WORTIFY_FRM_TITLE', 'Sign-up to Xortify.com - Fortify your Wortify');
 define('WORTIFY_FRM_UNAME', 'Your Wortify Username');
 define('WORTIFY_FRM_EMAIL', 'Your Email Address');
 define('WORTIFY_FRM_PASS', 'Your Password');
@@ -339,7 +339,6 @@ define('WORTIFY_CURL_TIMOUT_DESC', 'This is the total amount of seconds a CURL w
 define('WORTIFY_CURL_CONNECTTIMOUT', 'Total amount of seconds a CURL Waits for DNS to resolve');
 define('WORTIFY_CURL_CONNECTTIMOUT_DESC', 'This is the total amount of seconds a CURL waits for a DNS Lookup to resolve.');
 define('WORTIFY_NAME', 'Wortify');
-define('WORTIFY_VERSION', '4.16');
 define('WORTIFY_MODE_CLIENT', 'Client');
 define('WORTIFY_MODE_SERVER', 'Server');
 define('WORTIFY_USER_AGENT', '%s/%s %s Sector Network Security (%s)');

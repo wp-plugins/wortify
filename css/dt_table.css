@@ -30,6 +30,7 @@ table.display td{padding:5px 8px;border:1px solid #ccc}
 .sorting_asc_disabled div.th_wrapp{background: url('../images/sort_asc_disabled.gif') no-repeat center right}
 .sorting_desc_disabled div.th_wrapp{background: url('../images/sort_desc_disabled.gif') no-repeat center right}
 .sorting div.th_wrapp{background:url(../images/sort_both.gif) no-repeat right center}
+td.head{width: 230px;}
 tr.odd{background-color:#f5f5f5}
 tr.even{background-color:#fff}
 .top,.bottom{background-color:#F5F5F5;border:1px solid #CCC;padding:15px}
@@ -52,3 +53,10 @@ table.display td.center,.dataTables_empty{text-align:center}
 .paging_full_numbers span.paginate_button{background-color:#fff}
 .dataTables_scroll,.clear{clear:both}
 .dataTables_info,.dataTables_length,.dataTables_filter,.dataTables_processing,.paging_full_numbers span.paginate_button,.paging_full_numbers span.paginate_active {font-size:11px}
+.caption-marker, #caption-marker
+{
+	color: rgb(250,0,0);
+	float: right;
+	font-size: 134%;
+	font-weight: bold;
+}

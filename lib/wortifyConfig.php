@@ -283,7 +283,7 @@ class wortifyConfig {
 										'default' => 'rest_curlserialised',
 										'options' => array(WORTIFY_PROTOCOL_MINIMUMCLOUD=>'minimisedcloud', WORTIFY_PROTOCOL_WGETSERIAL=>'rest_wgetserialised', WORTIFY_PROTOCOL_WGETXML=>'rest_wgetxml', WORTIFY_PROTOCOL_CURLSERIAL=>'rest_curlserialised', WORTIFY_PROTOCOL_CURL=>'rest_curl', WORTIFY_PROTOCOL_JSON=>'rest_json', WORTIFY_PROTOCOL_CURLXML=>'rest_curlxml'),
 										),
-					"xortify_useroption_name" => array('name' => 'xortify_username',
+					"xortify_username" => array('name' => 'xortify_username',
 							'title' => 'WORTIFY_USERNAME',
 							'description' => 'WORTIFY_USERNAME_DESC',
 							'formtype' => 'text',
@@ -712,6 +712,7 @@ class wortifyConfig {
 		self::getDB()->queryF(sprintf("insert into " . self::table() . " (option_name, option_value) values ('%s', '%s')", $key, $option_value));
 		self::$cache[$key] = $option_value;
 	}
+	static $_non_cache_vars = array('xortify_username', 'xortify_password');
 	public static function get($key, $default = false){
 		if ($default == false) {
 			if (isset(self::$configs['protector'][$key]))
@@ -719,8 +720,8 @@ class wortifyConfig {
 			elseif (isset(self::$configs['xortify'][$key]))
 				$default = self::$configs['xortify'][$key]['default'];
 		}
-		if(! isset(self::$cache[$key])){ 
-			list($option_value) = self::getDB()->fetchRow(self::getDB()->query(sprintf("select option_value from " . self::table() . " where option_name='%s'", $key)));
+		if(! isset(self::$cache[$key]) || in_array($key, self::$_non_cache_vars)){ 
+			list($option_value) = self::getDB()->fetchRow(self::getDB()->query($sql = sprintf("select `option_value` from `" . self::table() . "` where `option_name`='%s'", $key)));
 			switch (self::valuetype($key)) {
 				case "array":
 					$option_value = json_decode($option_value);
@@ -731,8 +732,15 @@ class wortifyConfig {
 				self::$cache[$key] = $default;
 			}
 		}
+		if (empty(self::$cache[$key])) {
+			if (isset(self::$configs['protector'][$key]))
+				self::$cache[$key] = self::$configs['protector'][$key]['default'];
+			elseif (isset(self::$configs['xortify'][$key]))
+				self::$cache[$key] = self::$configs['xortify'][$key]['default'];
+		}
 		return self::$cache[$key];
 	}
+	
 	public static function get_ser($key, $default, $canUseDisk = false){ //When using disk, reading a option_valueue deletes it.
 		//If we can use disk, check if there are any values stored on disk first and read them instead of the DB if there are values
 		if($canUseDisk){
