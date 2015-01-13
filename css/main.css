@@ -1,0 +1,310 @@
+.wortifyWrap {
+	margin: 20px 0 0 20px;
+}
+div.wortifyLive {
+	height: 29px;
+	white-space: nowrap;
+	overflow: hidden;
+	border-width: 1px 0 1px 0;
+	background-color: #FFFCEF;
+	border-color: #666;
+	border-style: solid;
+	margin: 20px 0 10px 0;
+	padding: 3px 3px 3px 10px;
+	font-family: Arial;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+}
+div.wortifyLive h2 {
+	font-weight: bold;
+	color: #888;
+	margin: 0 10px 0 0;
+	padding: 0;
+	display: inline;
+	font-size: 14px;
+	font-family: Georgia, serif;
+	font-style: italic;
+	-webkit-font-smoothing: antialiased;
+}
+div.wortifyLive p {
+	color: #000;
+	font-weight: normal;
+	display: inline;
+}
+.wortify-icon32 {
+	width: 32px;
+	height: 32px;
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	padding: 0;
+	margin: 7px 5px 0 0;
+	float: left;
+}
+#wortifyHeading {
+	white-space: nowrap;
+}
+div.wortify-lock-icon {
+	background-image: url(../images/wortify-logo-32x32.png);
+}
+.wortify .resulticon {
+	display: block;
+	float: left;
+	width: 16px;
+	height: 16px;
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border-width: 0;
+	padding: 0;
+	margin: 0 3px 0 0;
+	background-image: url(../images/icons/bullet_yellow.png);
+}
+.wortify .wortifyScanButton { margin: 20px 0 20px 0; }
+.wortifyBoldTD {
+	font-weight: bold;
+}
+.wortifyAjax24 {
+	display: none;
+	width: 24px;
+	height: 24px;
+	background-image: url(../images/icons/ajax24.gif);
+	margin: 0;
+	padding: 0;
+}
+div.wortifyLoadingWhite32 {
+	width: 32px;
+	height: 32px;
+	background-image: url(../images/icons/ajaxWhite32x32.gif);
+	margin: 0;
+	padding: 0;
+}
+div.wortifyScanButton input.button-wortify-grey {
+	background: #EFEFEF url(../images/button-grad-grey.png) repeat-x scroll left top;
+	border-color: #EFEFEF;
+}
+.wortifyScanButton table td { vertical-align: top; }
+.wortifyTabsContainer {
+	background-color: #FFF;
+	overflow: hidden;
+	border: 1px solid #CCC;
+	max-width: 900px;
+	padding: 15px;
+	min-height: 200px;
+	-webkit-font-smoothing: antialiased;
+}
+#wortifyTabs::after {
+	content: ".";
+	display: block;
+	height: 0;
+	width: 0;
+	line-height: 0;
+	clear: both;
+	visibility: hidden;
+}
+#wortifyTabs a {
+	float: left;
+	z-index: 10;
+	height: 18px;
+	margin: 0 5px -1px 0;
+	padding: 5px 8px;
+	border: 1px solid #CCC;
+	text-decoration: none;
+	background-color: #EFEFEF;
+	color: #21759B;
+	-moz-border-radius-topright: 3px;
+	-moz-border-radius-topleft: 3px;
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+}
+#wortifyTabs a.selected {
+	border-bottom: 1px solid #FFF;
+	background-color: #FFF;
+	color: #777;
+}
+table.wortifySummaryParent { font-family: sans-serif; font-size: 14px; color: #000; z-index: 9;}
+table.wortifySummaryParent td { vertical-align: top; padding: 0; margin: 0; }
+table.wortifySummaryParent table.wortifySummaryChild th { font-weight: bold; text-align: right; font-family: Georgia, serif; color: #000; padding: 5px 10px 5px 0; border-top: 1px solid #CCC; } 
+table.wortifySummaryParent table.wortifySummaryChild td { font-weight: normal; text-align: left; padding: 5px 0 5px 0; border-top: 1px solid #CCC; } 
+table.wortifySummaryParent table.wortifySC1 td { width: 300px; padding: 0px 25px 10px 0; }
+table.wortifySummaryParent table.wortifySC2 th { width: 80px; }
+table.wortifySummaryParent table.wortifySC2 td { width: 100px; }
+table.wortifySummaryParent table.wortifySC3 th { width: 80px; }
+table.wortifySummaryParent table.wortifySC3 td { width: 250px; }
+table.wortifySummaryParent th.wortifyHead { font-size: 22px; font-family: Georgia, serif; font-style: italic; color: #555; font-weight: bold; text-align: left; padding: 20px 0 20px 0px; -webkit-font-smoothing: antialiased; }
+div.wortifyIssue table.wortifyIssue td { padding: 2px; margin: 0; border-width: 0px; text-align: left; }
+div.wortifyIssue table.wortifyIssue th { padding: 2px; margin: 0; font-weight: bold;  text-align: left; color: #777; }
+div.wortifyIssue h2 { margin: 0px 0 5px 0; padding: 0; }
+div.wortifyIssue table.wortifyIssueLinks td { border-width: 0px; text-align: left; padding-right: 10px; }
+.wortifyIssueOptions { 
+	border-top: 1px solid #CCC; 
+	padding: 10px;
+}
+.wortifyIssueOptions a {
+	margin-left: 10px;
+}
+.wortifyIssueOptions strong {
+	float: left;
+	display: block;
+	width: 60px;
+}
+.wortifyProbSev1, .wortifyProbSev2, .wortifyAjaxLight128, .wortifyResolved {
+	width: 128px;
+	height: 128px;
+	border: 0;
+	margin: 0 auto;
+	background-repeat: no-repeat; background-position: 0 0;
+	text-decoration: none;
+	display: block;
+}
+.wortifyProbSev1 { background-image: url(../images/icons/error128.png); }
+.wortifyProbSev2 { background-image: url(../images/icons/warning128.png); }
+.wortifyResolved { background-image: url(../images/icons/tick128.png); }
+.wortifyAjaxLight128 { background-image: url(../images/icons/ajax3.gif); }
+.wortifyStrong { font-weight: bold; }
+.wortifyModeElem { display: none; }
+.wortifyIssuesContainer { width: 800px; display: none; }
+.wortifyIssuesContainer p { width: 550px; }
+.wortifyWarn { color: #F00; }
+img.wortifyFlag { vertical-align: middle; margin: -3px 4px 0 0; }
+.wortifyHitTime { font-style: italic; }
+.wortifyAvatar img { vertical-align: middle; }
+.wortifyActEvent { border-bottom: 1px solid #CCC; margin: 0 0 10px 0; padding: 0 0 10px 0; }
+.wortifyTimeAgo { font-family: Georgia, times; color: #999; font-weight: bold; font-style: italic; }
+table tr .head, table tr #head
+{
+	min-width: 198px;
+}
+table.wortifyConfigForm th {
+	font-weight: normal;
+	text-align: left;
+	padding: 2px 3px 1px 0;
+	vertical-align: middle;
+}
+table.wortifyConfigForm td {
+	vertical-align: middle;
+}
+table th.wortifyConfigEnable { font-weight: bold; }
+.wortifySavedMsg { display: none; color: #A00; }
+table th.wortifySubheading { font-weight: bold; padding-top: 10px; }
+.wortifyALogTime { color: #999; }
+.wortifyALogEntry { }
+.wortifyALogMailLink, .wortifyALogViewLink {
+	display: block;
+	position: absolute;
+	padding: 0 0 0 18px;
+	margin: 0;
+	right: 10px;
+	top: 0px;
+	background-repeat: no-repeat;
+	font-weight: normal;
+}
+.wortifyALogMailLink {
+	background-image: url(../images/icons/email_go.png);
+}
+.wortifyALogViewLink {
+	background-image: url(../images/icons/magnifier.png);
+}
+#wortifyActivity { position: relative; }
+h3.wortifyConfigHeading {
+	font-size: 22px;
+	color: #777;
+	font-family: Georgia;
+	font-style: italic;
+	font-weight: normal
+}
+.wortifyTipText {
+	color: #777;
+	font-family: Georgia;
+	font-style: italic;
+}
+.consoleHead {
+	position: relative;
+	padding: 0 0 0 3px;
+	font-weight: bold;
+	width: 800px;
+}
+.consoleHeadText {
+	font-size: 18px; 
+	font-family: Georgia, serif; 
+	font-style: italic; 
+	color: #555; 
+	font-weight: bold; 
+	-webkit-font-smoothing: antialiased;
+}
+.consoleOuter { width: 800px; }
+.consoleInner { height: 116px; overflow: auto; z-index: 1; }
+.bevelDiv1 { border: 1px solid #EFEFEF; }
+.bevelDiv2 { border: 1px solid #AAA; }
+.bevelDiv3 { border: 1px solid #555; 
+	background-color: #FFFFE0; /* #FFFFF0; /* #FFEBCD;  #FFFACD; */
+	color: #000; padding: 5px; font-family: Arial; -webkit-font-smoothing: none; }
+.wortifyBlackCursor{ color: #FFF; }
+.wortifySecure { color: #0A0; font-weight: bold; }
+.wortifyActivityLine {
+}
+.wortifySummaryDate { float: left; margin-left: 3px; }
+.wortifySummaryMsg { float: left; margin-left: 3px; }
+.wortifySummaryResult { float: right; text-align: left; width: 280px; }
+.wortifySummaryLoading { width: 16px; height: 11px; background-image: url('../images/icons/ajaxScan.gif'); }
+.wortifySummaryBad, .wortifySummaryErr { color: #A00; }
+.wortifySummaryOK { color: #0A0; }
+.wortifyClear {
+	content: ".";
+	display: block;
+	height: 0;
+	width: 0;
+	line-height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.wortifySummaryFinal { 
+	-webkit-font-smoothing: antialiased;
+	font-weight: bold; 
+	color: #555;
+}
+input.wortifyStartScanButton { width: 160px; text-align: left;  padding-left: 20px; }
+.wortifyerror {
+	color: #F00;
+}
+#wortifyWorking {
+	padding: 2px 8px 2px 24px;
+	z-index: 100000;  
+	position: fixed; 
+	right: 2px; 
+	bottom: 2px; 
+	border: 1px solid #000; 
+	background-color: #F00; 
+	color: #FFF; 
+	font-size: 12px; 
+	font-weight: bold; 
+	font-family: Arial; 
+	text-align: center;
+	background-image: url('../images/icons/ajaxRed16.gif');
+	background-position: 2px 2px;
+	background-repeat: no-repeat;
+}
+#paidWrap {
+	position: relative;
+}
+#paidCover {
+}
+.paidInnerMsg {
+	width: 500px;
+	margin: 150px auto 0 auto;
+	color: #000;
+	font-size: 18px;
+	font-family: Georgia, Times;
+	line-height: 1.8em;
+	text-align: center;
+	-webkit-font-smoothing: antialiased;
+}
+.wortifyMarker {
+	height: 1px;
+	width: 1px;
+}
+.wortifyPaidOnlyNotice {
+	width: 500px; 
+	background-color: #FFFFE0; 
+	border: 1px solid #000; 
+	padding: 10px; 
+	margin: 20px;
+}
