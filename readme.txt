@@ -4,7 +4,7 @@ Tags: SPAM,MalUsers,SweatShops,Anti,Protection
 Donate link: http://web.labs.coop/modules/xpayment/
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 4.19.1
+Stable tag: 4.19.2
 License: Chronolabs ~ General Software License
 License URI: http://web.labs.coop/public/legal/general-software-license/10,3.htm
 

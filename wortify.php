@@ -3,8 +3,8 @@
 Plugin Name: Wortify Sentry & Security
 Plugin URI: https://xortify.com/
 Description: Wortify Sentry & Security - Anti-virus, Firewall and real-time WordPress sentry & security Network (Open Subscription ~ Currently at no charge will remain that we hope)
-Author: Simon Roberts (Mynamesnot/Wishcraft)
-Version: 4.19.1
+Author: Simon Antony Roberts aka. Leshy Cipherhouse (MyNamesNot / Wishcraft / CEJ)
+Version: 4.19.2
 Author URI: http://blog.simonaroberts.com/
 */
 if(defined('WP_INSTALLING') && WP_INSTALLING){

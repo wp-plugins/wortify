@@ -343,6 +343,9 @@ echo "				padding: 						13px;
 		if (strpos(strtolower($_SERVER['HTTP_HOST']), strtolower($_SERVER['HTTP_REFERER'])))
 			return false;
 		
+		if (strpos(strtolower($_SERVER['PHP_SELF']), '/wp-admin/'))
+			return false;
+		
 		self::__logENV(__FUNCTION__);
 		
 		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'protector' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'postcheck.inc.php';
@@ -366,6 +369,9 @@ echo "				padding: 						13px;
 		if (strpos(strtolower($_SERVER['HTTP_HOST']), strtolower($_SERVER['HTTP_REFERER'])))
 			return false;
 		
+		if (strpos(strtolower($_SERVER['PHP_SELF']), '/wp-admin/'))
+			return false;
+		
 		self::__logENV(__FUNCTION__);
 		
 		require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'xortify' . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'post.footer.end.php';
@@ -380,6 +386,9 @@ echo "				padding: 						13px;
 			return false;
 		
 		if (strpos(strtolower($_SERVER['HTTP_HOST']), strtolower($_SERVER['HTTP_REFERER'])))
+			return false;
+		
+		if (strpos(strtolower($_SERVER['PHP_SELF']), '/wp-admin/'))
 			return false;
 
 		self::__logENV(__FUNCTION__);
